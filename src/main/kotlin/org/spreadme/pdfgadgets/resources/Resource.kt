@@ -1,0 +1,54 @@
+package org.spreadme.pdfgadgets.resources
+
+object R {
+
+    object Drawables {
+        const val appIcon = "drawables/icon.png"
+        const val background = "drawables/background.svg"
+        const val outlines_empty = "drawables/outlines_empty.svg"
+        const val signature_empty = "drawables/signature_empty.svg"
+    }
+
+    object Icons {
+        const val home ="icons/home.svg"
+        const val remove ="icons/remove.svg"
+        const val save ="icons/save.svg"
+        const val undo ="icons/undo.svg"
+
+        const val pdf = "icons/pdf.svg"
+        const val pdfdictionary = "icons/pdfDictionary.svg"
+        const val pdfnanme = "icons/pdfName.svg"
+        const val pdfnumber = "icons/pdfNumber.svg"
+        const val pdfarray = "icons/pdfArray.svg"
+        const val pdfboolean = "icons/pdfBoolean.svg"
+        const val pdfliteral = "icons/pdfLiteral.svg"
+        const val pdfindirect_reference = "icons/pdfIndirectReference.svg"
+        const val pdfnull = "icons/pdfNull.svg"
+        const val pdfstream = "icons/pdfStream.svg"
+        const val pdfstring = "icons/pdfString.svg"
+
+        const val info = "icons/info.svg"
+        const val structure = "icons/structure.svg"
+        const val outlines = "icons/outlines.svg"
+        const val font = "icons/font.svg"
+        const val image = "icons/image.svg"
+        const val images = "icons/images.svg"
+
+        const val view_mode_default = "icons/view_mode_defaut.svg"
+        const val view_mode_flat = "icons/view_mode_flat.svg"
+
+        const val zoom_out = "icons/zoom_out.svg"
+        const val zoom_in = "icons/zoom_in.svg"
+
+        const val signature = "icons/signature.svg"
+        const val ds = "icons/ds.svg"
+
+        const val pdffile = "icons/pdffile.svg"
+        const val newfile = "icons/newfile.svg"
+        const val open = "icons/open.svg"
+        const val view = "icons/view.svg"
+
+        const val lignt = "icons/light.svg"
+        const val dark = "icons/dark.svg"
+    }
+}
