@@ -18,6 +18,7 @@ import org.spreadme.pdfgadgets.resources.R
 import org.spreadme.pdfgadgets.ui.common.DropdownTextInputField
 import org.spreadme.pdfgadgets.ui.common.TextSearchInputField
 import org.spreadme.pdfgadgets.ui.common.clickable
+import org.spreadme.pdfgadgets.ui.side.SideViewMode
 import org.spreadme.pdfgadgets.ui.theme.LocalExtraColors
 import org.spreadme.pdfgadgets.ui.toolbar.ToolbarViewModel.Companion.SCALES
 
@@ -70,7 +71,7 @@ fun ViewModeBar(
         verticalAlignment = Alignment.CenterVertically
     ) {
         val viewModelState = remember { toolbarViewModel }
-        ViewMode.values().forEach { mode ->
+        SideViewMode.values().forEach { mode ->
             Icon(
                 painter = painterResource(mode.icon),
                 contentDescription = mode.desc,
@@ -78,7 +79,7 @@ fun ViewModeBar(
                 modifier = Modifier.padding(start = 16.dp)
                     .size(16.dp)
                     .clickable(viewModelState.enabled) {
-                        viewModelState.onChangeViewMode(mode)
+                        viewModelState.changeSideViewMode(mode)
                     }
             )
         }
@@ -103,7 +104,7 @@ fun ScaleBar(
             contentDescription = "Zoom In",
             tint = tint,
             modifier = Modifier.size(16.dp).clickable(viewModelState.enabled) {
-                viewModelState.onChangeScale(ScaleType.ZOOM_IN)
+                viewModelState.changeScale(ScaleType.ZOOM_IN)
             }
         )
         DropdownTextInputField(
@@ -118,14 +119,14 @@ fun ScaleBar(
             tint = contentColor,
             enabled = viewModelState.enabled
         ) {
-            viewModelState.scale = it.replace("%", "").toInt()
+            viewModelState.changeScale(null, it.replace("%", "").toInt())
         }
         Icon(
             painterResource(R.Icons.zoom_out),
             contentDescription = "Zoom In",
             tint = tint,
             modifier = Modifier.size(16.dp).clickable(viewModelState.enabled) {
-                viewModelState.onChangeScale(ScaleType.ZOOM_OUT)
+                viewModelState.changeScale(ScaleType.ZOOM_OUT)
             }
         )
     }
@@ -146,7 +147,7 @@ fun TextSearchBar(
         TextSearchInputField(
             viewModelState.searchKeyword,
             onValueChange = {
-
+                viewModelState.searchKeyword = it
             },
             modifier = Modifier.padding(16.dp, 8.dp)
                 .fillMaxHeight().widthIn(240.dp, 272.dp)

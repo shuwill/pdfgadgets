@@ -12,8 +12,8 @@ import org.spreadme.pdfgadgets.utils.choose
 val lightTheme = lightColors(
     primaryVariant = Color(0xFFE7EAED),
     secondary = Color(0xFF005FB7),
-    background = Color(0xFFF5F5F4),
-    surface = Color(0xFFFAFAF9),
+    background = Color(0xFFF4F4F5),
+    surface = Color(0xFFFAFAFA),
 
     onPrimary = Color(0xFF000000),
     onSecondary = Color(0xFFFFFFFF),

@@ -2,18 +2,18 @@ package org.spreadme.pdfgadgets.common
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.key
-import java.util.UUID
+import java.util.*
 
 abstract class AbstractComponent(
-    open val name: String,
+    open var name: String,
     val uid: String = UUID.randomUUID().toString()
-): Component, AutoCloseable {
+) : Component, AutoCloseable {
 
     @Composable
     override fun render() {
-       key(this){
-           doRender()
-       }
+        key(this) {
+            doRender()
+        }
     }
 
     @Composable

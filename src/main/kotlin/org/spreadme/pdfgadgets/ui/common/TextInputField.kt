@@ -5,6 +5,7 @@ import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDropDown
+import androidx.compose.material.icons.filled.ArrowDropUp
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -37,7 +38,6 @@ fun TextInputField(
 ) {
     var textFieldValueState by remember { mutableStateOf(TextFieldValue(text = value)) }
     val textFieldValue = textFieldValueState.copy(text = value)
-
     BasicTextField(
         value = textFieldValue,
         modifier = modifier,
@@ -86,7 +86,7 @@ fun DropdownTextInputField(
     val icon = if (expanded) {
         Icons.Filled.ArrowDropDown
     } else {
-        Icons.Filled.ArrowDropDown
+        Icons.Filled.ArrowDropUp
     }
 
     Column {

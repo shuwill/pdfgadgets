@@ -1,8 +1,8 @@
-package org.spreadme.pdfgadgets.ui.toolbar
+package org.spreadme.pdfgadgets.ui.side
 
 import org.spreadme.pdfgadgets.resources.R
 
-enum class ViewMode(
+enum class SideViewMode(
     val icon: String,
     val desc: String
 ) {

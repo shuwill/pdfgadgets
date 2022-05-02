@@ -15,47 +15,25 @@ import androidx.compose.material.icons.filled.Close
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.awt.ComposeWindow
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import org.spreadme.pdfgadgets.resources.R
-import org.spreadme.pdfgadgets.ui.PlatformUI
 import org.spreadme.pdfgadgets.ui.common.CustomWindowDecoration
 import org.spreadme.pdfgadgets.ui.common.clickable
-import org.spreadme.pdfgadgets.ui.home.HomeComponent
 import org.spreadme.pdfgadgets.utils.choose
 
 @Composable
 fun ApplicationFrame(
-    window: ComposeWindow,
     frameViewModel: ApplicationFrameViewModel
 ) {
-    // custom the window title
-    val platformUI = PlatformUI(window.rootPane, frameViewModel.isDark)
-    if (platformUI.isSupportCustomWindowDecoration()) {
-        platformUI.customWindowDecoration()
-    }
-
-    Column(Modifier.fillMaxSize().background(MaterialTheme.colors.background)) {
+    Column(Modifier.fillMaxSize().background(MaterialTheme.colors.surface)) {
         //Tabs Bar
-        if (platformUI.isCustomWindowDecoration()) {
-            frameViewModel.tabbarPaddingStart = 80
-            CustomWindowDecoration(
-                Modifier.fillMaxWidth().height(40.dp).background(MaterialTheme.colors.primaryVariant)
-                    .padding(start = frameViewModel.tabbarPaddingStart.dp, end = frameViewModel.tabbarPaddingEnd.dp),
-                horizontalArrangement = Arrangement.Start,
-                windowState = frameViewModel.windowState,
-            ) {
-                TabsBar(frameViewModel = frameViewModel)
-            }
+        if (frameViewModel.isCustomWindowDecoration) {
+            CustomDecorationTabsBar(frameViewModel)
         } else {
-            TabsBar(
-                Modifier.fillMaxWidth().height(40.dp).background(MaterialTheme.colors.primaryVariant)
-                    .padding(start = frameViewModel.tabbarPaddingStart.dp, end = frameViewModel.tabbarPaddingEnd.dp),
-                frameViewModel
-            )
+            DefaultTabsBar(frameViewModel)
         }
         Divider(color = MaterialTheme.colors.primaryVariant, thickness = 1.dp)
         Box(
@@ -64,14 +42,34 @@ fun ApplicationFrame(
             //Tabs View
             TabView(frameViewModel)
             //Theme change View
-            ThemeSelector(
-                Modifier.padding(start = 16.dp, bottom = 16.dp)
-                    .align(Alignment.BottomStart)
-                    .zIndex(2f),
-                frameViewModel
-            )
+            ThemeSelector(frameViewModel)
         }
     }
+}
+
+@Composable
+fun CustomDecorationTabsBar(
+    frameViewModel: ApplicationFrameViewModel
+) {
+    CustomWindowDecoration(
+        Modifier.fillMaxWidth().height(40.dp).background(MaterialTheme.colors.primaryVariant)
+            .padding(start = frameViewModel.tabbarPaddingStart.dp, end = frameViewModel.tabbarPaddingEnd.dp),
+        horizontalArrangement = Arrangement.Start,
+        windowState = frameViewModel.windowState,
+    ) {
+        TabsBar(frameViewModel = frameViewModel)
+    }
+}
+
+@Composable
+fun DefaultTabsBar(
+    frameViewModel: ApplicationFrameViewModel
+) {
+    TabsBar(
+        Modifier.fillMaxWidth().height(40.dp).background(MaterialTheme.colors.primaryVariant)
+            .padding(start = frameViewModel.tabbarPaddingStart.dp, end = frameViewModel.tabbarPaddingEnd.dp),
+        frameViewModel
+    )
 }
 
 @Composable
@@ -102,8 +100,7 @@ fun TabsBar(
                     contentDescription = "Add",
                     tint = MaterialTheme.colors.onPrimary,
                     modifier = Modifier.size(frameViewModel.iconSize.dp).padding(horizontal = 8.dp).clickable {
-                        val homeComponent = HomeComponent(frameViewModel)
-                        frameViewModel.addComponent(homeComponent)
+                       frameViewModel.newBlankTab()
                     }
                 )
             }
@@ -131,16 +128,21 @@ fun TabItem(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.Start
     ) {
-        Text(
-            title,
-            color = active.choose(MaterialTheme.colors.onBackground, MaterialTheme.colors.onPrimary),
-            style = MaterialTheme.typography.caption,
-            softWrap = false,
-            overflow = TextOverflow.Ellipsis
-        )
+        Box(
+            Modifier.fillMaxSize().weight(0.8f),
+            contentAlignment = Alignment.CenterStart
+        ){
+            Text(
+                title,
+                color = active.choose(MaterialTheme.colors.onBackground, MaterialTheme.colors.onPrimary),
+                style = MaterialTheme.typography.caption,
+                softWrap = false,
+                overflow = TextOverflow.Ellipsis
+            )
+        }
 
         Box(
-            Modifier.fillMaxSize().zIndex(1f),
+            Modifier.fillMaxSize().weight(0.2f),
             contentAlignment = Alignment.CenterEnd
         ) {
             Icon(
@@ -157,17 +159,18 @@ fun TabItem(
 }
 
 @Composable
-fun ThemeSelector(
-    modifier: Modifier = Modifier,
-    viewModel: ApplicationFrameViewModel
+fun BoxScope.ThemeSelector(
+    frameViewModel: ApplicationFrameViewModel
 ) {
     Box(
-        modifier = modifier,
+        Modifier.padding(start = 16.dp, bottom = 16.dp)
+            .align(Alignment.BottomStart)
+            .zIndex(2f),
         contentAlignment = Alignment.Center,
     ) {
         Icon(
             painter = painterResource(
-                viewModel.isDark.choose(
+                frameViewModel.isDark.choose(
                     R.Icons.dark,
                     R.Icons.lignt
                 )
@@ -175,7 +178,7 @@ fun ThemeSelector(
             contentDescription = "Theme Selector",
             tint = MaterialTheme.colors.onSurface,
             modifier = Modifier.size(24.dp).clickable {
-                viewModel.isDark = !viewModel.isDark
+                frameViewModel.isDark = !frameViewModel.isDark
             }
         )
     }

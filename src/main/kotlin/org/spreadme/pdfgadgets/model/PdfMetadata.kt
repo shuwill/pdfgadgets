@@ -5,9 +5,8 @@ import com.itextpdf.kernel.pdf.PdfDocument
 
 class PdfMetadata(
     val fileMetadata: FileMetadata,
-    val version: String,
-    val numberOfPages: Int,
     val documentInfo: DocumentInfo,
+    val numberOfPages: Int,
     val trailer: PdfDictionary,
     val structureRoot: StructureNode,
     var pages: List<PageMetadata> = listOf(),

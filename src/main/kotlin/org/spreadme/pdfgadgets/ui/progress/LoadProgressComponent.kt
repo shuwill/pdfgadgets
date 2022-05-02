@@ -20,7 +20,6 @@ class LoadProgressComponent(
     override fun doRender() {
         val viewModelState = remember { progressViewModel }
         Column(Modifier.fillMaxSize()) {
-            println("loadProgress component [$uid] rendered")
             if (viewModelState.loading) {
                 Box(
                     modifier = Modifier.fillMaxSize(),

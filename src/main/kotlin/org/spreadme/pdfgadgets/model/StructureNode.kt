@@ -1,11 +1,9 @@
 package org.spreadme.pdfgadgets.model
 
-import com.itextpdf.kernel.font.PdfFont
-import com.itextpdf.kernel.font.PdfFontFactory
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.mutableStateOf
 import com.itextpdf.kernel.pdf.*
-import com.itextpdf.kernel.pdf.xobject.PdfImageXObject
 import org.spreadme.pdfgadgets.utils.new
-import java.awt.image.BufferedImage
 
 class StructureNode(
     val pdfName: PdfName?,
@@ -14,6 +12,7 @@ class StructureNode(
     val level: Int = 1,
     var paths: ArrayList<String> = arrayListOf(),
     var childs: List<StructureNode>  = listOf(),
+    val expand: MutableState<Boolean> = mutableStateOf(false)
 ) {
 
     constructor(pdfObject: PdfObject): this(null, pdfObject, 0, arrayListOf())
@@ -46,37 +45,6 @@ class StructureNode(
             childs = pdfObject.map { StructureNode(null, it, level + 1, paths.new()) }.toList()
         }
         return childs
-    }
-
-    fun isPageContents(): Boolean = paths.contains(PdfName.Page.toString()) && paths.last() == PdfName.Contents.toString()
-
-    fun isImage() = pdfObject is PdfDictionary && pdfObject[PdfName.Subtype] == PdfName.Image
-
-    fun image(onFailure: (Exception) -> Unit): BufferedImage? {
-        if (isImage()) {
-            try {
-                if (pdfObject is PdfStream) {
-                    val pdfImage = PdfImageXObject(pdfObject)
-                    return pdfImage.bufferedImage
-                }
-            } catch (e: Exception) {
-                onFailure(e)
-            }
-        }
-        return null
-    }
-
-    fun isFont() = pdfObject is PdfDictionary && pdfObject[PdfName.Type] == PdfName.Font
-
-    fun font(): PdfFont?{
-        if(isFont()) {
-            try {
-                return PdfFontFactory.createFont(pdfObject as PdfDictionary)
-            }catch (e: Exception) {
-                e.printStackTrace()
-            }
-        }
-        return null
     }
 
     override fun toString(): String {

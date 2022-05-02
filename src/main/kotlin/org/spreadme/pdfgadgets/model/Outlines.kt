@@ -10,7 +10,7 @@ import com.itextpdf.kernel.pdf.PdfOutline
 
 class Outlines(
     val document: PdfDocument,
-    val outlines: List<PdfOutline> = arrayListOf(),
+    val content: List<PdfOutline> = arrayListOf(),
     val destNames: Map<String, PdfObject> = mutableMapOf(),
 ) {
 

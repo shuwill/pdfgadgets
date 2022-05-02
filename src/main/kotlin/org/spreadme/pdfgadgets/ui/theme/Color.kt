@@ -87,8 +87,8 @@ fun lightExtraColors(
 
 fun darkExtraColors(
     success: Color = Color(0xFF16A34A),
-    onSuccess: Color = Color(0xFF171717),
-    successBackground: Color = Color(0xFFBBF7D0),
+    onSuccess: Color = Color(0xFFFAFAFA),
+    successBackground: Color = Color(0xFF14532D),
 
     error: Color = Color(0xFFDC2626),
     onError: Color = Color(0xFF171717),

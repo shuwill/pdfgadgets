@@ -16,9 +16,8 @@ class DefaultPdfMetadataParser : PdfMetadataParser, KoinComponent {
 
     override suspend fun parse(fileMetadata: FileMetadata): PdfMetadata {
         val document = PdfDocument(PdfReader(fileMetadata.file()))
-        val version = document.pdfVersion.toString()
         val numberOfPages = document.numberOfPages
-        val documentInfo = DocumentInfo(document.documentInfo)
+        val documentInfo = DocumentInfo(document.pdfVersion.toString(), document.documentInfo)
 
         // get outlines
         val catalog = document.catalog
@@ -68,9 +67,8 @@ class DefaultPdfMetadataParser : PdfMetadataParser, KoinComponent {
 
         return PdfMetadata(
             fileMetadata,
-            version,
-            numberOfPages,
             documentInfo,
+            numberOfPages,
             document.trailer,
             StructureNode(document.trailer),
             pages,

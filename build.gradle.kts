@@ -20,6 +20,7 @@ repositories {
 dependencies {
     implementation(kotlin("stdlib-jdk8"))
     implementation(compose.desktop.currentOs)
+    implementation(compose.materialIconsExtended)
 
     // Module dependencies
     implementation(project(":mupdf"))

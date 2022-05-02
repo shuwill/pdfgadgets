@@ -4,6 +4,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import org.spreadme.pdfgadgets.common.ViewModel
+import org.spreadme.pdfgadgets.ui.side.SideViewMode
 
 class ToolbarViewModel(
     enabled: Boolean = true
@@ -14,28 +15,37 @@ class ToolbarViewModel(
     }
 
     var enabled by mutableStateOf(enabled)
-
     var scale by mutableStateOf(100)
     var searchKeyword by mutableStateOf("")
+    var onChangeSideViewMode: (sideViewMode: SideViewMode) -> Unit = {}
+    var onChangeScale: (scale: Float) -> Unit = {}
 
-    fun onChangeViewMode(viewMode: ViewMode) {
-        //TODO
+    fun changeSideViewMode(sideViewMode: SideViewMode) {
+        onChangeSideViewMode(sideViewMode)
     }
 
-    fun onChangeScale(type: ScaleType) {
+    fun changeScale(type: ScaleType?, scale: Int = 100) {
         when (type) {
             ScaleType.ZOOM_IN -> {
-                scale -= 10
-                if (scale <= 10) {
-                    scale = 10
+                this.scale -= 10
+                if (this.scale <= 10) {
+                    this. scale = 10
                 }
             }
             ScaleType.ZOOM_OUT -> {
-                scale += 10
-                if (scale >= 200) {
-                    scale = 200
+                this.scale += 10
+                if (this.scale >= 200) {
+                    this.scale = 200
                 }
             }
+            else -> {
+                this.scale = scale
+            }
         }
+        onChangeScale(this.scale / 100.0f)
+    }
+
+    override fun clear() {
+
     }
 }

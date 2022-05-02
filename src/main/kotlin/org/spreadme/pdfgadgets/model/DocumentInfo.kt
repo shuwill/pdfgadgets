@@ -6,6 +6,7 @@ import org.spreadme.pdfgadgets.utils.pdfDate
 import java.util.*
 
 data class DocumentInfo(
+    val version: String,
     val title: String,
     val author: String,
     val subject: String,
@@ -16,7 +17,8 @@ data class DocumentInfo(
     val modDate: Date?
 ) {
 
-    constructor(documentInfo: PdfDocumentInfo) : this(
+    constructor(version: String, documentInfo: PdfDocumentInfo) : this(
+        version = version,
         title = documentInfo.title ?: "",
         author = documentInfo.author ?: "",
         subject = documentInfo.subject ?: "",

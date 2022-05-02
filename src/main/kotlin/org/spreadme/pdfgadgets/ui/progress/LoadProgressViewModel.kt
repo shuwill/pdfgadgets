@@ -12,6 +12,7 @@ class LoadProgressViewModel : ViewModel {
     var message by mutableStateOf<String?>(null)
 
     var onSuccess: () -> Unit = {}
+    var onFailure: () -> Unit = {}
 
     fun success() {
         loading = false
@@ -22,5 +23,9 @@ class LoadProgressViewModel : ViewModel {
         loading = false
         successful = false
         message = errorMessage
+    }
+
+    override fun clear() {
+
     }
 }

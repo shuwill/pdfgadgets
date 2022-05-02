@@ -4,37 +4,48 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.awt.ComposeWindow
+import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.window.WindowState
-import kotlinx.coroutines.MainScope
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 import org.spreadme.pdfgadgets.common.AbstractComponent
 import org.spreadme.pdfgadgets.common.LoadableComponent
 import org.spreadme.pdfgadgets.common.ViewModel
+import org.spreadme.pdfgadgets.ui.home.HomeComponent
 import org.spreadme.pdfgadgets.ui.progress.LoadProgressComponent
 import org.spreadme.pdfgadgets.ui.progress.LoadProgressViewModel
+import kotlin.coroutines.CoroutineContext
 import kotlin.system.exitProcess
 
-class ApplicationFrameViewModel : ViewModel {
+class ApplicationFrameViewModel : ViewModel, CoroutineScope {
+
+    override val coroutineContext: CoroutineContext
+        get() = Dispatchers.Default + SupervisorJob()
+
+
+    var composeWindow = ComposeWindow()
 
     val components = mutableStateListOf<AbstractComponent>()
     var currentComponent by mutableStateOf<AbstractComponent?>(null)
 
     //UI State
-    var windowState: WindowState = WindowState()
+    var windowState = WindowState()
     var isDark by mutableStateOf(false)
-    var tabbarPaddingStart by mutableStateOf(16)
-    var tabbarPaddingEnd by mutableStateOf(16)
-    val iconSize by mutableStateOf(32)
     var tabWidth by mutableStateOf(168)
 
-    fun addComponent(component: AbstractComponent) {
+    var isCustomWindowDecoration = false
+    var tabbarPaddingStart = 16
+    var tabbarPaddingEnd = 16
+    val iconSize = 32
+
+    fun customWindowDecoration(enabled: Boolean) {
+        isCustomWindowDecoration = enabled
+        tabbarPaddingStart = 80
+    }
+
+    fun onWindowStateChange(size: DpSize) {
+        println("onWindowResize $size")
         calculateWidth()
-        if (component is LoadableComponent) {
-            asyncAddComponent(component)
-        } else {
-            components.add(component)
-            currentComponent = component
-        }
     }
 
     fun onSelectTab(selectedComponent: AbstractComponent) {
@@ -55,30 +66,44 @@ class ApplicationFrameViewModel : ViewModel {
         components.remove(closeComponent)
     }
 
+    fun newBlankTab() {
+        calculateWidth()
+        val homeComponent = HomeComponent(this)
+        components.add(homeComponent)
+        currentComponent = homeComponent
+    }
+
     /**
      * @param component a need load component, the loading operations in a concurrent process,
      * render the [LoadableComponent] first, when load finished then render the [LoadableComponent]
      */
-    private fun asyncAddComponent(component: LoadableComponent) {
+    fun openTab(component: LoadableComponent) {
+        calculateWidth()
         val progressViewModel = LoadProgressViewModel()
         val loadProgressComponent = LoadProgressComponent(progressViewModel)
+        doOpenTab(loadProgressComponent)
+
         progressViewModel.onSuccess = {
-            components.add(component)
-            currentComponent = component
+            doOpenTab(component)
         }
-        MainScope().launch {
+        launch {
             try {
                 component.load()
                 progressViewModel.success()
             } catch (e: Exception) {
+                e.printStackTrace()
                 progressViewModel.loading = false
                 progressViewModel.fail(e.message)
             } finally {
                 components.remove(loadProgressComponent)
             }
         }
-        components.add(loadProgressComponent)
-        currentComponent = loadProgressComponent
+    }
+
+    private fun doOpenTab(component: AbstractComponent) {
+        components.add(component)
+        components.remove(currentComponent)
+        currentComponent = component
     }
 
     private fun calculateWidth() {
@@ -86,5 +111,10 @@ class ApplicationFrameViewModel : ViewModel {
         if ((components.size + 1) * tabWidth > windowWidth) {
             tabWidth = (windowWidth / (components.size + 1)).toInt()
         }
+    }
+
+    override fun clear() {
+        coroutineContext.cancel()
+        components.forEach { it.close() }
     }
 }

@@ -5,7 +5,7 @@ import org.spreadme.pdfgadgets.utils.Platform
 import javax.swing.JRootPane
 
 class PlatformUI(
-    private val rootPane: JRootPane,
+    private val rootPane: JRootPane = JRootPane(),
     private val isDark: Boolean = false
 ) {
 
