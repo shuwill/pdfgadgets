@@ -3,12 +3,16 @@ package org.spreadme.pdfgadgets.ui.pdfview
 import androidx.compose.animation.*
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.selection.selectable
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDropDown
+import androidx.compose.material.icons.filled.ArrowRight
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -21,17 +25,17 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import org.spreadme.pdfgadgets.model.Position
 import org.spreadme.pdfgadgets.model.Signature
+import org.spreadme.pdfgadgets.model.SignatureResult
 import org.spreadme.pdfgadgets.resources.R
-import org.spreadme.pdfgadgets.ui.common.VerticalScrollable
 import org.spreadme.pdfgadgets.ui.common.clickable
-import org.spreadme.pdfgadgets.ui.side.SideViewModel
+import org.spreadme.pdfgadgets.ui.sidepanel.SidePanelViewModel
 import org.spreadme.pdfgadgets.ui.theme.LocalExtraColors
 import org.spreadme.pdfgadgets.utils.choose
 
 @Composable
 fun SignatureList(
     signatures: List<Signature>,
-    sideViewModel: SideViewModel,
+    sidePanelViewModel: SidePanelViewModel,
     onScroll: (postion: Position, scrollFinish: () -> Unit) -> Unit,
 ) {
     if (signatures.isEmpty()) {
@@ -45,52 +49,15 @@ fun SignatureList(
             )
         }
     } else {
-        VerticalScrollable(sideViewModel) {
-            Column(modifier = Modifier.fillMaxSize()) {
-                signatures.forEach { signature ->
-                    Column(
-                        modifier = Modifier.fillMaxSize(),
-                    ) {
-                        val signatureResult = signature.signatureResult
-                        val verify = signatureResult.verifySignature
-                        var expanded by remember { signature.expand }
-                        Row(
-                            modifier = Modifier.fillMaxWidth().height(42.dp).selectable(true) {
-                                expanded = !expanded
-                            }.padding(horizontal = 16.dp),
-                            verticalAlignment = Alignment.CenterVertically
-                        ) {
-                            val imageVector = expanded.choose(Icons.Default.ArrowDropDown, Icons.Default.ArrowDropDown)
-                            Icon(
-                                imageVector,
-                                contentDescription = "",
-                                tint = MaterialTheme.colors.onBackground,
-                                modifier = Modifier.size(16.dp).clickable {
-                                    expanded = !expanded
-                                }
-                            )
-
-                            Icon(
-                                painter = painterResource(R.Icons.signature),
-                                contentDescription = "",
-                                tint = verify.choose(LocalExtraColors.current.success, LocalExtraColors.current.error),
-                                modifier = Modifier.padding(start = 8.dp).size(16.dp)
-                            )
-
-                            Text(
-                                "由\"${signatureResult.signName}\"签名",
-                                style = MaterialTheme.typography.caption,
-                                color = MaterialTheme.colors.onBackground,
-                                modifier = Modifier.padding(start = 8.dp),
-                                textAlign = TextAlign.Center,
-                                softWrap = false,
-                                overflow = TextOverflow.Clip
-                            )
-                        }
-
-                        SignatureListDetail(expanded, signature, onScroll)
-                    }
-                }
+        val lazyListState = rememberLazyListState(sidePanelViewModel.verticalScroll, sidePanelViewModel.verticalScrollOffset)
+        LazyColumn(
+            modifier = Modifier.fillMaxSize(),
+            state = lazyListState
+        ) {
+            sidePanelViewModel.verticalScroll = lazyListState.firstVisibleItemIndex
+            sidePanelViewModel.verticalScrollOffset = lazyListState.firstVisibleItemScrollOffset
+            items(signatures) { signature ->
+                SignatureListDetail(signature, onScroll)
             }
         }
     }
@@ -98,6 +65,60 @@ fun SignatureList(
 
 @Composable
 fun SignatureListDetail(
+    signature: Signature,
+    onScroll: (postion: Position, scrollFinish: () -> Unit) -> Unit,
+) {
+    Column(
+        modifier = Modifier.fillMaxSize(),
+    ) {
+        val expanded by remember { signature.expand }
+        SignatureBrief(signature.expand, signature.signatureResult)
+        SignatureExpandDetail(expanded, signature, onScroll)
+    }
+}
+
+@Composable
+private fun SignatureBrief(
+    expanded: MutableState<Boolean>,
+    signatureResult: SignatureResult
+) {
+    Row(
+        modifier = Modifier.fillMaxWidth().height(42.dp).selectable(true) {
+            expanded.value = !expanded.value
+        }.padding(horizontal = 16.dp),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        val imageVector = expanded.value.choose(Icons.Default.ArrowDropDown, Icons.Default.ArrowRight)
+        Icon(
+            imageVector,
+            contentDescription = "",
+            tint = MaterialTheme.colors.onBackground,
+            modifier = Modifier.size(16.dp).clickable {
+                expanded.value = !expanded.value
+            }
+        )
+
+        Icon(
+            painter = painterResource(R.Icons.signature),
+            contentDescription = "",
+            tint = signatureResult.verifySignature.choose(LocalExtraColors.current.success, LocalExtraColors.current.error),
+            modifier = Modifier.padding(start = 8.dp).size(16.dp)
+        )
+
+        Text(
+            "由\"${signatureResult.signName}\"签名",
+            style = MaterialTheme.typography.caption,
+            color = MaterialTheme.colors.onBackground,
+            modifier = Modifier.padding(start = 8.dp),
+            textAlign = TextAlign.Center,
+            softWrap = false,
+            overflow = TextOverflow.Clip
+        )
+    }
+}
+
+@Composable
+private fun SignatureExpandDetail(
     expanded: Boolean,
     signature: Signature,
     onScroll: (postion: Position, scrollFinish: () -> Unit) -> Unit,

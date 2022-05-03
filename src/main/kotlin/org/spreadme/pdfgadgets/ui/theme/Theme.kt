@@ -10,21 +10,23 @@ import androidx.compose.ui.graphics.Color
 import org.spreadme.pdfgadgets.utils.choose
 
 val lightTheme = lightColors(
-    primaryVariant = Color(0xFFE7EAED),
-    secondary = Color(0xFF005FB7),
-    background = Color(0xFFF4F4F5),
-    surface = Color(0xFFFAFAFA),
+    primaryVariant = Color(0xFF4F52B2),
+    primary = Color(0xFF5B5FC7),
+    secondary = Color(0xFF005fB7),
+    background = Color(0xFFE7EAED),
+    surface = Color(0xFFF8F8F8),
 
-    onPrimary = Color(0xFF000000),
+    onPrimary = Color(0xFFFFFFFF),
     onSecondary = Color(0xFFFFFFFF),
     onBackground = Color(0xFF171717),
     onSurface = Color(0xFF262626),
 )
 val darkTheme = darkColors(
-    primaryVariant = Color(0xFF18181B),
-    secondary = Color(0xFF60CDFF),
-    background = Color(0xFF27272A),
-    surface = Color(0xFF2C2C2C),
+    primaryVariant = Color(0xFF2F2F4A),
+    primary = Color(0xFF4F52B2),
+    secondary = Color(0xFF604DFF),
+    background = Color(0xFF1F1F1F),
+    surface = Color(0xFF2D2C2C),
 
     onPrimary = Color(0xFFE5E5E5),
     onSecondary = Color(0xFF000000),

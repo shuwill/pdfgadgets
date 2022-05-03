@@ -7,17 +7,22 @@ class ExtraColors(
     success: Color,
     onSuccess: Color,
     successBackground: Color,
+    successBorder: Color,
 
     error: Color,
     onError: Color,
     errorBackground: Color,
+    errorBorder: Color,
 
     warning: Color,
     onWarning: Color,
     warningBackground: Color,
+    warningBorder: Color,
 
     iconDisable: Color,
     contentDisable: Color,
+    border: Color,
+    sidePanelBackground: Color,
 
     isLight: Boolean
 ) {
@@ -27,12 +32,16 @@ class ExtraColors(
         internal set
     var successBackground by mutableStateOf(successBackground, structuralEqualityPolicy())
         internal set
+    var successBorder by mutableStateOf(successBorder, structuralEqualityPolicy())
+        internal set
 
     var error by mutableStateOf(error, structuralEqualityPolicy())
         internal set
     var onError by mutableStateOf(onError, structuralEqualityPolicy())
         internal set
     var errorBackground by mutableStateOf(errorBackground, structuralEqualityPolicy())
+        internal set
+    var errorBorder by mutableStateOf(errorBorder, structuralEqualityPolicy())
         internal set
 
     var warning by mutableStateOf(warning, structuralEqualityPolicy())
@@ -41,10 +50,16 @@ class ExtraColors(
         internal set
     var warningBackground by mutableStateOf(warningBackground, structuralEqualityPolicy())
         internal set
+    var warningBorder by mutableStateOf(warningBorder, structuralEqualityPolicy())
+        internal set
 
     var iconDisable by mutableStateOf(iconDisable, structuralEqualityPolicy())
         internal set
     var contentDisable by mutableStateOf(contentDisable, structuralEqualityPolicy())
+        internal set
+    var border by mutableStateOf(border, structuralEqualityPolicy())
+        internal set
+    var sidePanelBackground by mutableStateOf(sidePanelBackground, structuralEqualityPolicy())
         internal set
 
     var isLight by mutableStateOf(isLight, structuralEqualityPolicy())
@@ -52,71 +67,93 @@ class ExtraColors(
 }
 
 fun lightExtraColors(
-    success: Color = Color(0xFF15803D),
-    onSuccess: Color = Color(0xFF171717),
-    successBackground: Color = Color(0xFFBBF7D0),
+    success: Color = Color(0xFF237B4B),
+    onSuccess: Color = Color(0xFF237B4B),
+    successBackground: Color = Color(0xFFE7F2DA),
+    successBorder: Color = Color(0xFFBDDA9B),
 
-    error: Color = Color(0xFFB91C1C),
-    onError: Color = Color(0xFF171717),
-    errorBackground: Color = Color(0xFFFECACA),
+    error: Color = Color(0xFFC4314B),
+    onError: Color = Color(0xFFC4314B),
+    errorBackground: Color = Color(0xFFFCF4F6),
+    errorBorder: Color = Color(0xFFF3D6D8),
 
-    warning: Color = Color(0xFFC2410C),
-    onWarning: Color = Color(0xFF171717),
-    warningBackground: Color = Color(0xFFFED7AA),
+    warning: Color = Color(0xFF835C00),
+    onWarning: Color = Color(0xFF835C00),
+    warningBackground: Color = Color(0xFFFBF6D9),
+    warningBorder: Color = Color(0xFFF2E384),
 
     iconDisable: Color = Color(0xFFA3A3A3),
     contentDisable: Color = Color(0xFFA3A3A3),
+    border: Color = Color(0xFFE7EAED),
+    sidePanelBackground: Color = Color(0xFFF1F1F1)
+
 ): ExtraColors = ExtraColors(
     success,
     onSuccess,
     successBackground,
+    successBorder,
 
     error,
     onError,
     errorBackground,
+    errorBorder,
 
     warning,
     onWarning,
     warningBackground,
+    warningBorder,
 
     iconDisable,
     contentDisable,
+    border,
+    sidePanelBackground,
+
     true
 )
 
-
 fun darkExtraColors(
-    success: Color = Color(0xFF16A34A),
-    onSuccess: Color = Color(0xFFFAFAFA),
-    successBackground: Color = Color(0xFF14532D),
+    success: Color = Color(0xFF92C353),
+    onSuccess: Color = Color(0xFF92C353),
+    successBackground: Color = Color(0xFF0D2E0D),
+    successBorder: Color = Color(0xFF032003),
 
-    error: Color = Color(0xFFDC2626),
-    onError: Color = Color(0xFF171717),
-    errorBackground: Color = Color(0xFFFECACA),
+    error: Color = Color(0xFFF9526B),
+    onError: Color = Color(0xFFF9526B),
+    errorBackground: Color = Color(0xFF3E1F25),
+    errorBorder: Color = Color(0xFF1E040A),
 
-    warning: Color = Color(0xFFEA580C),
-    onWarning: Color = Color(0xFF171717),
-    warningBackground: Color = Color(0xFFFED7AA),
+    warning: Color = Color(0xFFF2E384),
+    onWarning: Color = Color(0xFFF2E384),
+    warningBackground: Color = Color(0xFF463100),
+    warningBorder: Color = Color(0xFF261A00),
 
     iconDisable: Color = Color(0xFF404040),
     contentDisable: Color = Color(0xFF404040),
+    border: Color = Color(0xFF1F1F1F),
+    sidePanelBackground: Color = Color(0xFF27272A)
+
 ): ExtraColors = ExtraColors(
     success,
     onSuccess,
     successBackground,
+    successBorder,
 
     error,
     onError,
     errorBackground,
+    errorBorder,
 
     warning,
     onWarning,
     warningBackground,
+    warningBorder,
 
     iconDisable,
     contentDisable,
+    border,
+    sidePanelBackground,
+
     true
 )
-
 
 val LocalExtraColors = compositionLocalOf { lightExtraColors() }

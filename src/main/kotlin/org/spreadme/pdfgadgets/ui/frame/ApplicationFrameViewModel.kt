@@ -44,8 +44,7 @@ class ApplicationFrameViewModel : ViewModel, CoroutineScope {
     }
 
     fun onWindowStateChange(size: DpSize) {
-        println("onWindowResize $size")
-        calculateWidth()
+       //TODO re calculate the tab width
     }
 
     fun onSelectTab(selectedComponent: AbstractComponent) {

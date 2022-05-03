@@ -12,7 +12,7 @@ class StructureNode(
     val level: Int = 1,
     var paths: ArrayList<String> = arrayListOf(),
     var childs: List<StructureNode>  = listOf(),
-    val expand: MutableState<Boolean> = mutableStateOf(false)
+    val expanded: MutableState<Boolean> = mutableStateOf(false)
 ) {
 
     constructor(pdfObject: PdfObject): this(null, pdfObject, 0, arrayListOf())

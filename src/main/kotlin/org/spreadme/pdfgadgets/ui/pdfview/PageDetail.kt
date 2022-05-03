@@ -31,6 +31,7 @@ import org.spreadme.pdfgadgets.model.Position
 import org.spreadme.pdfgadgets.model.Signature
 import org.spreadme.pdfgadgets.ui.common.AsyncImage
 import org.spreadme.pdfgadgets.ui.common.Rectangle
+import org.spreadme.pdfgadgets.ui.theme.LocalExtraColors
 
 import java.awt.Cursor
 import kotlin.math.abs
@@ -70,7 +71,7 @@ fun mediabox(
     // mediabox size
     Rectangle(
         modifier = Modifier.background(MaterialTheme.colors.background.copy(0.65f))
-            .border(1.dp, color = MaterialTheme.colors.primaryVariant)
+            .border(1.dp, color = LocalExtraColors.current.border)
             .pointerHoverIcon(PointerIcon(Cursor(Cursor.CROSSHAIR_CURSOR))),
         page.mediabox,
         page.mediabox.height,

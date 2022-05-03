@@ -25,14 +25,18 @@ import org.spreadme.pdfgadgets.common.LoadableComponent
 import org.spreadme.pdfgadgets.repository.FileMetadataParser
 import org.spreadme.pdfgadgets.repository.PdfMetadataParser
 import org.spreadme.pdfgadgets.ui.common.clickable
-import org.spreadme.pdfgadgets.ui.side.SideView
-import org.spreadme.pdfgadgets.ui.side.SideViewMode
+import org.spreadme.pdfgadgets.ui.frame.ApplicationFrameViewModel
+import org.spreadme.pdfgadgets.ui.sidepanel.SidePanel
+import org.spreadme.pdfgadgets.ui.sidepanel.SidePanelMode
+import org.spreadme.pdfgadgets.ui.theme.LocalExtraColors
+import org.spreadme.pdfgadgets.ui.toolbar.ActionBar
 import org.spreadme.pdfgadgets.ui.toolbar.Toolbar
 import org.spreadme.pdfgadgets.ui.toolbar.ToolbarViewModel
 import java.nio.file.Path
 
 class PdfViewComponent(
-    filePath: Path
+    filePath: Path,
+    val frameViewModel: ApplicationFrameViewModel
 ) : LoadableComponent(), KoinComponent {
 
     val path: Path = filePath
@@ -51,33 +55,36 @@ class PdfViewComponent(
         ) {
             println("pdf view component [$name] rendered")
             Toolbar(toolbarViewModel = toolbarViewModel)
-            Divider(color = MaterialTheme.colors.primaryVariant)
+            Divider(color = LocalExtraColors.current.border)
             val focusManager = LocalFocusManager.current
             Row(Modifier.fillMaxSize().clickable { focusManager.clearFocus() }) {
+                ActionBar(frameViewModel)
+                Box(Modifier.fillMaxHeight().width(1.dp).background(LocalExtraColors.current.border))
+
                 val pdfpdfViewModel = remember { pdfViewModel }
                 toolbarViewModel.onChangeSideViewMode = pdfpdfViewModel::onChangeSideViewMode
                 toolbarViewModel.onChangeScale = pdfpdfViewModel::onChangeScalue
-                SideViewGroup(pdfpdfViewModel)
+                SidePanelGroup(pdfpdfViewModel)
                 PageDetailGroup(pdfpdfViewModel)
             }
         }
     }
 
     @Composable
-    fun RowScope.SideViewGroup(pdfViewModel: PdfViewModel) {
+    fun RowScope.SidePanelGroup(pdfViewModel: PdfViewModel) {
         // PDF Info View Component
-        if (pdfViewModel.hasSideView(SideViewMode.INFO)) {
+        if (pdfViewModel.hasSideView(SidePanelMode.INFO)) {
             DocumentAttrDetail(
                 pdfViewModel.pdfMetadata.fileMetadata.name,
                 pdfViewModel.pdfMetadata.documentInfo
             ) {
-                pdfViewModel.onChangeSideViewMode(SideViewMode.INFO)
+                pdfViewModel.onChangeSideViewMode(SidePanelMode.INFO)
             }
         }
 
         // PDF Bookmarks View Component
-        AnimatedVisibility(pdfViewModel.hasSideView(SideViewMode.OUTLINES)) {
-            SideView(pdfViewModel.sideViewModel(SideViewMode.OUTLINES)) {
+        AnimatedVisibility(pdfViewModel.hasSideView(SidePanelMode.OUTLINES)) {
+            SidePanel(pdfViewModel.sideViewModel(SidePanelMode.OUTLINES)) {
                 OutlinesTree(
                     it,
                     pdfViewModel.pdfMetadata.outlines,
@@ -88,15 +95,15 @@ class PdfViewComponent(
         }
 
         // PDF Structure View Component
-        AnimatedVisibility(pdfViewModel.hasSideView(SideViewMode.STRUCTURE)) {
-            SideView(pdfViewModel.sideViewModel(SideViewMode.STRUCTURE)) {
+        AnimatedVisibility(pdfViewModel.hasSideView(SidePanelMode.STRUCTURE)) {
+            SidePanel(pdfViewModel.sideViewModel(SidePanelMode.STRUCTURE)) {
                 StructureTree(pdfViewModel.pdfMetadata.structureRoot, it)
             }
         }
 
         // PDF Signature View Component
-        AnimatedVisibility(pdfViewModel.hasSideView(SideViewMode.SIGNATURE)) {
-            SideView(pdfViewModel.sideViewModel(SideViewMode.SIGNATURE)) {
+        AnimatedVisibility(pdfViewModel.hasSideView(SidePanelMode.SIGNATURE)) {
+            SidePanel(pdfViewModel.sideViewModel(SidePanelMode.SIGNATURE)) {
                 SignatureList(
                     pdfViewModel.pdfMetadata.signatures,
                     it,
@@ -110,8 +117,8 @@ class PdfViewComponent(
     fun PageDetailGroup(
         pdfViewModel: PdfViewModel
     ) {
-        val lazyListState = rememberLazyListState(pdfViewModel.scrollIndex, pdfViewModel.scrollOffset)
-        val horizontalScollState = rememberScrollState(0)
+        val lazyListState = rememberLazyListState(pdfViewModel.initScrollIndex, pdfViewModel.initScrollOffset)
+        val horizontalScollState = rememberScrollState(pdfViewModel.horizontalInitScollIndex)
 
         val coroutineScope = rememberCoroutineScope()
         if (pdfViewModel.scrollable) {
@@ -136,10 +143,14 @@ class PdfViewComponent(
                 }
             }
 
+            pdfViewModel.initScrollIndex = lazyListState.firstVisibleItemIndex
+            pdfViewModel.initScrollOffset = lazyListState.firstVisibleItemScrollOffset
+            pdfViewModel.horizontalInitScollIndex = horizontalScollState.value
+
             Box(
                 modifier = Modifier.padding(end = 16.dp, bottom = 16.dp)
                     .size(80.dp, 32.dp)
-                    .background(MaterialTheme.colors.background.copy(0.85f), RoundedCornerShape(4.dp))
+                    .background(MaterialTheme.colors.primary.copy(0.85f), RoundedCornerShape(4.dp))
                     .align(Alignment.BottomEnd)
                     .zIndex(2f),
                 contentAlignment = Alignment.Center,
@@ -147,7 +158,7 @@ class PdfViewComponent(
                 Text(
                     "${lazyListState.firstVisibleItemIndex + 1} / ${pdfViewModel.pdfMetadata.numberOfPages}",
                     style = MaterialTheme.typography.subtitle2,
-                    color = MaterialTheme.colors.onBackground
+                    color = MaterialTheme.colors.onPrimary
                 )
             }
 

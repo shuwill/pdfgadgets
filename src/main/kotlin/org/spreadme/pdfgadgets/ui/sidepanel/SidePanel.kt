@@ -1,11 +1,10 @@
-package org.spreadme.pdfgadgets.ui.side
+package org.spreadme.pdfgadgets.ui.sidepanel
 
-import androidx.compose.foundation.*
+import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.Orientation
 import androidx.compose.foundation.gestures.draggable
 import androidx.compose.foundation.gestures.rememberDraggableState
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -16,27 +15,28 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
+import org.spreadme.pdfgadgets.ui.theme.LocalExtraColors
 import java.awt.Cursor
 
 @Composable
-fun SideView(
-    sideViewModel: SideViewModel,
-    content: @Composable BoxScope.(SideViewModel) -> Unit
+fun SidePanel(
+    sidePanelViewModel: SidePanelViewModel,
+    content: @Composable BoxScope.(SidePanelViewModel) -> Unit
 ) {
 
-    val sideViewState = remember { sideViewModel }
+    val sideViewState = remember { sidePanelViewModel }
 
     Column(
         modifier = Modifier.fillMaxHeight().width(sideViewState.expandedSize)
-            .background(MaterialTheme.colors.background)
+            .background(LocalExtraColors.current.sidePanelBackground)
     ) {
         Box(modifier = Modifier.fillMaxSize()) {
-            content(sideViewModel)
+            content(sidePanelViewModel)
             Box(
                 modifier = Modifier.fillMaxSize().zIndex(1f),
                 contentAlignment = Alignment.CenterEnd
             ) {
-                VerticalSplitter(
+                SidePanelVerticalSplitter(
                     sideViewState,
                     onResize = {
                         sideViewState.expandedSize = (sideViewState.expandedSize + it)
@@ -49,8 +49,8 @@ fun SideView(
 }
 
 @Composable
-fun VerticalSplitter(
-    sideViewState: SideViewModel,
+fun SidePanelVerticalSplitter(
+    sideViewState: SidePanelViewModel,
     onResize: (delta: Dp) -> Unit,
 ) {
     val density = LocalDensity.current
@@ -73,5 +73,5 @@ fun VerticalSplitter(
             }
         }
     )
-    Box(modifier = Modifier.width(1.dp).fillMaxHeight().background(MaterialTheme.colors.primaryVariant))
+    Box(modifier = Modifier.width(1.dp).fillMaxHeight().background(LocalExtraColors.current.border))
 }

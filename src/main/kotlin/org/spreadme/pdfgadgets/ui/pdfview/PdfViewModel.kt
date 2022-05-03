@@ -5,57 +5,61 @@ import androidx.compose.runtime.snapshots.SnapshotStateList
 import org.spreadme.pdfgadgets.common.ViewModel
 import org.spreadme.pdfgadgets.model.PdfMetadata
 import org.spreadme.pdfgadgets.model.Position
-import org.spreadme.pdfgadgets.ui.side.SideViewMode
-import org.spreadme.pdfgadgets.ui.side.SideViewModel
+import org.spreadme.pdfgadgets.ui.sidepanel.SidePanelMode
+import org.spreadme.pdfgadgets.ui.sidepanel.SidePanelViewModel
 
 class PdfViewModel(
     val pdfMetadata: PdfMetadata
 ) : ViewModel {
 
     var scale by mutableStateOf(1.0f)
-    var scrollable by mutableStateOf(false)
-    var scrollIndex by mutableStateOf(0)
-    var scrollOffset by mutableStateOf(0)
 
-    val searchedPositions : SnapshotStateList<Position> = mutableStateListOf()
+    var initScrollIndex = 0
+    var initScrollOffset = 0
+    var horizontalInitScollIndex = 0
+
+    var scrollable by mutableStateOf(false)
+    var scrollIndex by mutableStateOf(initScrollIndex)
+    var scrollOffset by mutableStateOf(initScrollOffset)
 
     var scrollFinish : () -> Unit = {}
 
-    private var sideViewModes = mutableStateListOf<SideViewMode>()
-    private val sideViewModels = mutableStateMapOf<SideViewMode, SideViewModel>()
-    private val excludeModesMap = mutableMapOf<SideViewMode, ArrayList<SideViewMode>>()
+    val searchedPositions : SnapshotStateList<Position> = mutableStateListOf()
+
+    private var sidePanelModes = mutableStateListOf<SidePanelMode>()
+    private val sidePanelModels = mutableStateMapOf<SidePanelMode, SidePanelViewModel>()
+    private val excludeModesMap = mutableMapOf<SidePanelMode, ArrayList<SidePanelMode>>()
 
     init {
-        excludeModesMap[SideViewMode.OUTLINES] = arrayListOf(SideViewMode.STRUCTURE, SideViewMode.SIGNATURE)
-        excludeModesMap[SideViewMode.STRUCTURE] = arrayListOf(SideViewMode.OUTLINES, SideViewMode.SIGNATURE)
-        excludeModesMap[SideViewMode.SIGNATURE] = arrayListOf(SideViewMode.OUTLINES, SideViewMode.STRUCTURE)
+        excludeModesMap[SidePanelMode.OUTLINES] = arrayListOf(SidePanelMode.STRUCTURE, SidePanelMode.SIGNATURE)
+        excludeModesMap[SidePanelMode.STRUCTURE] = arrayListOf(SidePanelMode.OUTLINES, SidePanelMode.SIGNATURE)
+        excludeModesMap[SidePanelMode.SIGNATURE] = arrayListOf(SidePanelMode.OUTLINES, SidePanelMode.STRUCTURE)
 
-        SideViewMode.values().forEach {
-            sideViewModels[it] = SideViewModel()
+        SidePanelMode.values().forEach {
+            sidePanelModels[it] = SidePanelViewModel()
         }
     }
 
-    fun onChangeSideViewMode(sideViewMode: SideViewMode) {
-        if (sideViewModes.contains(sideViewMode)) {
-            sideViewModes.remove(sideViewMode)
-        } else if (!sideViewModes.contains(sideViewMode)) {
-            sideViewModes.add(sideViewMode)
-            sideViewModes.removeAll(excludeModesMap[sideViewMode] ?: arrayListOf())
+    fun onChangeSideViewMode(sidePanelMode: SidePanelMode) {
+        if (sidePanelModes.contains(sidePanelMode)) {
+            sidePanelModes.remove(sidePanelMode)
+        } else if (!sidePanelModes.contains(sidePanelMode)) {
+            sidePanelModes.add(sidePanelMode)
+            sidePanelModes.removeAll(excludeModesMap[sidePanelMode] ?: arrayListOf())
         }
     }
 
-    fun sideViewModel(viewMode: SideViewMode): SideViewModel {
-        val sideViewState = sideViewModels[viewMode]
+    fun sideViewModel(viewMode: SidePanelMode): SidePanelViewModel {
+        val sideViewState = sidePanelModels[viewMode]
         if (sideViewState != null) {
             return sideViewState
         }
-        return SideViewModel()
+        return SidePanelViewModel()
     }
 
-    fun hasSideView(viewMode: SideViewMode): Boolean = sideViewModes.contains(viewMode)
+    fun hasSideView(viewMode: SidePanelMode): Boolean = sidePanelModes.contains(viewMode)
 
     fun onChangeScalue(scale: Float) {
-        println("scale change to $scale")
         this.scale = scale
     }
 

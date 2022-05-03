@@ -51,7 +51,7 @@ fun TextInputField(
         singleLine = singleLine,
         enabled = enabled,
         readOnly = readOnly,
-        cursorBrush = SolidColor(MaterialTheme.colors.onPrimary),
+        cursorBrush = SolidColor(MaterialTheme.colors.primary),
         decorationBox = @Composable { innerTextField ->
             Row(
                 verticalAlignment = Alignment.CenterVertically

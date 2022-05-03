@@ -1,6 +1,7 @@
 package org.spreadme.pdfgadgets.ui.pdfview
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Icon
@@ -63,7 +64,8 @@ fun VerifyDetail(verify: Boolean) {
                     LocalExtraColors.current.successBackground,
                     LocalExtraColors.current.errorBackground
                 )
-            ),
+            )
+            .border(1.dp, LocalExtraColors.current.successBorder, RoundedCornerShape(8.dp)),
         verticalAlignment = Alignment.CenterVertically
     ) {
         Icon(

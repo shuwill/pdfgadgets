@@ -18,7 +18,7 @@ import org.spreadme.pdfgadgets.resources.R
 import org.spreadme.pdfgadgets.ui.common.DropdownTextInputField
 import org.spreadme.pdfgadgets.ui.common.TextSearchInputField
 import org.spreadme.pdfgadgets.ui.common.clickable
-import org.spreadme.pdfgadgets.ui.side.SideViewMode
+import org.spreadme.pdfgadgets.ui.sidepanel.SidePanelMode
 import org.spreadme.pdfgadgets.ui.theme.LocalExtraColors
 import org.spreadme.pdfgadgets.ui.toolbar.ToolbarViewModel.Companion.SCALES
 
@@ -71,7 +71,7 @@ fun ViewModeBar(
         verticalAlignment = Alignment.CenterVertically
     ) {
         val viewModelState = remember { toolbarViewModel }
-        SideViewMode.values().forEach { mode ->
+        SidePanelMode.values().forEach { mode ->
             Icon(
                 painter = painterResource(mode.icon),
                 contentDescription = mode.desc,

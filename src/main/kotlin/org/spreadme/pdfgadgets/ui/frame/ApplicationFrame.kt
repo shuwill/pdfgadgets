@@ -15,13 +15,11 @@ import androidx.compose.material.icons.filled.Close
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.zIndex
-import org.spreadme.pdfgadgets.resources.R
 import org.spreadme.pdfgadgets.ui.common.CustomWindowDecoration
 import org.spreadme.pdfgadgets.ui.common.clickable
+import org.spreadme.pdfgadgets.ui.theme.LocalExtraColors
 import org.spreadme.pdfgadgets.utils.choose
 
 @Composable
@@ -35,14 +33,12 @@ fun ApplicationFrame(
         } else {
             DefaultTabsBar(frameViewModel)
         }
-        Divider(color = MaterialTheme.colors.primaryVariant, thickness = 1.dp)
+        Divider(color = LocalExtraColors.current.border, thickness = 1.dp)
         Box(
             Modifier.fillMaxSize()
         ) {
             //Tabs View
             TabView(frameViewModel)
-            //Theme change View
-            ThemeSelector(frameViewModel)
         }
     }
 }
@@ -155,32 +151,6 @@ fun TabItem(
             )
         }
 
-    }
-}
-
-@Composable
-fun BoxScope.ThemeSelector(
-    frameViewModel: ApplicationFrameViewModel
-) {
-    Box(
-        Modifier.padding(start = 16.dp, bottom = 16.dp)
-            .align(Alignment.BottomStart)
-            .zIndex(2f),
-        contentAlignment = Alignment.Center,
-    ) {
-        Icon(
-            painter = painterResource(
-                frameViewModel.isDark.choose(
-                    R.Icons.dark,
-                    R.Icons.lignt
-                )
-            ),
-            contentDescription = "Theme Selector",
-            tint = MaterialTheme.colors.onSurface,
-            modifier = Modifier.size(24.dp).clickable {
-                frameViewModel.isDark = !frameViewModel.isDark
-            }
-        )
     }
 }
 

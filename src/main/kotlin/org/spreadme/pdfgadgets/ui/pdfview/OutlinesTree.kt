@@ -25,18 +25,18 @@ import org.spreadme.pdfgadgets.model.PageMetadata
 import org.spreadme.pdfgadgets.model.Position
 import org.spreadme.pdfgadgets.resources.R
 import org.spreadme.pdfgadgets.ui.common.VerticalScrollable
-import org.spreadme.pdfgadgets.ui.side.SideViewModel
+import org.spreadme.pdfgadgets.ui.sidepanel.SidePanelViewModel
 
 @Composable
 fun OutlinesTree(
-    sideViewModel: SideViewModel,
+    sidePanelViewModel: SidePanelViewModel,
     outlines: Outlines,
     pageMetadata: List<PageMetadata>,
     onScroll: (postion: Position, scrollFinish: () -> Unit) -> Unit,
 ) {
     if (outlines.content.isNotEmpty()) {
         VerticalScrollable(
-            sideViewModel
+            sidePanelViewModel
         ){
             Column(modifier = Modifier.fillMaxSize()) {
                 bookmarksTreeNode(
