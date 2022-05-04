@@ -7,7 +7,6 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Divider
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -15,7 +14,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import kotlinx.coroutines.launch
@@ -24,19 +22,17 @@ import org.koin.core.component.inject
 import org.spreadme.pdfgadgets.common.LoadableComponent
 import org.spreadme.pdfgadgets.repository.FileMetadataParser
 import org.spreadme.pdfgadgets.repository.PdfMetadataParser
-import org.spreadme.pdfgadgets.ui.common.clickable
 import org.spreadme.pdfgadgets.ui.frame.ApplicationFrameViewModel
+import org.spreadme.pdfgadgets.ui.frame.LoadProgressViewModel
+import org.spreadme.pdfgadgets.ui.frame.MainApplicationFrame
 import org.spreadme.pdfgadgets.ui.sidepanel.SidePanel
 import org.spreadme.pdfgadgets.ui.sidepanel.SidePanelMode
-import org.spreadme.pdfgadgets.ui.theme.LocalExtraColors
-import org.spreadme.pdfgadgets.ui.toolbar.ActionBar
-import org.spreadme.pdfgadgets.ui.toolbar.Toolbar
 import org.spreadme.pdfgadgets.ui.toolbar.ToolbarViewModel
 import java.nio.file.Path
 
 class PdfViewComponent(
     filePath: Path,
-    val frameViewModel: ApplicationFrameViewModel
+    private val frameViewModel: ApplicationFrameViewModel
 ) : LoadableComponent(), KoinComponent {
 
     val path: Path = filePath
@@ -45,28 +41,22 @@ class PdfViewComponent(
     private val pdfMetadataParser by inject<PdfMetadataParser>()
 
     private val toolbarViewModel: ToolbarViewModel = ToolbarViewModel(true)
+    private val loadProgressViewModel: LoadProgressViewModel = LoadProgressViewModel()
     private lateinit var pdfViewModel: PdfViewModel
 
     @Composable
     override fun doRender() {
-        Column(
-            Modifier.fillMaxSize().background(MaterialTheme.colors.surface),
-            verticalArrangement = Arrangement.Top
+        MainApplicationFrame(
+            toolbarViewModel,
+            frameViewModel,
+            loadProgressViewModel
         ) {
-            println("pdf view component [$name] rendered")
-            Toolbar(toolbarViewModel = toolbarViewModel)
-            Divider(color = LocalExtraColors.current.border)
-            val focusManager = LocalFocusManager.current
-            Row(Modifier.fillMaxSize().clickable { focusManager.clearFocus() }) {
-                ActionBar(frameViewModel)
-                Box(Modifier.fillMaxHeight().width(1.dp).background(LocalExtraColors.current.border))
-
-                val pdfpdfViewModel = remember { pdfViewModel }
-                toolbarViewModel.onChangeSideViewMode = pdfpdfViewModel::onChangeSideViewMode
-                toolbarViewModel.onChangeScale = pdfpdfViewModel::onChangeScalue
-                SidePanelGroup(pdfpdfViewModel)
-                PageDetailGroup(pdfpdfViewModel)
-            }
+            println("pdf view component【${name}】rendered")
+            val pdfpdfViewModel = remember { pdfViewModel }
+            toolbarViewModel.onChangeSideViewMode = pdfpdfViewModel::onChangeSideViewMode
+            toolbarViewModel.onChangeScale = pdfpdfViewModel::onChangeScalue
+            SidePanelGroup(pdfpdfViewModel)
+            PageDetailGroup(pdfpdfViewModel)
         }
     }
 

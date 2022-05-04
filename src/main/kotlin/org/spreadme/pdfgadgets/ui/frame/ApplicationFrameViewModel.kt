@@ -12,8 +12,6 @@ import org.spreadme.pdfgadgets.common.AbstractComponent
 import org.spreadme.pdfgadgets.common.LoadableComponent
 import org.spreadme.pdfgadgets.common.ViewModel
 import org.spreadme.pdfgadgets.ui.home.HomeComponent
-import org.spreadme.pdfgadgets.ui.progress.LoadProgressComponent
-import org.spreadme.pdfgadgets.ui.progress.LoadProgressViewModel
 import kotlin.coroutines.CoroutineContext
 import kotlin.system.exitProcess
 
@@ -44,7 +42,7 @@ class ApplicationFrameViewModel : ViewModel, CoroutineScope {
     }
 
     fun onWindowStateChange(size: DpSize) {
-       //TODO re calculate the tab width
+        //TODO re calculate the tab width
     }
 
     fun onSelectTab(selectedComponent: AbstractComponent) {
@@ -73,36 +71,29 @@ class ApplicationFrameViewModel : ViewModel, CoroutineScope {
     }
 
     /**
+     * @param progressViewModel progrss view model
      * @param component a need load component, the loading operations in a concurrent process,
      * render the [LoadableComponent] first, when load finished then render the [LoadableComponent]
      */
-    fun openTab(component: LoadableComponent) {
-        calculateWidth()
-        val progressViewModel = LoadProgressViewModel()
-        val loadProgressComponent = LoadProgressComponent(progressViewModel)
-        doOpenTab(loadProgressComponent)
-
-        progressViewModel.onSuccess = {
-            doOpenTab(component)
-        }
+    fun openTab(
+        progressViewModel: LoadProgressViewModel,
+        component: LoadableComponent
+    ) {
+        progressViewModel.start()
         launch {
             try {
                 component.load()
                 progressViewModel.success()
             } catch (e: Exception) {
                 e.printStackTrace()
-                progressViewModel.loading = false
-                progressViewModel.fail(e.message)
-            } finally {
-                components.remove(loadProgressComponent)
+                progressViewModel.fail(e.message ?: "Pdf文件解析失败")
             }
         }
-    }
-
-    private fun doOpenTab(component: AbstractComponent) {
-        components.add(component)
-        components.remove(currentComponent)
-        currentComponent = component
+        progressViewModel.onSuccess = {
+            components.add(component)
+            components.remove(currentComponent)
+            currentComponent = component
+        }
     }
 
     private fun calculateWidth() {

@@ -3,12 +3,13 @@ package org.spreadme.pdfgadgets.ui.toolbar
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import org.spreadme.pdfgadgets.common.AbstractViewModel
 import org.spreadme.pdfgadgets.common.ViewModel
 import org.spreadme.pdfgadgets.ui.sidepanel.SidePanelMode
 
 class ToolbarViewModel(
     enabled: Boolean = true
-) : ViewModel {
+) : AbstractViewModel() {
 
     companion object {
         val SCALES = arrayListOf("100%", "150%", "200%", "80%", "50%")
@@ -29,7 +30,7 @@ class ToolbarViewModel(
             ScaleType.ZOOM_IN -> {
                 this.scale -= 10
                 if (this.scale <= 10) {
-                    this. scale = 10
+                    this.scale = 10
                 }
             }
             ScaleType.ZOOM_OUT -> {
@@ -43,9 +44,5 @@ class ToolbarViewModel(
             }
         }
         onChangeScale(this.scale / 100.0f)
-    }
-
-    override fun clear() {
-
     }
 }
