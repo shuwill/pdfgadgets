@@ -16,11 +16,12 @@ import org.spreadme.pdfgadgets.resources.R
 import org.spreadme.pdfgadgets.ui.common.FileDialog
 import org.spreadme.pdfgadgets.ui.frame.ApplicationFrameViewModel
 import org.spreadme.pdfgadgets.ui.pdfview.PdfViewComponent
-import org.spreadme.pdfgadgets.ui.theme.LocalExtraColors
+import org.spreadme.pdfgadgets.ui.frame.LoadProgressViewModel
 
 @Composable
 fun ActionBar(
-    frameViewModel: ApplicationFrameViewModel
+    frameViewModel: ApplicationFrameViewModel,
+    progressViewModel: LoadProgressViewModel
 ) {
     Column(
         Modifier.fillMaxHeight().width(56.dp)
@@ -33,7 +34,10 @@ fun ActionBar(
                 title = "打开文件",
                 exts = arrayListOf("pdf"),
                 onFileOpen = {
-                    frameViewModel.openTab(PdfViewComponent(it, frameViewModel))
+                    frameViewModel.openTab(
+                        progressViewModel,
+                        PdfViewComponent(it, frameViewModel)
+                    )
                 }
             )
         }

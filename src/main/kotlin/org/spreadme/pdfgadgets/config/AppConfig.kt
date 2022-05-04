@@ -1,5 +1,7 @@
 package org.spreadme.pdfgadgets.config
 
+import org.spreadme.pdfgadgets.common.DBHelper
+import org.spreadme.pdfgadgets.model.FileMetadatas
 import java.awt.image.BufferedImage
 import java.nio.file.Files
 import java.nio.file.Path
@@ -8,7 +10,7 @@ import javax.imageio.ImageIO
 
 object AppConfig {
 
-    val appName: String = "PDF Gadgets"
+    val appName: String = "PDFGadgets"
     val appPath: Path = Paths.get(System.getProperty("user.home"), ".pdfgadgets")
     val indexPath: Path = Paths.get(appPath.toString(), "index")
 
@@ -22,6 +24,7 @@ object AppConfig {
             Files.createDirectory(indexPath)
         }
 
+        DBHelper.help("$appPath/$appName.db").createTable(FileMetadatas)
     }
 
     fun appIcon(resourceId: String): BufferedImage {
