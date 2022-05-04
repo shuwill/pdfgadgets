@@ -25,22 +25,22 @@ dependencies {
     // Module dependencies
     implementation(project(":mupdf"))
 
-    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.3.2")
-    implementation("io.insert-koin:koin-core:3.1.6")
+    implementation("org.jetbrains.kotlinx", "kotlinx-serialization-json", "1.3.2")
+    implementation("io.insert-koin", "koin-core", "3.1.6")
 
-    implementation("com.itextpdf:itext7-core:7.2.1")
-    // https://mvnrepository.com/artifact/org.xerial/sqlite-jdbc
-    implementation("org.xerial:sqlite-jdbc:3.36.0.3")
+    implementation("com.itextpdf", "itext7-core", "7.2.1")
+
+    implementation("org.xerial", "sqlite-jdbc", "3.36.0.3")
     implementation("org.jetbrains.exposed", "exposed-core", "0.38.1")
     implementation("org.jetbrains.exposed", "exposed-dao", "0.38.1")
     implementation("org.jetbrains.exposed", "exposed-jdbc", "0.38.1")
     implementation("org.jetbrains.exposed", "exposed-java-time", "0.38.1")
 
-
-    implementation("io.github.microutils:kotlin-logging:2.1.21")
+    implementation("ch.qos.logback:logback-classic:1.2.11")
+    implementation("io.github.microutils", "kotlin-logging-jvm", "2.1.21")
 
     testImplementation(kotlin("test-junit"))
-    testImplementation("io.insert-koin:koin-test:3.1.6")
+    testImplementation("io.insert-koin", "koin-test", "3.1.6")
 }
 
 tasks.test {

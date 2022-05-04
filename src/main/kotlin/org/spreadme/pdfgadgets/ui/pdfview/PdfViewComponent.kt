@@ -21,8 +21,9 @@ import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 import org.spreadme.pdfgadgets.common.LoadableComponent
 import org.spreadme.pdfgadgets.repository.FileMetadataParser
+import org.spreadme.pdfgadgets.repository.FileMetadataRepository
 import org.spreadme.pdfgadgets.repository.PdfMetadataParser
-import org.spreadme.pdfgadgets.ui.frame.ApplicationFrameViewModel
+import org.spreadme.pdfgadgets.ui.frame.ApplicationViewModel
 import org.spreadme.pdfgadgets.ui.frame.LoadProgressViewModel
 import org.spreadme.pdfgadgets.ui.frame.MainApplicationFrame
 import org.spreadme.pdfgadgets.ui.sidepanel.SidePanel
@@ -30,13 +31,12 @@ import org.spreadme.pdfgadgets.ui.sidepanel.SidePanelMode
 import org.spreadme.pdfgadgets.ui.toolbar.ToolbarViewModel
 import java.nio.file.Path
 
-class PdfViewComponent(
-    filePath: Path,
-    private val frameViewModel: ApplicationFrameViewModel
-) : LoadableComponent(), KoinComponent {
+class PdfViewComponent(filePath: Path) : LoadableComponent(), KoinComponent {
 
     val path: Path = filePath
 
+    private val applicationViewModel by inject<ApplicationViewModel>()
+    private val fileMetadataRepository by inject<FileMetadataRepository>()
     private val fileMetadataParser by inject<FileMetadataParser>()
     private val pdfMetadataParser by inject<PdfMetadataParser>()
 
@@ -48,7 +48,7 @@ class PdfViewComponent(
     override fun doRender() {
         MainApplicationFrame(
             toolbarViewModel,
-            frameViewModel,
+            applicationViewModel,
             loadProgressViewModel
         ) {
             println("pdf view component【${name}】rendered")
@@ -165,6 +165,7 @@ class PdfViewComponent(
 
     override suspend fun load() {
         val fileMetadata = fileMetadataParser.parse(path)
+        fileMetadataRepository.save(fileMetadata)
         name = fileMetadata.name
         val pdfMetadata = pdfMetadataParser.parse(fileMetadata)
         pdfViewModel = PdfViewModel(pdfMetadata)

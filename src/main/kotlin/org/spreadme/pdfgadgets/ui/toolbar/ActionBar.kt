@@ -12,15 +12,16 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import org.spreadme.pdfgadgets.config.AppConfigs
 import org.spreadme.pdfgadgets.resources.R
 import org.spreadme.pdfgadgets.ui.common.FileDialog
-import org.spreadme.pdfgadgets.ui.frame.ApplicationFrameViewModel
-import org.spreadme.pdfgadgets.ui.pdfview.PdfViewComponent
+import org.spreadme.pdfgadgets.ui.frame.ApplicationViewModel
 import org.spreadme.pdfgadgets.ui.frame.LoadProgressViewModel
+import org.spreadme.pdfgadgets.ui.pdfview.PdfViewComponent
 
 @Composable
 fun ActionBar(
-    frameViewModel: ApplicationFrameViewModel,
+    applicationViewModel: ApplicationViewModel,
     progressViewModel: LoadProgressViewModel
 ) {
     Column(
@@ -30,13 +31,13 @@ fun ActionBar(
     ) {
         ActionIcon(Modifier.padding(top = 16.dp), R.Icons.open) {
             FileDialog(
-                parent = frameViewModel.composeWindow,
+                parent = applicationViewModel.composeWindow,
                 title = "打开文件",
                 exts = arrayListOf("pdf"),
                 onFileOpen = {
-                    frameViewModel.openTab(
+                    applicationViewModel.openFile(
                         progressViewModel,
-                        PdfViewComponent(it, frameViewModel)
+                        PdfViewComponent(it)
                     )
                 }
             )
@@ -51,7 +52,8 @@ fun ActionBar(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             ActionIcon(Modifier.padding(bottom = 16.dp), R.Icons.lignt) {
-                frameViewModel.isDark = !frameViewModel.isDark
+                applicationViewModel.isDark = !applicationViewModel.isDark
+                applicationViewModel.config(AppConfigs.DARK_CONFIG, applicationViewModel.isDark.toString())
             }
         }
     }

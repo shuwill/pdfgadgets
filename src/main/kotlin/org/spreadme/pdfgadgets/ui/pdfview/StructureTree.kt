@@ -96,9 +96,22 @@ private fun StructureNodeName(node: StructureNode) {
     Text(
         text = node.toString(),
         style = MaterialTheme.typography.caption,
-        color = MaterialTheme.colors.onBackground,
+        color = if (node.isCanParse()) {
+            MaterialTheme.colors.primary
+        } else {
+            MaterialTheme.colors.onBackground
+        },
         textAlign = TextAlign.Start,
         softWrap = false,
-        overflow = TextOverflow.Ellipsis
+        overflow = TextOverflow.Ellipsis,
+        modifier = Modifier.run {
+            if (node.isCanParse()) {
+                this.selectable(true) {
+
+                }
+            } else {
+                this
+            }
+        }
     )
 }

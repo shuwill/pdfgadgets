@@ -1,6 +1,7 @@
 package org.spreadme.pdfgadgets
 
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.res.painterResource
@@ -8,21 +9,22 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Window
 import androidx.compose.ui.window.application
 import androidx.compose.ui.window.rememberWindowState
-import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import org.koin.core.component.KoinComponent
+import org.koin.core.component.inject
 import org.spreadme.pdfgadgets.common.Activity
 import org.spreadme.pdfgadgets.common.ActivityIntent
 import org.spreadme.pdfgadgets.config.AppConfig
 import org.spreadme.pdfgadgets.resources.R
 import org.spreadme.pdfgadgets.ui.PlatformUI
+import org.spreadme.pdfgadgets.ui.frame.AppLoadIndicator
 import org.spreadme.pdfgadgets.ui.frame.ApplicationFrame
-import org.spreadme.pdfgadgets.ui.frame.ApplicationFrameViewModel
-import org.spreadme.pdfgadgets.ui.home.HomeComponent
+import org.spreadme.pdfgadgets.ui.frame.ApplicationViewModel
 import org.spreadme.pdfgadgets.ui.theme.PDFGadgetsTheme
 import java.awt.Taskbar
 
-class MainActivity : Activity() {
+class MainActivity : Activity(), KoinComponent {
 
     companion object {
         fun getStartIntent(): ActivityIntent {
@@ -32,16 +34,18 @@ class MainActivity : Activity() {
         }
     }
 
+    private val appLoadFinished = mutableStateOf(false)
+    private val appLoadIndicator = AppLoadIndicator()
+
+    private val applicationViewModel by inject<ApplicationViewModel>()
+
     override fun onCreate() {
         if (Taskbar.isTaskbarSupported()) {
             Taskbar.getTaskbar().iconImage = AppConfig.appIcon(R.Drawables.appIcon)
         }
 
-        val frameViewModel = ApplicationFrameViewModel()
-        frameViewModel.newBlankTab()
-
         application {
-            val windowState = rememberWindowState(width = 1224.dp, height = 800.dp)
+            val windowState = rememberWindowState(width = 1278.dp, height = 760.dp)
             Window(
                 onCloseRequest = {
                     onDestory()
@@ -54,27 +58,31 @@ class MainActivity : Activity() {
                 // listening the state of the window
                 LaunchedEffect(windowState) {
                     snapshotFlow { windowState.size }
-                        .onEach { frameViewModel.onWindowStateChange(it) }
+                        .onEach { applicationViewModel.onWindowStateChange(it) }
                         .launchIn(this)
                 }
 
-                PDFGadgetsTheme(frameViewModel.isDark) {
-
-                    frameViewModel.composeWindow = window
-                    frameViewModel.windowState = windowState
-
+                PDFGadgetsTheme(applicationViewModel.isDark) {
                     // custom the window title
-                    val platformUI = PlatformUI(window.rootPane, frameViewModel.isDark)
+                    val platformUI = PlatformUI(window.rootPane, applicationViewModel.isDark)
                     if (platformUI.isSupportCustomWindowDecoration()) {
                         platformUI.customWindowDecoration()
-                        frameViewModel.customWindowDecoration(true)
+                        applicationViewModel.customWindowDecoration(true)
                     }
 
-                    val frameViewModelState = remember { frameViewModel }
-                    ApplicationFrame(frameViewModelState)
+                    appLoadIndicator.indicate(appLoadFinished) {
+                        applicationViewModel.composeWindow = window
+                        applicationViewModel.windowState = windowState
+
+                        ApplicationFrame(applicationViewModel)
+                    }
                 }
             }
         }
     }
 
+    override fun onDestory() {
+        appLoadIndicator.close()
+        applicationViewModel.clear()
+    }
 }

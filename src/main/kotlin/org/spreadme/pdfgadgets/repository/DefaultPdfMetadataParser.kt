@@ -2,10 +2,7 @@ package org.spreadme.pdfgadgets.repository
 
 import com.itextpdf.kernel.geom.PageSize
 import com.itextpdf.kernel.geom.Rectangle
-import com.itextpdf.kernel.pdf.PdfDictionary
-import com.itextpdf.kernel.pdf.PdfDocument
-import com.itextpdf.kernel.pdf.PdfName
-import com.itextpdf.kernel.pdf.PdfReader
+import com.itextpdf.kernel.pdf.*
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 import org.spreadme.pdfgadgets.model.*
@@ -78,7 +75,7 @@ class DefaultPdfMetadataParser : PdfMetadataParser, KoinComponent {
         )
     }
 
-    private fun cropbox(page: com.itextpdf.kernel.pdf.PdfPage): Rectangle? {
+    private fun cropbox(page: PdfPage): Rectangle? {
         val cropBox = page.cropBox
         if (cropBox != null) {
             var pageSize = PageSize(cropBox)
@@ -92,5 +89,5 @@ class DefaultPdfMetadataParser : PdfMetadataParser, KoinComponent {
         return null
     }
 
-    private fun mediabox(page: com.itextpdf.kernel.pdf.PdfPage): Rectangle = page.pageSizeWithRotation
+    private fun mediabox(page: PdfPage): Rectangle = page.pageSizeWithRotation
 }

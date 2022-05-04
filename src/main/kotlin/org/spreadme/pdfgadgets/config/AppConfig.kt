@@ -1,9 +1,11 @@
 package org.spreadme.pdfgadgets.config
 
-import org.spreadme.pdfgadgets.common.DBHelper
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.mutableStateOf
+import org.jetbrains.exposed.sql.Table
 import org.spreadme.pdfgadgets.model.FileMetadatas
+import org.spreadme.pdfgadgets.model.FileMetadatas.autoIncrement
 import java.awt.image.BufferedImage
-import java.nio.file.Files
 import java.nio.file.Path
 import java.nio.file.Paths
 import javax.imageio.ImageIO
@@ -14,18 +16,7 @@ object AppConfig {
     val appPath: Path = Paths.get(System.getProperty("user.home"), ".pdfgadgets")
     val indexPath: Path = Paths.get(appPath.toString(), "index")
 
-    init {
-        // create config floder
-        if (!Files.exists(appPath)) {
-            Files.createDirectories(appPath)
-        }
-        // create index floder
-        if (!Files.exists(indexPath)) {
-            Files.createDirectory(indexPath)
-        }
-
-        DBHelper.help("$appPath/$appName.db").createTable(FileMetadatas)
-    }
+    var isDark: MutableState<Boolean> = mutableStateOf(false)
 
     fun appIcon(resourceId: String): BufferedImage {
         // Retrieving image
@@ -45,4 +36,16 @@ object AppConfig {
 
         return newImage
     }
+}
+
+object AppConfigs: Table("APP_CONFIGS") {
+
+    val DARK_CONFIG = "isDark"
+
+    val id = integer("id").autoIncrement()
+    val key = varchar("configKey", 500)
+    val value = text("configVey")
+
+    override val primaryKey = PrimaryKey(AppConfigs.id, name = "PK_APP_CONFIGS_ID")
+
 }

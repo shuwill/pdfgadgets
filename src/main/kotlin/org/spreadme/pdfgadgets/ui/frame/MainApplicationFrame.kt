@@ -19,7 +19,7 @@ import org.spreadme.pdfgadgets.ui.toolbar.ToolbarViewModel
 @Composable
 fun MainApplicationFrame(
     toolbarViewModel: ToolbarViewModel,
-    frameViewModel: ApplicationFrameViewModel,
+    applicationViewModel: ApplicationViewModel,
     loadProgressViewModel: LoadProgressViewModel,
     content: @Composable RowScope.() -> Unit
 ) {
@@ -45,7 +45,7 @@ fun MainApplicationFrame(
                 }
             }) {
                 Row(Modifier.fillMaxSize()) {
-                    ActionBar(frameViewModel, progressState)
+                    ActionBar(applicationViewModel, progressState)
                     Box(
                         Modifier.fillMaxHeight().width(1.dp)
                             .background(LocalExtraColors.current.border)

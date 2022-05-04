@@ -13,6 +13,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextOverflow
@@ -24,79 +25,80 @@ import org.spreadme.pdfgadgets.utils.choose
 
 @Composable
 fun ApplicationFrame(
-    frameViewModel: ApplicationFrameViewModel
+    applicationViewModel: ApplicationViewModel
 ) {
     Column(Modifier.fillMaxSize().background(MaterialTheme.colors.surface)) {
         //Tabs Bar
-        if (frameViewModel.isCustomWindowDecoration) {
-            CustomDecorationTabsBar(frameViewModel)
+        if (applicationViewModel.isCustomWindowDecoration) {
+            CustomDecorationTabsBar(applicationViewModel)
         } else {
-            DefaultTabsBar(frameViewModel)
+            DefaultTabsBar(applicationViewModel)
         }
         Divider(color = LocalExtraColors.current.border, thickness = 1.dp)
         Box(
             Modifier.fillMaxSize()
         ) {
             //Tabs View
-            TabView(frameViewModel)
+            TabView(applicationViewModel)
         }
     }
 }
 
 @Composable
 fun CustomDecorationTabsBar(
-    frameViewModel: ApplicationFrameViewModel
+    applicationViewModel: ApplicationViewModel
 ) {
     CustomWindowDecoration(
         Modifier.fillMaxWidth().height(40.dp).background(MaterialTheme.colors.primaryVariant)
-            .padding(start = frameViewModel.tabbarPaddingStart.dp, end = frameViewModel.tabbarPaddingEnd.dp),
+            .padding(start = applicationViewModel.tabbarPaddingStart.dp, end = applicationViewModel.tabbarPaddingEnd.dp),
         horizontalArrangement = Arrangement.Start,
-        windowState = frameViewModel.windowState,
+        windowState = applicationViewModel.windowState,
     ) {
-        TabsBar(frameViewModel = frameViewModel)
+        TabsBar(applicationViewModel = applicationViewModel)
     }
 }
 
 @Composable
 fun DefaultTabsBar(
-    frameViewModel: ApplicationFrameViewModel
+    applicationViewModel: ApplicationViewModel
 ) {
     TabsBar(
         Modifier.fillMaxWidth().height(40.dp).background(MaterialTheme.colors.primaryVariant)
-            .padding(start = frameViewModel.tabbarPaddingStart.dp, end = frameViewModel.tabbarPaddingEnd.dp),
-        frameViewModel
+            .padding(start = applicationViewModel.tabbarPaddingStart.dp, end = applicationViewModel.tabbarPaddingEnd.dp),
+        applicationViewModel
     )
 }
 
 @Composable
 fun TabsBar(
     modifier: Modifier = Modifier,
-    frameViewModel: ApplicationFrameViewModel
+    applicationViewModel: ApplicationViewModel
 ) {
     LazyRow(
         modifier,
         verticalAlignment = Alignment.CenterVertically,
     ) {
-        itemsIndexed(frameViewModel.components) { index, item ->
+        itemsIndexed(applicationViewModel.components) { index, item ->
             TabItem(
-                Modifier.fillMaxHeight().width(frameViewModel.tabWidth.dp),
+                applicationViewModel.tabWidth,
                 title = item.name,
-                active = frameViewModel.currentComponent == item,
+                active = applicationViewModel.currentComponent == item,
                 onSelected = {
-                    frameViewModel.onSelectTab(item)
+                    applicationViewModel.onSelectTab(item)
                 },
                 onClose = {
-                    frameViewModel.onClose(item)
+                    applicationViewModel.onClose(item)
                 }
             )
             // if item is last, show add icon
-            if (index == frameViewModel.components.size - 1) {
+            if (index == applicationViewModel.components.size - 1) {
                 Icon(
                     Icons.Default.Add,
                     contentDescription = "Add",
                     tint = MaterialTheme.colors.onPrimary,
-                    modifier = Modifier.size(frameViewModel.iconSize.dp).padding(horizontal = 8.dp).clickable {
-                       frameViewModel.newBlankTab()
+                    modifier = Modifier.size(applicationViewModel.iconSize.dp).padding(horizontal = 8.dp).clickable {
+                        applicationViewModel.newBlankTab()
+                        applicationViewModel.calculateWidth()
                     }
                 )
             }
@@ -106,14 +108,14 @@ fun TabsBar(
 
 @Composable
 fun TabItem(
-    modifier: Modifier = Modifier,
+    width: Int,
     title: String,
     active: Boolean,
     onSelected: () -> Unit,
     onClose: () -> Unit
 ) {
     Row(
-        modifier.background(
+        Modifier.fillMaxHeight().width(width.dp).background(
             active.choose(
                 MaterialTheme.colors.background,
                 MaterialTheme.colors.primaryVariant
@@ -127,7 +129,7 @@ fun TabItem(
         Box(
             Modifier.fillMaxSize().weight(0.8f),
             contentAlignment = Alignment.CenterStart
-        ){
+        ) {
             Text(
                 title,
                 color = active.choose(MaterialTheme.colors.onBackground, MaterialTheme.colors.onPrimary),
@@ -150,12 +152,11 @@ fun TabItem(
                 }
             )
         }
-
     }
 }
 
 @Composable
-fun TabView(frameViewModel: ApplicationFrameViewModel) {
+fun TabView(frameViewModel: ApplicationViewModel) {
     frameViewModel.currentComponent?.render()
 }
 
@@ -163,7 +164,7 @@ fun TabView(frameViewModel: ApplicationFrameViewModel) {
 @Preview
 fun TabItemPreview() {
     TabItem(
-        Modifier.size(168.dp, 40.dp),
+        168,
         title = "测试Tab页",
         active = true,
         onSelected = {

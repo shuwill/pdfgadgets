@@ -18,12 +18,12 @@ data class FileMetadata(
 }
 
 object FileMetadatas: Table("FILE_METADATAS") {
-    val id = integer("id").autoIncrement() // Column<Int>
+    val id = integer("id").autoIncrement()
     val path = varchar("path", 500)
     val name = varchar("name", 500)
     val thumbnail = varchar("thumbnail", 500).nullable()
     val length = long("length")
     val openTime = datetime("fecha")
 
-    override val primaryKey = PrimaryKey(id, name = "PK_Cities_ID")
+    override val primaryKey = PrimaryKey(id, name = "PK_FILE_METADATAS_ID")
 }

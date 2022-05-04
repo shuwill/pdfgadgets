@@ -10,13 +10,6 @@ class MupdfRenderer(
     fileMetadata: FileMetadata
 ): PdfRenderer {
 
-    companion object {
-        init {
-            Context.setLibLoader(MupdfLibLoader)
-            Context.init()
-        }
-    }
-
     private val mutex = Mutex()
     private val renderDocument = Document.openDocument(fileMetadata.path) as PDFDocument
 

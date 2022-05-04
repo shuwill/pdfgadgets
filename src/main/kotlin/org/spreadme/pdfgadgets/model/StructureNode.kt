@@ -47,6 +47,14 @@ class StructureNode(
         return childs
     }
 
+    fun isPageContents() = paths.contains(PdfName.Page.toString()) && paths.last() == PdfName.Contents.toString()
+
+    fun isImage() = pdfObject is PdfDictionary && pdfObject[PdfName.Subtype] == PdfName.Image
+
+    fun isFont() = pdfObject is PdfDictionary && pdfObject[PdfName.Type] == PdfName.Font
+
+    fun isCanParse() = isPageContents() || isImage() || isFont()
+
     override fun toString(): String {
         val name = pdfName?.toString() ?: ""
         val value = type.toString(pdfObject)
