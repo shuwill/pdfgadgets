@@ -33,6 +33,6 @@ val pdfParseModule = module {
 
 val viewModelModule = module {
     single {
-        ApplicationViewModel(get())
+        ApplicationViewModel(get(), get())
     }
 }

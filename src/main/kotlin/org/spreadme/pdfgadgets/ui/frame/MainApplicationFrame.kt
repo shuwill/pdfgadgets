@@ -3,14 +3,19 @@ package org.spreadme.pdfgadgets.ui.frame
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Warning
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.blur
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
+import org.spreadme.pdfgadgets.ui.common.Toast
 import org.spreadme.pdfgadgets.ui.theme.LocalExtraColors
 import org.spreadme.pdfgadgets.ui.toolbar.ActionBar
 import org.spreadme.pdfgadgets.ui.toolbar.Toolbar
@@ -33,23 +38,19 @@ fun MainApplicationFrame(
             val progressState = remember { loadProgressViewModel }
             when (progressState.status) {
                 LoadProgressStatus.LOADING -> LoadingModal()
-                LoadProgressStatus.FAILURE -> FailureModal(progressState.message)
+                LoadProgressStatus.FAILURE -> {
+                    FailureToast(progressState.message) {
+                        progressState.status = LoadProgressStatus.NONE
+                    }
+                    progressState.onFail()
+                }
                 LoadProgressStatus.SUCCESSFUL -> progressState.onSuccess()
                 else -> {}
             }
-            Box(Modifier.fillMaxSize().run {
-                if (progressState.status != LoadProgressStatus.NONE) {
-                    this.blur(8.dp)
-                } else {
-                    this
-                }
-            }) {
+            Box(Modifier.fillMaxSize()) {
                 Row(Modifier.fillMaxSize()) {
                     ActionBar(applicationViewModel, progressState)
-                    Box(
-                        Modifier.fillMaxHeight().width(1.dp)
-                            .background(LocalExtraColors.current.border)
-                    )
+                    Box(Modifier.fillMaxHeight().width(1.dp).background(LocalExtraColors.current.border))
                     content()
                 }
             }
@@ -61,7 +62,7 @@ fun MainApplicationFrame(
 fun LoadingModal() {
     Box(
         Modifier.fillMaxSize()
-            .background(MaterialTheme.colors.background.copy(alpha = 0.65f))
+            .background(MaterialTheme.colors.background.copy(alpha = 0.95f))
             .zIndex(999f),
         contentAlignment = Alignment.Center
     ) {
@@ -70,40 +71,31 @@ fun LoadingModal() {
 }
 
 @Composable
-fun FailureModal(
-    message: String
-) {
+fun FailureToast(message: String, onFinished: () -> Unit) {
     Box(
-        Modifier
-            .fillMaxWidth(0.5f)
-            .background(LocalExtraColors.current.errorBackground)
-            .border(1.dp, color = LocalExtraColors.current.error)
+        Modifier.fillMaxSize().zIndex(999f).padding(top = 16.dp),
+        contentAlignment = Alignment.TopCenter
     ) {
-        Column(
-            horizontalAlignment = Alignment.CenterHorizontally
+        Toast(
+            modifier = Modifier.clip(RoundedCornerShape(8.dp))
+                .background(LocalExtraColors.current.warningBackground)
+                .border(1.dp, LocalExtraColors.current.warningBorder, RoundedCornerShape(8.dp))
+                .padding(16.dp),
+            mutableStateOf(true),
+            5000,
+            onFinished = onFinished
         ) {
-            Row(
-                Modifier.fillMaxWidth().height(32.dp).padding(8.dp),
-                horizontalArrangement = Arrangement.Center,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Text(
-                    message,
-                    color = MaterialTheme.colors.onBackground,
-                    style = MaterialTheme.typography.body1
-                )
-            }
-            Row(
-                horizontalArrangement = Arrangement.End
-            ) {
-                Button(
-                    onClick = {
-
-                    }
-                ) {
-                    Text("确定")
-                }
-            }
+            Icon(
+                Icons.Default.Warning,
+                contentDescription = "warning",
+                tint = LocalExtraColors.current.warning,
+                modifier = Modifier.padding(end = 8.dp).size(16.dp)
+            )
+            Text(
+                message,
+                color = LocalExtraColors.current.warning,
+                style = MaterialTheme.typography.caption
+            )
         }
     }
 }

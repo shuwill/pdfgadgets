@@ -8,18 +8,24 @@ import androidx.compose.ui.awt.ComposeWindow
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.window.WindowState
 import kotlinx.coroutines.*
+import mu.KotlinLogging
+import org.koin.core.component.KoinComponent
 import org.spreadme.pdfgadgets.common.AbstractComponent
 import org.spreadme.pdfgadgets.common.LoadableComponent
 import org.spreadme.pdfgadgets.common.ViewModel
-import org.spreadme.pdfgadgets.config.AppConfig
 import org.spreadme.pdfgadgets.repository.AppConfigRepository
+import org.spreadme.pdfgadgets.repository.FileMetadataRepository
 import org.spreadme.pdfgadgets.ui.home.HomeComponent
+import java.nio.file.Path
 import kotlin.coroutines.CoroutineContext
 import kotlin.system.exitProcess
 
 class ApplicationViewModel(
-    private val appConfigRepository: AppConfigRepository
-) : ViewModel, CoroutineScope {
+    private val appConfigRepository: AppConfigRepository,
+    private val fileMetadataRepository: FileMetadataRepository
+) : ViewModel, CoroutineScope, KoinComponent {
+
+    private val logger = KotlinLogging.logger {}
 
     override val coroutineContext: CoroutineContext
         get() = Dispatchers.Default + SupervisorJob()
@@ -79,7 +85,7 @@ class ApplicationViewModel(
      */
     fun openFile(
         progressViewModel: LoadProgressViewModel,
-        component: LoadableComponent
+        component: LoadableComponent<Path>,
     ) {
         progressViewModel.start()
         launch {
@@ -87,8 +93,13 @@ class ApplicationViewModel(
                 component.load()
                 progressViewModel.success()
             } catch (e: Exception) {
-                e.printStackTrace()
-                progressViewModel.fail(e.message ?: "Pdf文件解析失败")
+                logger.error(e.message, e)
+                fileMetadataRepository.deleteByPath(component.content())
+                val message = when (e) {
+                    is NoSuchFileException -> "文件已被删除或被转移"
+                    else -> e.message ?: "Pdf文件解析失败"
+                }
+                progressViewModel.fail(message)
             }
         }
         progressViewModel.onSuccess = {
@@ -96,6 +107,10 @@ class ApplicationViewModel(
             components.remove(currentComponent)
             currentComponent = component
         }
+    }
+
+    fun createFile() {
+        //TODO create pdf file from support file type
     }
 
     fun calculateWidth() {

@@ -31,7 +31,7 @@ import org.spreadme.pdfgadgets.ui.sidepanel.SidePanelMode
 import org.spreadme.pdfgadgets.ui.toolbar.ToolbarViewModel
 import java.nio.file.Path
 
-class PdfViewComponent(filePath: Path) : LoadableComponent(), KoinComponent {
+class PdfViewComponent(filePath: Path) : LoadableComponent<Path>(), KoinComponent {
 
     val path: Path = filePath
 
@@ -170,6 +170,8 @@ class PdfViewComponent(filePath: Path) : LoadableComponent(), KoinComponent {
         val pdfMetadata = pdfMetadataParser.parse(fileMetadata)
         pdfViewModel = PdfViewModel(pdfMetadata)
     }
+
+    override fun content(): Path = path
 
     override fun close() {
         pdfViewModel.clear()

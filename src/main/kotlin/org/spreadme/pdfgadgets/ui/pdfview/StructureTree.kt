@@ -14,6 +14,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import org.spreadme.pdfgadgets.model.StructureNode
@@ -102,11 +103,16 @@ private fun StructureNodeName(node: StructureNode) {
             MaterialTheme.colors.onBackground
         },
         textAlign = TextAlign.Start,
+        textDecoration = if (node.isCanParse()) {
+            TextDecoration.Underline
+        } else {
+            null
+        },
         softWrap = false,
         overflow = TextOverflow.Ellipsis,
         modifier = Modifier.run {
             if (node.isCanParse()) {
-                this.selectable(true) {
+                this.clickable(true) {
 
                 }
             } else {

@@ -1,6 +1,5 @@
 package org.spreadme.pdfgadgets.repository
 
-import androidx.compose.runtime.MutableState
 import com.artifex.mupdf.fitz.Context
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -80,6 +79,7 @@ class DefaultAppConfigRepository : AppConfigRepository {
                 }
             }
         }
+        delay(200)
     }
 
     override suspend fun config(configKey: String, configValue: String) {

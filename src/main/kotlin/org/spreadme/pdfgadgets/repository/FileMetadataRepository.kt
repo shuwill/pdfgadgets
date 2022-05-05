@@ -6,8 +6,9 @@ import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.spreadme.pdfgadgets.model.FileMetadata
 import org.spreadme.pdfgadgets.model.FileMetadatas
+import java.nio.file.Path
 import java.time.ZoneId
-import java.util.Date
+import java.util.*
 
 class FileMetadataRepository {
 
@@ -48,4 +49,9 @@ class FileMetadataRepository {
         }
     }
 
+    suspend fun deleteByPath(path: Path) = withContext(Dispatchers.IO){
+        transaction {
+            FileMetadatas.deleteWhere { (FileMetadatas.path.eq(path.toString())) }
+        }
+    }
 }

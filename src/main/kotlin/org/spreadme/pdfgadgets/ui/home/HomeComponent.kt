@@ -5,10 +5,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.SupervisorJob
-import kotlinx.coroutines.cancel
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 import org.spreadme.pdfgadgets.common.AbstractComponent
@@ -19,9 +15,8 @@ import org.spreadme.pdfgadgets.ui.frame.MainApplicationFrame
 import org.spreadme.pdfgadgets.ui.pdfview.PdfViewComponent
 import org.spreadme.pdfgadgets.ui.toolbar.ToolbarViewModel
 import java.nio.file.Paths
-import kotlin.coroutines.CoroutineContext
 
-class HomeComponent : AbstractComponent("新建标签"), CoroutineScope, KoinComponent {
+class HomeComponent : AbstractComponent("新建标签"), KoinComponent {
 
     private val applicationViewModel by inject<ApplicationViewModel>()
     private val fileMetadataRepository by inject<FileMetadataRepository>()
@@ -30,11 +25,11 @@ class HomeComponent : AbstractComponent("新建标签"), CoroutineScope, KoinCom
     private val loadProgressViewModel: LoadProgressViewModel = LoadProgressViewModel()
     private val recentFileViewModel: RecentFileViewModel = RecentFileViewModel(fileMetadataRepository)
 
-    override val coroutineContext: CoroutineContext
-        get() = Dispatchers.Default + SupervisorJob()
-
     @Composable
     override fun doRender() {
+        loadProgressViewModel.onFail = {
+            recentFileViewModel.reacquire()
+        }
         MainApplicationFrame(
             toolbarViewModel,
             applicationViewModel,
@@ -53,7 +48,4 @@ class HomeComponent : AbstractComponent("新建标签"), CoroutineScope, KoinCom
         }
     }
 
-    override fun close() {
-        coroutineContext.cancel()
-    }
 }

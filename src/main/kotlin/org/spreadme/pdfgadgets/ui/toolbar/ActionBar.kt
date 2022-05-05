@@ -43,7 +43,15 @@ fun ActionBar(
             )
         }
         ActionIcon(Modifier.padding(top = 16.dp), R.Icons.newfile) {
+            FileDialog(
+                parent = applicationViewModel.composeWindow,
+                title = "打开文件",
+                onFileOpen = {
+                    applicationViewModel.createFile(
 
+                    )
+                }
+            )
         }
 
         Column(

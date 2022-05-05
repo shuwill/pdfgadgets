@@ -10,6 +10,7 @@ class LoadProgressViewModel : AbstractViewModel() {
     var status by mutableStateOf(LoadProgressStatus.NONE)
     var message by mutableStateOf("")
     var onSuccess: () -> Unit = {}
+    var onFail: () -> Unit = {}
 
     fun start() {
         status = LoadProgressStatus.LOADING

@@ -31,12 +31,12 @@ fun LoadAnimation(modifier: Modifier = Modifier) {
             animate(
                 0f,
                 90f,
-                animationSpec = tween(500, easing = LinearEasing),
+                animationSpec = tween(250, easing = LinearEasing),
                 block = { value, _ -> rotation = value }
             )
             animate(
                 48f, 0f,
-                animationSpec = tween(1000, easing = LinearEasing),
+                animationSpec = tween(500, easing = LinearEasing),
                 block = { value, _ -> height = value }
             )
         }

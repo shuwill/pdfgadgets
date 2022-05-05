@@ -1,5 +1,5 @@
 package org.spreadme.pdfgadgets.common
 
-abstract class LoadableComponent(
+abstract class LoadableComponent<T>(
     name: String = "Loading..."
-) : AbstractComponent(name), Loadable
+) : AbstractComponent(name), Loadable<T>

@@ -1,9 +1,11 @@
 package org.spreadme.pdfgadgets.common
 
-interface Loadable {
+interface Loadable<T> {
 
     /**
      * load finish callback
      */
     suspend fun load()
+
+    fun content(): T
 }

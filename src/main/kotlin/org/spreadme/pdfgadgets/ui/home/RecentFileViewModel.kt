@@ -22,6 +22,13 @@ class RecentFileViewModel(
         }
     }
 
+    fun reacquire() {
+        fileMetadatas.clear()
+        launch {
+            fileMetadatas.addAll(fileMetadataRepository.query())
+        }
+    }
+
     override fun clear() {
         coroutineContext.cancel()
     }
