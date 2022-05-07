@@ -7,11 +7,9 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import org.spreadme.pdfgadgets.resources.R
@@ -24,62 +22,58 @@ import org.spreadme.pdfgadgets.ui.toolbar.ToolbarViewModel.Companion.SCALES
 
 @Composable
 fun Toolbar(
-    modifier: Modifier = Modifier.fillMaxWidth().height(48.dp)
-        .background(MaterialTheme.colors.background),
+    modifier: Modifier = Modifier,
     toolbarViewModel: ToolbarViewModel
 ) {
     Row(
         modifier
     ) {
-        val tint = if (toolbarViewModel.enabled) {
-            MaterialTheme.colors.onBackground
-        } else {
-            LocalExtraColors.current.iconDisable
-        }
-        val contentColor = if (toolbarViewModel.enabled) {
-            MaterialTheme.colors.onSurface
-        } else {
-            LocalExtraColors.current.contentDisable
-        }
-        ViewModeBar(
+        SidePanelModeBar(
             Modifier.fillMaxSize().weight(0.2f),
-            toolbarViewModel,
-            tint = tint
+            toolbarViewModel.enabled,
+            onSidePanelModeChange = toolbarViewModel::changeSideViewMode
         )
         ScaleBar(
             Modifier.fillMaxSize().weight(0.6f),
-            toolbarViewModel,
-            tint = tint,
-            contentColor = contentColor
+            toolbarViewModel.enabled,
+            toolbarViewModel.scale,
+            onScaleTypeChange = toolbarViewModel::changeScale,
+            onScaleChange = toolbarViewModel::changeScale
         )
         TextSearchBar(
+            toolbarViewModel.searchKeyword,
             Modifier.fillMaxSize().weight(0.2f),
-            toolbarViewModel, contentColor
-        )
+            toolbarViewModel.enabled
+        ) {
+            toolbarViewModel.searchKeyword = it
+        }
     }
 }
 
 @Composable
-fun ViewModeBar(
+fun SidePanelModeBar(
     modifier: Modifier = Modifier,
-    toolbarViewModel: ToolbarViewModel,
-    tint: Color,
+    enabled: Boolean,
+    onSidePanelModeChange: (SidePanelMode) -> Unit
 ) {
     Row(
         modifier,
         horizontalArrangement = Arrangement.Start,
         verticalAlignment = Alignment.CenterVertically
     ) {
-        val viewModelState = remember { toolbarViewModel }
         SidePanelMode.values().forEach { mode ->
             Icon(
                 painter = painterResource(mode.icon),
                 contentDescription = mode.desc,
-                tint = tint,
+                tint = if (enabled) {
+                    MaterialTheme.colors.onBackground
+                } else {
+                    LocalExtraColors.current.iconDisable
+                },
                 modifier = Modifier.padding(start = 16.dp)
                     .size(16.dp)
-                    .clickable(viewModelState.enabled) {
-                        viewModelState.changeSideViewMode(mode)
+                    .clickable(enabled) {
+                        onSidePanelModeChange(mode)
                     }
             )
         }
@@ -89,73 +83,122 @@ fun ViewModeBar(
 @Composable
 fun ScaleBar(
     modifier: Modifier = Modifier,
-    toolbarViewModel: ToolbarViewModel,
-    tint: Color,
-    contentColor: Color,
+    enabled: Boolean,
+    scale: Int,
+    onScaleTypeChange: (ScaleType) -> Unit,
+    onScaleChange: (Int) -> Unit
 ) {
     Row(
         modifier,
         horizontalArrangement = Arrangement.Center,
         verticalAlignment = Alignment.CenterVertically
     ) {
-        val viewModelState = remember { toolbarViewModel }
-        Icon(
-            painterResource(R.Icons.zoom_in),
-            contentDescription = "Zoom In",
-            tint = tint,
-            modifier = Modifier.size(16.dp).clickable(viewModelState.enabled) {
-                viewModelState.changeScale(ScaleType.ZOOM_IN)
-            }
+        ScaleIcon(
+            ScaleType.ZOOM_IN,
+            iconResource = R.Icons.zoom_in,
+            enabled = enabled,
+            onScaleChange = onScaleTypeChange
         )
-        DropdownTextInputField(
-            "${viewModelState.scale}%",
-            SCALES,
-            modifier = Modifier
-                .padding(8.dp, 8.dp)
-                .fillMaxHeight().width(180.dp)
-                .clip(RoundedCornerShape(8.dp))
-                .background(MaterialTheme.colors.surface),
-            MaterialTheme.typography.caption.copy(color = contentColor),
-            tint = contentColor,
-            enabled = viewModelState.enabled
-        ) {
-            viewModelState.changeScale(null, it.replace("%", "").toInt())
-        }
-        Icon(
-            painterResource(R.Icons.zoom_out),
-            contentDescription = "Zoom In",
-            tint = tint,
-            modifier = Modifier.size(16.dp).clickable(viewModelState.enabled) {
-                viewModelState.changeScale(ScaleType.ZOOM_OUT)
-            }
+        ScaleDropdownInput(
+            scale,
+            enabled = enabled,
+            onScaleChange = onScaleChange
+        )
+        ScaleIcon(
+            ScaleType.ZOOM_OUT,
+            iconResource = R.Icons.zoom_out,
+            enabled = enabled,
+            onScaleChange = onScaleTypeChange
         )
     }
 }
 
 @Composable
+fun ScaleIcon(
+    scaleType: ScaleType,
+    size: Int = 16,
+    iconResource: String,
+    enabled: Boolean,
+    onScaleChange: (ScaleType) -> Unit
+) {
+    Icon(
+        painterResource(iconResource),
+        contentDescription = "Zoom In",
+        tint = if (enabled) {
+            MaterialTheme.colors.onBackground
+        } else {
+            LocalExtraColors.current.iconDisable
+        },
+        modifier = Modifier.size(size.dp).clickable(enabled) {
+            onScaleChange(scaleType)
+        }
+    )
+}
+
+@Composable
+fun ScaleDropdownInput(
+    scale: Int,
+    enabled: Boolean,
+    onScaleChange: (Int) -> Unit
+) {
+    DropdownTextInputField(
+        "${scale}%",
+        SCALES,
+        modifier = Modifier
+            .padding(8.dp, 8.dp)
+            .fillMaxHeight().width(180.dp)
+            .clip(RoundedCornerShape(8.dp))
+            .background(MaterialTheme.colors.surface),
+        MaterialTheme.typography.caption.copy(
+            color = if (enabled) {
+                MaterialTheme.colors.onSurface
+            } else {
+                LocalExtraColors.current.contentDisable
+            }
+        ),
+        tint = if (enabled) {
+            MaterialTheme.colors.onBackground
+        } else {
+            LocalExtraColors.current.iconDisable
+        },
+        enabled = enabled
+    ) {
+        onScaleChange(it.replace("%", "").toInt())
+    }
+}
+
+@Composable
 fun TextSearchBar(
+    searchKeyword: String,
     modifier: Modifier = Modifier,
-    toolbarViewModel: ToolbarViewModel,
-    contentColor: Color,
+    enabled: Boolean,
+    onValueChange: (String) -> Unit
 ) {
     Row(
         modifier,
         horizontalArrangement = Arrangement.End,
         verticalAlignment = Alignment.CenterVertically
     ) {
-        val viewModelState = remember { toolbarViewModel }
         TextSearchInputField(
-            viewModelState.searchKeyword,
-            onValueChange = {
-                viewModelState.searchKeyword = it
-            },
+            searchKeyword,
+            onValueChange = onValueChange,
             modifier = Modifier.padding(16.dp, 8.dp)
                 .fillMaxHeight().widthIn(240.dp, 272.dp)
                 .clip(RoundedCornerShape(8.dp))
                 .background(MaterialTheme.colors.surface),
-            textStyle = MaterialTheme.typography.caption.copy(color = contentColor),
-            tint = contentColor,
-            enabled = viewModelState.enabled
+            textStyle = MaterialTheme.typography.caption.copy(
+                color = if (enabled) {
+                    MaterialTheme.colors.onSurface
+                } else {
+                    LocalExtraColors.current.contentDisable
+                }
+            ),
+            tint = if (enabled) {
+                MaterialTheme.colors.onBackground
+            } else {
+                LocalExtraColors.current.iconDisable
+            },
+            enabled = enabled
         )
     }
 }
@@ -163,11 +206,12 @@ fun TextSearchBar(
 @Composable
 @Preview
 fun ViewBarPreview() {
-    ViewModeBar(
+    SidePanelModeBar(
         Modifier.fillMaxWidth().height(48.dp).background(MaterialTheme.colors.background),
-        ToolbarViewModel(),
-        tint = MaterialTheme.colors.onBackground,
-    )
+        false,
+    ) {
+
+    }
 }
 
 @Composable
@@ -175,8 +219,9 @@ fun ViewBarPreview() {
 fun ScaleBarPreview() {
     ScaleBar(
         Modifier.fillMaxWidth().height(48.dp).background(MaterialTheme.colors.background),
-        ToolbarViewModel(),
-        tint = MaterialTheme.colors.onBackground,
-        contentColor = MaterialTheme.colors.onSurface
+        true,
+        100,
+        onScaleTypeChange = {},
+        onScaleChange = {}
     )
 }

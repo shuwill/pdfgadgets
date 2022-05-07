@@ -21,43 +21,39 @@ import org.spreadme.pdfgadgets.repository.AppConfigRepository
 import org.spreadme.pdfgadgets.resources.R
 import kotlin.coroutines.CoroutineContext
 
-class AppLoadIndicator : KoinComponent, CoroutineScope, AutoCloseable {
+class ApplicationBootstrap : KoinComponent {
 
     private val appConfigRepository by inject<AppConfigRepository>()
     private val applicationViewModel by inject<ApplicationViewModel>()
 
-    override val coroutineContext: CoroutineContext
-        get() = Dispatchers.Default + SupervisorJob()
-
     @OptIn(ExperimentalAnimationApi::class)
     @Composable
-    fun indicate(
-        finishedState: MutableState<Boolean>,
-        content: @Composable () -> Unit
+    fun bootstrap(
+        onFinished: @Composable () -> Unit
     ) {
-        var finished by remember { finishedState }
+        var finished by remember { mutableStateOf(false) }
+        val message = MutableStateFlow("")
+
+        LaunchedEffect(Unit) {
+            appConfigRepository.load(message)
+            applicationViewModel.newBlankTab()
+            finished = true
+        }
 
         if (!finished) {
-            val message = MutableStateFlow("")
+            println("bootstrap")
             AppLoadProgressIndicator(message)
-            launch {
-                appConfigRepository.load(message)
-                applicationViewModel.newBlankTab()
-                finished = true
-            }
         }
+
         AnimatedVisibility(
             finished,
             enter = fadeIn() + scaleIn(),
             exit = fadeOut() + scaleOut(),
         ) {
-            content()
+            onFinished()
         }
     }
 
-    override fun close() {
-        coroutineContext.cancel()
-    }
 }
 
 @Composable

@@ -18,7 +18,6 @@ import androidx.compose.ui.input.pointer.pointerHoverIcon
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.toSize
@@ -36,17 +35,10 @@ fun TextInputField(
     trailingIcon: (@Composable () -> Unit)? = null,
     onValueChange: (String) -> Unit,
 ) {
-    var textFieldValueState by remember { mutableStateOf(TextFieldValue(text = value)) }
-    val textFieldValue = textFieldValueState.copy(text = value)
     BasicTextField(
-        value = textFieldValue,
+        value = value,
         modifier = modifier,
-        onValueChange = {
-            textFieldValueState = it
-            if (value != it.text) {
-                onValueChange(it.text)
-            }
-        },
+        onValueChange = onValueChange,
         textStyle = textStyle,
         singleLine = singleLine,
         enabled = enabled,
@@ -72,7 +64,7 @@ fun TextInputField(
 
 @Composable
 fun DropdownTextInputField(
-    selectedText: String,
+    value: String,
     suggestions: List<String>,
     modifier: Modifier = Modifier,
     textStyle: TextStyle = MaterialTheme.typography.caption,
@@ -83,17 +75,10 @@ fun DropdownTextInputField(
     var expanded by remember { mutableStateOf(false) }
     var textfieldSize by remember { mutableStateOf(Size.Zero) }
 
-    val icon = if (expanded) {
-        Icons.Filled.ArrowDropDown
-    } else {
-        Icons.Filled.ArrowDropUp
-    }
-
     Column {
-        val selectedTextState = mutableStateOf(selectedText)
         TextInputField(
-            value = selectedTextState.value,
-            onValueChange = { selectedTextState.value = it },
+            value = value,
+            onValueChange = { },
             textStyle = textStyle.copy(textAlign = TextAlign.Center),
             modifier = modifier.onGloballyPositioned { coordinates ->
                 //This value is used to assign to the DropDown the same width
@@ -104,7 +89,11 @@ fun DropdownTextInputField(
             readOnly = true,
             trailingIcon = {
                 Icon(
-                    icon,
+                    if (expanded) {
+                        Icons.Filled.ArrowDropDown
+                    } else {
+                        Icons.Filled.ArrowDropUp
+                    },
                     contentDescription = "Expand Dropdown Menu",
                     tint = tint,
                     modifier = Modifier.padding(end = 8.dp).size(16.dp)
@@ -124,7 +113,6 @@ fun DropdownTextInputField(
             suggestions.forEach { label ->
                 DropdownMenuItem(
                     onClick = {
-                        selectedTextState.value = label
                         expanded = !expanded
                         onSelected(label)
                     },

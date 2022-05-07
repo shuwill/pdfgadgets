@@ -1,8 +1,6 @@
 package org.spreadme.pdfgadgets
 
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
@@ -18,7 +16,7 @@ import org.spreadme.pdfgadgets.common.ActivityIntent
 import org.spreadme.pdfgadgets.config.AppConfig
 import org.spreadme.pdfgadgets.resources.R
 import org.spreadme.pdfgadgets.ui.PlatformUI
-import org.spreadme.pdfgadgets.ui.frame.AppLoadIndicator
+import org.spreadme.pdfgadgets.ui.frame.ApplicationBootstrap
 import org.spreadme.pdfgadgets.ui.frame.ApplicationFrame
 import org.spreadme.pdfgadgets.ui.frame.ApplicationViewModel
 import org.spreadme.pdfgadgets.ui.theme.PDFGadgetsTheme
@@ -34,9 +32,7 @@ class MainActivity : Activity(), KoinComponent {
         }
     }
 
-    private val appLoadFinished = mutableStateOf(false)
-    private val appLoadIndicator = AppLoadIndicator()
-
+    private val applicationBootstrap = ApplicationBootstrap()
     private val applicationViewModel by inject<ApplicationViewModel>()
 
     override fun onCreate() {
@@ -62,18 +58,19 @@ class MainActivity : Activity(), KoinComponent {
                         .launchIn(this)
                 }
 
+                // custom the window title
+                val platformUI = PlatformUI(window.rootPane, applicationViewModel.isDark)
+                if (platformUI.isSupportCustomWindowDecoration()) {
+                    platformUI.customWindowDecoration()
+                    applicationViewModel.customWindowDecoration(true)
+                }
+
+                // load the window state
+                applicationViewModel.composeWindow = window
+                applicationViewModel.windowState = windowState
+
                 PDFGadgetsTheme(applicationViewModel.isDark) {
-                    // custom the window title
-                    val platformUI = PlatformUI(window.rootPane, applicationViewModel.isDark)
-                    if (platformUI.isSupportCustomWindowDecoration()) {
-                        platformUI.customWindowDecoration()
-                        applicationViewModel.customWindowDecoration(true)
-                    }
-
-                    appLoadIndicator.indicate(appLoadFinished) {
-                        applicationViewModel.composeWindow = window
-                        applicationViewModel.windowState = windowState
-
+                    applicationBootstrap.bootstrap {
                         ApplicationFrame(applicationViewModel)
                     }
                 }
@@ -82,7 +79,6 @@ class MainActivity : Activity(), KoinComponent {
     }
 
     override fun onDestory() {
-        appLoadIndicator.close()
         applicationViewModel.clear()
     }
 }

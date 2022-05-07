@@ -13,6 +13,7 @@ import org.koin.core.component.KoinComponent
 import org.spreadme.pdfgadgets.common.AbstractComponent
 import org.spreadme.pdfgadgets.common.LoadableComponent
 import org.spreadme.pdfgadgets.common.ViewModel
+import org.spreadme.pdfgadgets.config.AppConfig
 import org.spreadme.pdfgadgets.repository.AppConfigRepository
 import org.spreadme.pdfgadgets.repository.FileMetadataRepository
 import org.spreadme.pdfgadgets.ui.home.HomeComponent
@@ -37,11 +38,11 @@ class ApplicationViewModel(
 
     //UI State
     var windowState = WindowState()
-    var isDark by mutableStateOf(false)
+    var isDark by AppConfig.isDark
     var tabWidth by mutableStateOf(168)
 
     var isCustomWindowDecoration = false
-    var tabbarPaddingStart = 16
+    var tabbarPaddingStart = 0
     var tabbarPaddingEnd = 16
     val iconSize = 32
 
@@ -96,10 +97,11 @@ class ApplicationViewModel(
                 logger.error(e.message, e)
                 fileMetadataRepository.deleteByPath(component.content())
                 val message = when (e) {
-                    is NoSuchFileException -> "文件已被删除或被转移"
+                    is java.nio.file.NoSuchFileException -> "文件已被删除或被转移"
                     else -> e.message ?: "Pdf文件解析失败"
                 }
                 progressViewModel.fail(message)
+                progressViewModel.onFail()
             }
         }
         progressViewModel.onSuccess = {

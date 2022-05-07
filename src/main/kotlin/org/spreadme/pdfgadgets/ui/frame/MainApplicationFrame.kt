@@ -32,7 +32,10 @@ fun MainApplicationFrame(
         Modifier.fillMaxSize(),
         verticalArrangement = Arrangement.Top
     ) {
-        Toolbar(toolbarViewModel = toolbarViewModel)
+        Toolbar(
+            modifier = Modifier.fillMaxWidth().height(48.dp).background(MaterialTheme.colors.background),
+            toolbarViewModel = toolbarViewModel
+        )
         Divider(color = LocalExtraColors.current.border)
         Box(Modifier.fillMaxSize()) {
             val progressState = remember { loadProgressViewModel }
@@ -42,7 +45,6 @@ fun MainApplicationFrame(
                     FailureToast(progressState.message) {
                         progressState.status = LoadProgressStatus.NONE
                     }
-                    progressState.onFail()
                 }
                 LoadProgressStatus.SUCCESSFUL -> progressState.onSuccess()
                 else -> {}
@@ -73,7 +75,7 @@ fun LoadingModal() {
 @Composable
 fun FailureToast(message: String, onFinished: () -> Unit) {
     Box(
-        Modifier.fillMaxSize().zIndex(999f).padding(top = 16.dp),
+        Modifier.fillMaxSize().zIndex(999f).padding(top = 24.dp),
         contentAlignment = Alignment.TopCenter
     ) {
         Toast(
@@ -82,7 +84,7 @@ fun FailureToast(message: String, onFinished: () -> Unit) {
                 .border(1.dp, LocalExtraColors.current.warningBorder, RoundedCornerShape(8.dp))
                 .padding(16.dp),
             mutableStateOf(true),
-            5000,
+            2000,
             onFinished = onFinished
         ) {
             Icon(

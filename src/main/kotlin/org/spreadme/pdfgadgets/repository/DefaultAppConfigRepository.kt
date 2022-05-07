@@ -79,7 +79,6 @@ class DefaultAppConfigRepository : AppConfigRepository {
                 }
             }
         }
-        delay(200)
     }
 
     override suspend fun config(configKey: String, configValue: String) {

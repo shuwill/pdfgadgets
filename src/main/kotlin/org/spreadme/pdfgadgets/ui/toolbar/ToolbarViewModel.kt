@@ -4,7 +4,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import org.spreadme.pdfgadgets.common.AbstractViewModel
-import org.spreadme.pdfgadgets.common.ViewModel
 import org.spreadme.pdfgadgets.ui.sidepanel.SidePanelMode
 
 class ToolbarViewModel(
@@ -18,6 +17,7 @@ class ToolbarViewModel(
     var enabled by mutableStateOf(enabled)
     var scale by mutableStateOf(100)
     var searchKeyword by mutableStateOf("")
+
     var onChangeSideViewMode: (sidePanelMode: SidePanelMode) -> Unit = {}
     var onChangeScale: (scale: Float) -> Unit = {}
 
@@ -25,7 +25,7 @@ class ToolbarViewModel(
         onChangeSideViewMode(sidePanelMode)
     }
 
-    fun changeScale(type: ScaleType?, scale: Int = 100) {
+    fun changeScale(type: ScaleType) {
         when (type) {
             ScaleType.ZOOM_IN -> {
                 this.scale -= 10
@@ -39,10 +39,12 @@ class ToolbarViewModel(
                     this.scale = 200
                 }
             }
-            else -> {
-                this.scale = scale
-            }
         }
+        onChangeScale(this.scale / 100.0f)
+    }
+
+    fun changeScale(scale: Int) {
+        this.scale = scale
         onChangeScale(this.scale / 100.0f)
     }
 }
