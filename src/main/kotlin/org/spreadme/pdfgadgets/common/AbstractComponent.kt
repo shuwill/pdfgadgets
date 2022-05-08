@@ -12,6 +12,25 @@ abstract class AbstractComponent(
 
     val viewModels: MutableMap<String, ViewModel> = mutableMapOf()
 
+    inline fun <reified T : ViewModel> AbstractComponent.getViewModel(
+        vararg params: Any?,
+        block: T.() -> Unit = {}
+    ): T {
+        val key = T::class.java.name
+        synchronized(viewModels) {
+            val previous = viewModels[key]
+            if (previous == null) {
+                val kClass = T::class
+                val primaryConstructor = kClass.primaryConstructor ?: throw Exception("no primary constructor found on ${kClass.simpleName}")
+                val viewModel = primaryConstructor.call(*params)
+                viewModel.apply(block)
+                viewModels[key] = viewModel
+                return viewModel
+            }
+            return previous as T
+        }
+    }
+
     @Composable
     override fun render() {
         key(this) {
@@ -26,6 +45,7 @@ abstract class AbstractComponent(
         viewModels.values.forEach {
             it.clear()
         }
+        viewModels.clear()
     }
 
     override fun equals(other: Any?): Boolean {
@@ -43,23 +63,4 @@ abstract class AbstractComponent(
         return uid.hashCode()
     }
 
-}
-
-inline fun <reified T : ViewModel> AbstractComponent.getViewModel(
-    vararg params: Any?,
-    init: (T) -> Unit = {}
-): T {
-    val key = T::class.java.name
-    synchronized(viewModels) {
-        val previous = viewModels[key]
-        if (previous == null) {
-            val kClass = T::class
-            val primaryConstructor = kClass.primaryConstructor ?: throw Exception("no primary constructor found on ${kClass.simpleName}")
-            val viewModel = primaryConstructor.call(*params)
-            init(viewModel)
-            viewModels[key] = viewModel
-            return viewModel
-        }
-        return previous as T
-    }
 }

@@ -15,6 +15,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
+import org.spreadme.pdfgadgets.ui.common.LoadProgressIndicator
 import org.spreadme.pdfgadgets.ui.common.Toast
 import org.spreadme.pdfgadgets.ui.theme.LocalExtraColors
 import org.spreadme.pdfgadgets.ui.toolbars.ActionBar
@@ -68,7 +69,7 @@ fun LoadingModal() {
             .zIndex(999f),
         contentAlignment = Alignment.Center
     ) {
-        CircularProgressIndicator()
+        LoadProgressIndicator()
     }
 }
 

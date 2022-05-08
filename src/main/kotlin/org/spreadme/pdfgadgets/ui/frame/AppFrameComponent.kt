@@ -9,7 +9,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import org.koin.core.component.inject
 import org.spreadme.pdfgadgets.common.AppComponent
-import org.spreadme.pdfgadgets.common.getViewModel
 import org.spreadme.pdfgadgets.repository.AppConfigRepository
 import org.spreadme.pdfgadgets.repository.FileMetadataRepository
 import org.spreadme.pdfgadgets.ui.common.CustomWindowDecoration
@@ -20,7 +19,6 @@ class AppFrameComponent : AppComponent("Application Frame") {
 
     private val appConfigRepository by inject<AppConfigRepository>()
     private val fileMetadataRepository by inject<FileMetadataRepository>()
-
     private val applicationViewModel = getViewModel<ApplicationViewModel>(appConfigRepository, fileMetadataRepository)
 
     @Composable

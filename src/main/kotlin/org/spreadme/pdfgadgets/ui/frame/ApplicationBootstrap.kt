@@ -6,7 +6,10 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.MaterialTheme
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
@@ -18,9 +21,11 @@ import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 import org.spreadme.pdfgadgets.repository.AppConfigRepository
 import org.spreadme.pdfgadgets.resources.R
+import org.spreadme.pdfgadgets.ui.common.LoadProgressIndicator
+import org.spreadme.pdfgadgets.ui.common.LoadText
 
 class ApplicationBootstrap(
-    val applicationViewModel: ApplicationViewModel
+    private val applicationViewModel: ApplicationViewModel
 ) : KoinComponent {
 
     private val appConfigRepository by inject<AppConfigRepository>()
@@ -30,22 +35,20 @@ class ApplicationBootstrap(
     fun bootstrap(
         onFinished: @Composable () -> Unit
     ) {
-        var finished by remember { mutableStateOf(false) }
-        val message = MutableStateFlow("")
 
-        LaunchedEffect(Unit) {
-            appConfigRepository.load(message)
+        LaunchedEffect(applicationViewModel) {
+            appConfigRepository.load(applicationViewModel.loadMessage)
             applicationViewModel.newBlankTab()
-            finished = true
+            applicationViewModel.finished = true
         }
 
-        if (!finished) {
+        if (!applicationViewModel.finished) {
             println("bootstrap")
-            AppLoadProgressIndicator(message)
+            AppLoadProgressIndicator(applicationViewModel.loadMessage)
         }
 
         AnimatedVisibility(
-            finished,
+            applicationViewModel.finished,
             enter = fadeIn() + scaleIn(),
             exit = fadeOut() + scaleOut(),
         ) {
@@ -69,7 +72,7 @@ fun AppLoadProgressIndicator(message: MutableStateFlow<String>) {
                 modifier = Modifier.fillMaxSize()
             )
         }
-        LoadAnimation(Modifier.fillMaxSize().zIndex(1f))
+        LoadProgressIndicator(Modifier.fillMaxSize().zIndex(1f), color = MaterialTheme.colors.onPrimary)
         Column(
             Modifier.fillMaxSize().background(MaterialTheme.colors.primary.copy(0.95f)),
             verticalArrangement = Arrangement.Bottom,

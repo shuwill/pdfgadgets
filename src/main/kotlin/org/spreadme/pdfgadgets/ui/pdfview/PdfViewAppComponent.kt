@@ -16,10 +16,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.koin.core.component.inject
 import org.spreadme.pdfgadgets.common.LoadableAppComponent
-import org.spreadme.pdfgadgets.common.getViewModel
 import org.spreadme.pdfgadgets.repository.FileMetadataParser
 import org.spreadme.pdfgadgets.repository.FileMetadataRepository
 import org.spreadme.pdfgadgets.repository.PdfMetadataParser
@@ -33,7 +33,7 @@ import java.nio.file.Path
 
 class PdfViewAppComponent(
     val path: Path,
-    val applicationViewModel: ApplicationViewModel
+    private val applicationViewModel: ApplicationViewModel
 ) : LoadableAppComponent<Path>() {
 
     private val fileMetadataRepository by inject<FileMetadataRepository>()
@@ -165,15 +165,13 @@ class PdfViewAppComponent(
 
     override suspend fun load() {
         val fileMetadata = fileMetadataParser.parse(path)
-        fileMetadataRepository.save(fileMetadata)
         name = fileMetadata.name
+        delay(5_000)
         val pdfMetadata = pdfMetadataParser.parse(fileMetadata)
+        fileMetadataRepository.save(fileMetadata)
         pdfViewModel = getViewModel(pdfMetadata)
     }
 
     override fun content(): Path = path
 
-    override fun close() {
-        pdfViewModel.clear()
-    }
 }

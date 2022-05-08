@@ -7,6 +7,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.awt.ComposeWindow
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.window.WindowState
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 import mu.KotlinLogging
 import org.spreadme.pdfgadgets.common.AppComponent
@@ -21,8 +22,8 @@ import java.nio.file.Path
 import kotlin.system.exitProcess
 
 class ApplicationViewModel(
-    val appConfigRepository: AppConfigRepository,
-    val fileMetadataRepository: FileMetadataRepository
+    private val appConfigRepository: AppConfigRepository,
+    private val fileMetadataRepository: FileMetadataRepository
 ) : ViewModel() {
 
     private val logger = KotlinLogging.logger {}
@@ -31,6 +32,10 @@ class ApplicationViewModel(
 
     val components = mutableStateListOf<AppComponent>()
     var currentComponent by mutableStateOf<AppComponent?>(null)
+
+    //application load status
+    var finished by mutableStateOf(false)
+    var loadMessage = MutableStateFlow("")
 
     //UI State
     var windowState = WindowState()

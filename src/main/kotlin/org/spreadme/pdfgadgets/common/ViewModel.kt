@@ -10,17 +10,17 @@ import kotlin.coroutines.CoroutineContext
 abstract class ViewModel {
 
     companion object {
-        private fun closeWithRumtimeException(any: Any) {
+        fun closeWithRumtimeException(any: Any) {
             if (any is Closeable) {
                 any.close()
             }
         }
     }
 
-    private val tags: MutableMap<String, Any> = mutableMapOf()
+    val tags: MutableMap<String, Any> = mutableMapOf()
 
     @Volatile
-    private var cleared: Boolean = false
+    var cleared: Boolean = false
 
     open fun onCleared() {
 
@@ -38,7 +38,7 @@ abstract class ViewModel {
         onCleared()
     }
 
-    fun <T : Any> setTagIfAbsent(key: String, newValue: T): T {
+    inline fun <reified T : Any> setTagIfAbsent(key: String, newValue: T): T {
         synchronized(tags) {
             val previous = tags[key]
             val result = if (previous == null) {
@@ -54,7 +54,7 @@ abstract class ViewModel {
         }
     }
 
-    fun <T> getTag(key: String): T? {
+    inline fun <reified T> getTag(key: String): T? {
         if (tags.isEmpty()) {
             return null
         }
