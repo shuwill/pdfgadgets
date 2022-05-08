@@ -6,11 +6,11 @@ import org.spreadme.pdfgadgets.common.ViewModel
 import org.spreadme.pdfgadgets.model.PdfMetadata
 import org.spreadme.pdfgadgets.model.Position
 import org.spreadme.pdfgadgets.ui.sidepanel.SidePanelMode
-import org.spreadme.pdfgadgets.ui.sidepanel.SidePanelViewModel
+import org.spreadme.pdfgadgets.ui.sidepanel.SidePanelUIState
 
 class PdfViewModel(
     val pdfMetadata: PdfMetadata
-) : ViewModel {
+) : ViewModel() {
 
     var scale by mutableStateOf(1.0f)
 
@@ -22,12 +22,12 @@ class PdfViewModel(
     var scrollIndex by mutableStateOf(initScrollIndex)
     var scrollOffset by mutableStateOf(initScrollOffset)
 
-    var scrollFinish : () -> Unit = {}
+    var scrollFinish: () -> Unit = {}
 
-    val searchedPositions : SnapshotStateList<Position> = mutableStateListOf()
+    val searchedPositions: SnapshotStateList<Position> = mutableStateListOf()
 
     private var sidePanelModes = mutableStateListOf<SidePanelMode>()
-    private val sidePanelModels = mutableStateMapOf<SidePanelMode, SidePanelViewModel>()
+    private val sidePanelModels = mutableStateMapOf<SidePanelMode, SidePanelUIState>()
     private val excludeModesMap = mutableMapOf<SidePanelMode, ArrayList<SidePanelMode>>()
 
     init {
@@ -36,8 +36,10 @@ class PdfViewModel(
         excludeModesMap[SidePanelMode.SIGNATURE] = arrayListOf(SidePanelMode.OUTLINES, SidePanelMode.STRUCTURE)
 
         SidePanelMode.values().forEach {
-            sidePanelModels[it] = SidePanelViewModel()
+            sidePanelModels[it] = SidePanelUIState()
         }
+
+        setTagIfAbsent(PdfMetadata::class.java.canonicalName, pdfMetadata)
     }
 
     fun onChangeSideViewMode(sidePanelMode: SidePanelMode) {
@@ -49,12 +51,12 @@ class PdfViewModel(
         }
     }
 
-    fun sideViewModel(viewMode: SidePanelMode): SidePanelViewModel {
+    fun sideViewModel(viewMode: SidePanelMode): SidePanelUIState {
         val sideViewState = sidePanelModels[viewMode]
         if (sideViewState != null) {
             return sideViewState
         }
-        return SidePanelViewModel()
+        return SidePanelUIState()
     }
 
     fun hasSideView(viewMode: SidePanelMode): Boolean = sidePanelModes.contains(viewMode)
@@ -65,7 +67,7 @@ class PdfViewModel(
 
     fun onScroll(position: Position, scrollFinish: () -> Unit) {
         val offset = position.calculateScrollOffset()
-        if(offset == Position.DISABLE) {
+        if (offset == Position.DISABLE) {
             return
         }
         this.scrollable = true
@@ -74,7 +76,4 @@ class PdfViewModel(
         this.scrollFinish = scrollFinish
     }
 
-    override fun clear() {
-        pdfMetadata.close()
-    }
 }

@@ -20,18 +20,18 @@ import java.awt.Cursor
 
 @Composable
 fun SidePanel(
-    sidePanelViewModel: SidePanelViewModel,
-    content: @Composable BoxScope.(SidePanelViewModel) -> Unit
+    sidePanelUIState: SidePanelUIState,
+    content: @Composable BoxScope.(SidePanelUIState) -> Unit
 ) {
 
-    val sideViewState = remember { sidePanelViewModel }
+    val sideViewState = remember { sidePanelUIState }
 
     Column(
         modifier = Modifier.fillMaxHeight().width(sideViewState.expandedSize)
             .background(LocalExtraColors.current.sidePanelBackground)
     ) {
         Box(modifier = Modifier.fillMaxSize()) {
-            content(sidePanelViewModel)
+            content(sidePanelUIState)
             Box(
                 modifier = Modifier.fillMaxSize().zIndex(1f),
                 contentAlignment = Alignment.CenterEnd
@@ -50,7 +50,7 @@ fun SidePanel(
 
 @Composable
 fun SidePanelVerticalSplitter(
-    sideViewState: SidePanelViewModel,
+    sideViewState: SidePanelUIState,
     onResize: (delta: Dp) -> Unit,
 ) {
     val density = LocalDensity.current

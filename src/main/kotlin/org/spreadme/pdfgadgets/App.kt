@@ -5,7 +5,6 @@ import org.spreadme.pdfgadgets.common.Application
 import org.spreadme.pdfgadgets.di.appConfigLoadModule
 import org.spreadme.pdfgadgets.di.fileMetadataModule
 import org.spreadme.pdfgadgets.di.pdfParseModule
-import org.spreadme.pdfgadgets.di.viewModelModule
 
 class PDFGadgetsApp : Application() {
 
@@ -20,14 +19,11 @@ class PDFGadgetsApp : Application() {
             modules(
                 appConfigLoadModule,
                 fileMetadataModule,
-                pdfParseModule,
-                viewModelModule
+                pdfParseModule
             )
         }
     }
-
 }
-
 
 fun main() {
     PDFGadgetsApp().create()

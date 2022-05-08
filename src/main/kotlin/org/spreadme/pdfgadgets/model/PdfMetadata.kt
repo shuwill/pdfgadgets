@@ -2,6 +2,7 @@ package org.spreadme.pdfgadgets.model
 
 import com.itextpdf.kernel.pdf.PdfDictionary
 import com.itextpdf.kernel.pdf.PdfDocument
+import java.io.Closeable
 
 class PdfMetadata(
     val fileMetadata: FileMetadata,
@@ -13,7 +14,7 @@ class PdfMetadata(
     val document: PdfDocument,
     val outlines: Outlines = Outlines(document),
     var signatures: List<Signature> = listOf(),
-) : AutoCloseable {
+) : Closeable {
 
     override fun close() {
         document.close()

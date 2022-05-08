@@ -3,9 +3,9 @@ package org.spreadme.pdfgadgets.ui.frame
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
-import org.spreadme.pdfgadgets.common.AbstractViewModel
+import org.spreadme.pdfgadgets.common.ViewModel
 
-class LoadProgressViewModel : AbstractViewModel() {
+class LoadProgressViewModel : ViewModel() {
 
     var status by mutableStateOf(LoadProgressStatus.NONE)
     var message by mutableStateOf("")

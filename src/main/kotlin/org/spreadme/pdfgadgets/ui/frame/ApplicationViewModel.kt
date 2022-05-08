@@ -7,34 +7,30 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.awt.ComposeWindow
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.window.WindowState
-import kotlinx.coroutines.*
+import kotlinx.coroutines.launch
 import mu.KotlinLogging
-import org.koin.core.component.KoinComponent
-import org.spreadme.pdfgadgets.common.AbstractComponent
-import org.spreadme.pdfgadgets.common.LoadableComponent
+import org.spreadme.pdfgadgets.common.AppComponent
+import org.spreadme.pdfgadgets.common.LoadableAppComponent
 import org.spreadme.pdfgadgets.common.ViewModel
+import org.spreadme.pdfgadgets.common.viewModelScope
 import org.spreadme.pdfgadgets.config.AppConfig
 import org.spreadme.pdfgadgets.repository.AppConfigRepository
 import org.spreadme.pdfgadgets.repository.FileMetadataRepository
 import org.spreadme.pdfgadgets.ui.home.HomeComponent
 import java.nio.file.Path
-import kotlin.coroutines.CoroutineContext
 import kotlin.system.exitProcess
 
 class ApplicationViewModel(
-    private val appConfigRepository: AppConfigRepository,
-    private val fileMetadataRepository: FileMetadataRepository
-) : ViewModel, CoroutineScope, KoinComponent {
+    val appConfigRepository: AppConfigRepository,
+    val fileMetadataRepository: FileMetadataRepository
+) : ViewModel() {
 
     private val logger = KotlinLogging.logger {}
 
-    override val coroutineContext: CoroutineContext
-        get() = Dispatchers.Default + SupervisorJob()
-
     var composeWindow = ComposeWindow()
 
-    val components = mutableStateListOf<AbstractComponent>()
-    var currentComponent by mutableStateOf<AbstractComponent?>(null)
+    val components = mutableStateListOf<AppComponent>()
+    var currentComponent by mutableStateOf<AppComponent?>(null)
 
     //UI State
     var windowState = WindowState()
@@ -44,7 +40,7 @@ class ApplicationViewModel(
     var isCustomWindowDecoration = false
     var tabbarPaddingStart = 0
     var tabbarPaddingEnd = 16
-    val iconSize = 32
+    val addIconSize = 32
 
     fun customWindowDecoration(enabled: Boolean) {
         isCustomWindowDecoration = enabled
@@ -55,11 +51,11 @@ class ApplicationViewModel(
         //TODO re calculate the tab width
     }
 
-    fun onSelectTab(selectedComponent: AbstractComponent) {
+    fun onSelectTab(selectedComponent: AppComponent) {
         currentComponent = selectedComponent
     }
 
-    fun onClose(closeComponent: AbstractComponent) {
+    fun onCloseTab(closeComponent: AppComponent) {
         closeComponent.close()
         val index = components.indexOf(closeComponent)
         currentComponent = if (index == 0 && components.size == 1) {
@@ -74,22 +70,35 @@ class ApplicationViewModel(
     }
 
     fun newBlankTab() {
-        val homeComponent = HomeComponent()
+        val homeComponent = HomeComponent(this)
         components.add(homeComponent)
         currentComponent = homeComponent
+    }
+
+    fun openCurrentTab(component: AppComponent) {
+        components.add(component)
+        components.remove(currentComponent)
+        currentComponent = component
+    }
+
+    fun calculateTabWidth() {
+        val windowWidth = windowState.size.width.value - (tabbarPaddingStart + tabbarPaddingEnd + addIconSize)
+        if ((components.size + 1) * tabWidth > windowWidth) {
+            tabWidth = (windowWidth / (components.size + 1)).toInt()
+        }
     }
 
     /**
      * @param progressViewModel progrss view model
      * @param component a need load component, the loading operations in a concurrent process,
-     * render the [LoadableComponent] first, when load finished then render the [LoadableComponent]
+     * render the [LoadableAppComponent] first, when load finished then render the [LoadableAppComponent]
      */
     fun openFile(
         progressViewModel: LoadProgressViewModel,
-        component: LoadableComponent<Path>,
+        component: LoadableAppComponent<Path>,
     ) {
         progressViewModel.start()
-        launch {
+        viewModelScope.launch {
             try {
                 component.load()
                 progressViewModel.success()
@@ -105,9 +114,7 @@ class ApplicationViewModel(
             }
         }
         progressViewModel.onSuccess = {
-            components.add(component)
-            components.remove(currentComponent)
-            currentComponent = component
+            openCurrentTab(component)
         }
     }
 
@@ -115,20 +122,9 @@ class ApplicationViewModel(
         //TODO create pdf file from support file type
     }
 
-    fun calculateWidth() {
-        val windowWidth = windowState.size.width.value - (tabbarPaddingStart + tabbarPaddingEnd + iconSize)
-        if ((components.size + 1) * tabWidth > windowWidth) {
-            tabWidth = (windowWidth / (components.size + 1)).toInt()
-        }
-    }
-
-    override fun clear() {
-        coroutineContext.cancel()
-        components.forEach { it.close() }
-    }
 
     fun config(configKey: String, configValue: String) {
-        launch {
+        viewModelScope.launch {
             appConfigRepository.config(configKey, configValue)
         }
     }

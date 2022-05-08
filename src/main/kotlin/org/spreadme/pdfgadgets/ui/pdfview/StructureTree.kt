@@ -20,15 +20,15 @@ import androidx.compose.ui.unit.dp
 import org.spreadme.pdfgadgets.model.StructureNode
 import org.spreadme.pdfgadgets.ui.common.VerticalScrollable
 import org.spreadme.pdfgadgets.ui.common.clickable
-import org.spreadme.pdfgadgets.ui.sidepanel.SidePanelViewModel
+import org.spreadme.pdfgadgets.ui.sidepanel.SidePanelUIState
 import org.spreadme.pdfgadgets.utils.choose
 
 @Composable
 fun StructureTree(
     structureRoot: StructureNode,
-    sidePanelViewModel: SidePanelViewModel
+    sidePanelUIState: SidePanelUIState
 ) {
-    VerticalScrollable(sidePanelViewModel) {
+    VerticalScrollable(sidePanelUIState) {
         Column(
             modifier = Modifier.fillMaxSize()
         ) {

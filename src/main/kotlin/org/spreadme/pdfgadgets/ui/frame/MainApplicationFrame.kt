@@ -17,13 +17,13 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import org.spreadme.pdfgadgets.ui.common.Toast
 import org.spreadme.pdfgadgets.ui.theme.LocalExtraColors
-import org.spreadme.pdfgadgets.ui.toolbar.ActionBar
-import org.spreadme.pdfgadgets.ui.toolbar.Toolbar
-import org.spreadme.pdfgadgets.ui.toolbar.ToolbarViewModel
+import org.spreadme.pdfgadgets.ui.toolbars.ActionBar
+import org.spreadme.pdfgadgets.ui.toolbars.Toolbars
+import org.spreadme.pdfgadgets.ui.toolbars.ToolbarsViewModel
 
 @Composable
 fun MainApplicationFrame(
-    toolbarViewModel: ToolbarViewModel,
+    toolbarsViewModel: ToolbarsViewModel,
     applicationViewModel: ApplicationViewModel,
     loadProgressViewModel: LoadProgressViewModel,
     content: @Composable RowScope.() -> Unit
@@ -32,9 +32,9 @@ fun MainApplicationFrame(
         Modifier.fillMaxSize(),
         verticalArrangement = Arrangement.Top
     ) {
-        Toolbar(
+        Toolbars(
             modifier = Modifier.fillMaxWidth().height(48.dp).background(MaterialTheme.colors.background),
-            toolbarViewModel = toolbarViewModel
+            toolbarsViewModel = toolbarsViewModel
         )
         Divider(color = LocalExtraColors.current.border)
         Box(Modifier.fillMaxSize()) {

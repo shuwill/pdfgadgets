@@ -1,4 +1,4 @@
-package org.spreadme.pdfgadgets.ui.toolbar
+package org.spreadme.pdfgadgets.ui.toolbars
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -17,7 +17,7 @@ import org.spreadme.pdfgadgets.resources.R
 import org.spreadme.pdfgadgets.ui.common.FileDialog
 import org.spreadme.pdfgadgets.ui.frame.ApplicationViewModel
 import org.spreadme.pdfgadgets.ui.frame.LoadProgressViewModel
-import org.spreadme.pdfgadgets.ui.pdfview.PdfViewComponent
+import org.spreadme.pdfgadgets.ui.pdfview.PdfViewAppComponent
 
 @Composable
 fun ActionBar(
@@ -37,7 +37,7 @@ fun ActionBar(
                 onFileOpen = {
                     applicationViewModel.openFile(
                         progressViewModel,
-                        PdfViewComponent(it)
+                        PdfViewAppComponent(it, applicationViewModel)
                     )
                 }
             )

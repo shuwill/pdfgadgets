@@ -1,4 +1,4 @@
-package org.spreadme.pdfgadgets.ui.toolbar
+package org.spreadme.pdfgadgets.ui.toolbars
 
 import androidx.compose.desktop.ui.tooling.preview.Preview
 import androidx.compose.foundation.background
@@ -18,40 +18,40 @@ import org.spreadme.pdfgadgets.ui.common.TextSearchInputField
 import org.spreadme.pdfgadgets.ui.common.clickable
 import org.spreadme.pdfgadgets.ui.sidepanel.SidePanelMode
 import org.spreadme.pdfgadgets.ui.theme.LocalExtraColors
-import org.spreadme.pdfgadgets.ui.toolbar.ToolbarViewModel.Companion.SCALES
+import org.spreadme.pdfgadgets.ui.toolbars.ToolbarsViewModel.Companion.SCALES
 
 @Composable
-fun Toolbar(
+fun Toolbars(
     modifier: Modifier = Modifier,
-    toolbarViewModel: ToolbarViewModel
+    toolbarsViewModel: ToolbarsViewModel
 ) {
     Row(
         modifier
     ) {
-        SidePanelModeBar(
+        SidePanelSwitchBar(
             Modifier.fillMaxSize().weight(0.2f),
-            toolbarViewModel.enabled,
-            onSidePanelModeChange = toolbarViewModel::changeSideViewMode
+            toolbarsViewModel.enabled,
+            onSidePanelModeChange = toolbarsViewModel::changeSideViewMode
         )
         ScaleBar(
             Modifier.fillMaxSize().weight(0.6f),
-            toolbarViewModel.enabled,
-            toolbarViewModel.scale,
-            onScaleTypeChange = toolbarViewModel::changeScale,
-            onScaleChange = toolbarViewModel::changeScale
+            toolbarsViewModel.enabled,
+            toolbarsViewModel.scale,
+            onScaleTypeChange = toolbarsViewModel::changeScale,
+            onScaleChange = toolbarsViewModel::changeScale
         )
         TextSearchBar(
-            toolbarViewModel.searchKeyword,
+            toolbarsViewModel.searchKeyword,
             Modifier.fillMaxSize().weight(0.2f),
-            toolbarViewModel.enabled
+            toolbarsViewModel.enabled
         ) {
-            toolbarViewModel.searchKeyword = it
+            toolbarsViewModel.searchKeyword = it
         }
     }
 }
 
 @Composable
-fun SidePanelModeBar(
+fun SidePanelSwitchBar(
     modifier: Modifier = Modifier,
     enabled: Boolean,
     onSidePanelModeChange: (SidePanelMode) -> Unit
@@ -206,7 +206,7 @@ fun TextSearchBar(
 @Composable
 @Preview
 fun ViewBarPreview() {
-    SidePanelModeBar(
+    SidePanelSwitchBar(
         Modifier.fillMaxWidth().height(48.dp).background(MaterialTheme.colors.background),
         false,
     ) {

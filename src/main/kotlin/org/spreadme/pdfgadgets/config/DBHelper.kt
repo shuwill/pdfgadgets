@@ -1,4 +1,4 @@
-package org.spreadme.pdfgadgets.common
+package org.spreadme.pdfgadgets.config
 
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext

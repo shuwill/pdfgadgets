@@ -3,36 +3,35 @@ package org.spreadme.pdfgadgets.ui.home
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
-import org.spreadme.pdfgadgets.common.AbstractComponent
+import org.spreadme.pdfgadgets.common.AppComponent
+import org.spreadme.pdfgadgets.common.getViewModel
 import org.spreadme.pdfgadgets.repository.FileMetadataRepository
 import org.spreadme.pdfgadgets.ui.frame.ApplicationViewModel
 import org.spreadme.pdfgadgets.ui.frame.LoadProgressViewModel
 import org.spreadme.pdfgadgets.ui.frame.MainApplicationFrame
-import org.spreadme.pdfgadgets.ui.pdfview.PdfViewComponent
-import org.spreadme.pdfgadgets.ui.toolbar.ToolbarViewModel
-import java.nio.file.Paths
+import org.spreadme.pdfgadgets.ui.pdfview.PdfViewAppComponent
+import org.spreadme.pdfgadgets.ui.toolbars.ToolbarsViewModel
 
-class HomeComponent : AbstractComponent("新建标签"), KoinComponent {
+class HomeComponent(
+    private val applicationViewModel: ApplicationViewModel
+) : AppComponent("新建标签") {
 
-    private val applicationViewModel by inject<ApplicationViewModel>()
     private val fileMetadataRepository by inject<FileMetadataRepository>()
 
-    private val toolbarViewModel: ToolbarViewModel = ToolbarViewModel(false)
-    private val loadProgressViewModel: LoadProgressViewModel = LoadProgressViewModel()
-    private val recentFileViewModel: RecentFileViewModel = RecentFileViewModel(fileMetadataRepository)
+    private val toolbarsViewModel = getViewModel<ToolbarsViewModel>(false)
+    private val loadProgressViewModel = getViewModel<LoadProgressViewModel>()
+    private val recentFileViewModel = getViewModel<RecentFileViewModel>(fileMetadataRepository)
 
     @Composable
-    override fun doRender() {
+    override fun onRender() {
         loadProgressViewModel.onFail = {
             recentFileViewModel.reacquire()
         }
         MainApplicationFrame(
-            toolbarViewModel,
+            toolbarsViewModel,
             applicationViewModel,
             loadProgressViewModel
         ) {
@@ -42,7 +41,7 @@ class HomeComponent : AbstractComponent("新建标签"), KoinComponent {
                 RecentFiles(recentFileState) {
                     applicationViewModel.openFile(
                         loadProgressViewModel,
-                        PdfViewComponent(Paths.get(it.path))
+                        PdfViewAppComponent(it.path(), applicationViewModel)
                     )
                 }
             }

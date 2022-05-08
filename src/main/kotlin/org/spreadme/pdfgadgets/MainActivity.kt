@@ -9,20 +9,17 @@ import androidx.compose.ui.window.application
 import androidx.compose.ui.window.rememberWindowState
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
-import org.koin.core.component.KoinComponent
-import org.koin.core.component.inject
 import org.spreadme.pdfgadgets.common.Activity
 import org.spreadme.pdfgadgets.common.ActivityIntent
 import org.spreadme.pdfgadgets.config.AppConfig
 import org.spreadme.pdfgadgets.resources.R
 import org.spreadme.pdfgadgets.ui.PlatformUI
+import org.spreadme.pdfgadgets.ui.frame.AppFrameComponent
 import org.spreadme.pdfgadgets.ui.frame.ApplicationBootstrap
-import org.spreadme.pdfgadgets.ui.frame.ApplicationFrame
-import org.spreadme.pdfgadgets.ui.frame.ApplicationViewModel
 import org.spreadme.pdfgadgets.ui.theme.PDFGadgetsTheme
 import java.awt.Taskbar
 
-class MainActivity : Activity(), KoinComponent {
+class MainActivity : Activity() {
 
     companion object {
         fun getStartIntent(): ActivityIntent {
@@ -32,8 +29,9 @@ class MainActivity : Activity(), KoinComponent {
         }
     }
 
-    private val applicationBootstrap = ApplicationBootstrap()
-    private val applicationViewModel by inject<ApplicationViewModel>()
+    private val appFrameComponent = AppFrameComponent()
+    private val appFrameViewModel = appFrameComponent.viewModel()
+    private val applicationBootstrap = ApplicationBootstrap(appFrameViewModel)
 
     override fun onCreate() {
         if (Taskbar.isTaskbarSupported()) {
@@ -46,32 +44,30 @@ class MainActivity : Activity(), KoinComponent {
                 onCloseRequest = {
                     onDestory()
                     exitApplication()
-                },
-                icon = painterResource(R.Drawables.appIcon),
-                title = AppConfig.appName,
-                state = windowState
+                }, icon = painterResource(R.Drawables.appIcon), title = AppConfig.appName, state = windowState
             ) {
                 // listening the state of the window
                 LaunchedEffect(windowState) {
                     snapshotFlow { windowState.size }
-                        .onEach { applicationViewModel.onWindowStateChange(it) }
-                        .launchIn(this)
+                        .onEach {
+                            appFrameViewModel.onWindowStateChange(it)
+                        }.launchIn(this)
                 }
 
                 // custom the window title
-                val platformUI = PlatformUI(window.rootPane, applicationViewModel.isDark)
+                val platformUI = PlatformUI(window.rootPane, appFrameViewModel.isDark)
                 if (platformUI.isSupportCustomWindowDecoration()) {
                     platformUI.customWindowDecoration()
-                    applicationViewModel.customWindowDecoration(true)
+                    appFrameViewModel.customWindowDecoration(true)
                 }
 
                 // load the window state
-                applicationViewModel.composeWindow = window
-                applicationViewModel.windowState = windowState
+                appFrameViewModel.composeWindow = window
+                appFrameViewModel.windowState = windowState
 
-                PDFGadgetsTheme(applicationViewModel.isDark) {
+                PDFGadgetsTheme(appFrameViewModel.isDark) {
                     applicationBootstrap.bootstrap {
-                        ApplicationFrame(applicationViewModel)
+                        appFrameComponent.onRender()
                     }
                 }
             }
@@ -79,6 +75,6 @@ class MainActivity : Activity(), KoinComponent {
     }
 
     override fun onDestory() {
-        applicationViewModel.clear()
+        appFrameComponent.close()
     }
 }

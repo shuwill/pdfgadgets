@@ -1,14 +1,14 @@
-package org.spreadme.pdfgadgets.ui.toolbar
+package org.spreadme.pdfgadgets.ui.toolbars
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
-import org.spreadme.pdfgadgets.common.AbstractViewModel
+import org.spreadme.pdfgadgets.common.ViewModel
 import org.spreadme.pdfgadgets.ui.sidepanel.SidePanelMode
 
-class ToolbarViewModel(
+class ToolbarsViewModel(
     enabled: Boolean = true
-) : AbstractViewModel() {
+) : ViewModel() {
 
     companion object {
         val SCALES = arrayListOf("100%", "150%", "200%", "80%", "50%")

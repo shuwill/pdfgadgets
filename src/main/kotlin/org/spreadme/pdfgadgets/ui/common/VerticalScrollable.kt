@@ -9,23 +9,23 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import org.spreadme.pdfgadgets.ui.sidepanel.SidePanelViewModel
+import org.spreadme.pdfgadgets.ui.sidepanel.SidePanelUIState
 
 @Composable
 fun VerticalScrollable(
-    sidePanelViewModel: SidePanelViewModel,
+    sidePanelUIState: SidePanelUIState,
     content: @Composable BoxScope.() -> Unit
 ) {
 
     Box(modifier = Modifier.fillMaxSize()) {
-        val verticalScrollState = rememberScrollState(sidePanelViewModel.verticalScroll)
+        val verticalScrollState = rememberScrollState(sidePanelUIState.verticalScroll)
 
         Box(
             modifier = Modifier
                 .fillMaxSize()
                 .verticalScroll(verticalScrollState)
         ) {
-            sidePanelViewModel.verticalScroll = verticalScrollState.value
+            sidePanelUIState.verticalScroll = verticalScrollState.value
             content()
         }
 

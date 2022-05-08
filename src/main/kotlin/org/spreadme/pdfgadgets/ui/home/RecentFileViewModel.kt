@@ -1,35 +1,29 @@
 package org.spreadme.pdfgadgets.ui.home
 
 import androidx.compose.runtime.mutableStateListOf
-import kotlinx.coroutines.*
-import org.spreadme.pdfgadgets.common.AbstractViewModel
+import kotlinx.coroutines.launch
+import org.spreadme.pdfgadgets.common.ViewModel
+import org.spreadme.pdfgadgets.common.viewModelScope
 import org.spreadme.pdfgadgets.model.FileMetadata
 import org.spreadme.pdfgadgets.repository.FileMetadataRepository
-import kotlin.coroutines.CoroutineContext
 
 class RecentFileViewModel(
-    private val fileMetadataRepository: FileMetadataRepository
-) : AbstractViewModel(), CoroutineScope {
-
-    override val coroutineContext: CoroutineContext
-        get() = Dispatchers.Default + SupervisorJob()
+    val fileMetadataRepository: FileMetadataRepository
+) : ViewModel() {
 
     val fileMetadatas = mutableStateListOf<FileMetadata>()
 
     init {
-        launch {
+        viewModelScope.launch {
             fileMetadatas.addAll(fileMetadataRepository.query())
         }
     }
 
     fun reacquire() {
         fileMetadatas.clear()
-        launch {
+        viewModelScope.launch {
             fileMetadatas.addAll(fileMetadataRepository.query())
         }
     }
 
-    override fun clear() {
-        coroutineContext.cancel()
-    }
 }

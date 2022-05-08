@@ -13,18 +13,17 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
-import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.MutableStateFlow
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 import org.spreadme.pdfgadgets.repository.AppConfigRepository
 import org.spreadme.pdfgadgets.resources.R
-import kotlin.coroutines.CoroutineContext
 
-class ApplicationBootstrap : KoinComponent {
+class ApplicationBootstrap(
+    val applicationViewModel: ApplicationViewModel
+) : KoinComponent {
 
     private val appConfigRepository by inject<AppConfigRepository>()
-    private val applicationViewModel by inject<ApplicationViewModel>()
 
     @OptIn(ExperimentalAnimationApi::class)
     @Composable

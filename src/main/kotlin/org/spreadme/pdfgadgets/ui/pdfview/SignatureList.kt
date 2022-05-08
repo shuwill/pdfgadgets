@@ -28,14 +28,14 @@ import org.spreadme.pdfgadgets.model.Signature
 import org.spreadme.pdfgadgets.model.SignatureResult
 import org.spreadme.pdfgadgets.resources.R
 import org.spreadme.pdfgadgets.ui.common.clickable
-import org.spreadme.pdfgadgets.ui.sidepanel.SidePanelViewModel
+import org.spreadme.pdfgadgets.ui.sidepanel.SidePanelUIState
 import org.spreadme.pdfgadgets.ui.theme.LocalExtraColors
 import org.spreadme.pdfgadgets.utils.choose
 
 @Composable
 fun SignatureList(
     signatures: List<Signature>,
-    sidePanelViewModel: SidePanelViewModel,
+    sidePanelUIState: SidePanelUIState,
     onScroll: (postion: Position, scrollFinish: () -> Unit) -> Unit,
 ) {
     if (signatures.isEmpty()) {
@@ -49,13 +49,13 @@ fun SignatureList(
             )
         }
     } else {
-        val lazyListState = rememberLazyListState(sidePanelViewModel.verticalScroll, sidePanelViewModel.verticalScrollOffset)
+        val lazyListState = rememberLazyListState(sidePanelUIState.verticalScroll, sidePanelUIState.verticalScrollOffset)
         LazyColumn(
             modifier = Modifier.fillMaxSize(),
             state = lazyListState
         ) {
-            sidePanelViewModel.verticalScroll = lazyListState.firstVisibleItemIndex
-            sidePanelViewModel.verticalScrollOffset = lazyListState.firstVisibleItemScrollOffset
+            sidePanelUIState.verticalScroll = lazyListState.firstVisibleItemIndex
+            sidePanelUIState.verticalScrollOffset = lazyListState.firstVisibleItemScrollOffset
             items(signatures) { signature ->
                 SignatureListDetail(signature, onScroll)
             }

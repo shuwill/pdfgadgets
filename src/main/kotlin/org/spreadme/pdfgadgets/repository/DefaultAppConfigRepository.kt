@@ -2,7 +2,6 @@ package org.spreadme.pdfgadgets.repository
 
 import com.artifex.mupdf.fitz.Context
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.withContext
 import mu.KotlinLogging
@@ -11,7 +10,7 @@ import org.jetbrains.exposed.sql.select
 import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.jetbrains.exposed.sql.update
-import org.spreadme.pdfgadgets.common.DBHelper
+import org.spreadme.pdfgadgets.config.DBHelper
 import org.spreadme.pdfgadgets.config.AppConfig
 import org.spreadme.pdfgadgets.config.AppConfigs
 import org.spreadme.pdfgadgets.config.MupdfConfig

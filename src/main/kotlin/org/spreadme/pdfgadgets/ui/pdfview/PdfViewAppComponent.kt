@@ -17,9 +17,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import kotlinx.coroutines.launch
-import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
-import org.spreadme.pdfgadgets.common.LoadableComponent
+import org.spreadme.pdfgadgets.common.LoadableAppComponent
+import org.spreadme.pdfgadgets.common.getViewModel
 import org.spreadme.pdfgadgets.repository.FileMetadataParser
 import org.spreadme.pdfgadgets.repository.FileMetadataRepository
 import org.spreadme.pdfgadgets.repository.PdfMetadataParser
@@ -28,33 +28,33 @@ import org.spreadme.pdfgadgets.ui.frame.LoadProgressViewModel
 import org.spreadme.pdfgadgets.ui.frame.MainApplicationFrame
 import org.spreadme.pdfgadgets.ui.sidepanel.SidePanel
 import org.spreadme.pdfgadgets.ui.sidepanel.SidePanelMode
-import org.spreadme.pdfgadgets.ui.toolbar.ToolbarViewModel
+import org.spreadme.pdfgadgets.ui.toolbars.ToolbarsViewModel
 import java.nio.file.Path
 
-class PdfViewComponent(filePath: Path) : LoadableComponent<Path>(), KoinComponent {
+class PdfViewAppComponent(
+    val path: Path,
+    val applicationViewModel: ApplicationViewModel
+) : LoadableAppComponent<Path>() {
 
-    val path: Path = filePath
-
-    private val applicationViewModel by inject<ApplicationViewModel>()
     private val fileMetadataRepository by inject<FileMetadataRepository>()
     private val fileMetadataParser by inject<FileMetadataParser>()
     private val pdfMetadataParser by inject<PdfMetadataParser>()
 
-    private val toolbarViewModel: ToolbarViewModel = ToolbarViewModel(true)
-    private val loadProgressViewModel: LoadProgressViewModel = LoadProgressViewModel()
+    private val toolbarsViewModel = getViewModel<ToolbarsViewModel>(true)
+    private val loadProgressViewModel = getViewModel<LoadProgressViewModel>()
     private lateinit var pdfViewModel: PdfViewModel
 
     @Composable
-    override fun doRender() {
+    override fun onRender() {
         MainApplicationFrame(
-            toolbarViewModel,
+            toolbarsViewModel,
             applicationViewModel,
             loadProgressViewModel
         ) {
             println("pdf view component【${name}】rendered")
             val pdfpdfViewModel = remember { pdfViewModel }
-            toolbarViewModel.onChangeSideViewMode = pdfpdfViewModel::onChangeSideViewMode
-            toolbarViewModel.onChangeScale = pdfpdfViewModel::onChangeScalue
+            toolbarsViewModel.onChangeSideViewMode = pdfpdfViewModel::onChangeSideViewMode
+            toolbarsViewModel.onChangeScale = pdfpdfViewModel::onChangeScalue
             SidePanelGroup(pdfpdfViewModel)
             PageDetailGroup(pdfpdfViewModel)
         }
@@ -168,7 +168,7 @@ class PdfViewComponent(filePath: Path) : LoadableComponent<Path>(), KoinComponen
         fileMetadataRepository.save(fileMetadata)
         name = fileMetadata.name
         val pdfMetadata = pdfMetadataParser.parse(fileMetadata)
-        pdfViewModel = PdfViewModel(pdfMetadata)
+        pdfViewModel = getViewModel(pdfMetadata)
     }
 
     override fun content(): Path = path
