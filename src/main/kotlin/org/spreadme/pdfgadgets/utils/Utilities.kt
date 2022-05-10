@@ -54,13 +54,6 @@ inline fun Date.format(): String {
 }
 
 /**
- * new array list
- */
-fun <E> ArrayList<E>.new(): ArrayList<E> {
-    return ArrayList(this)
-}
-
-/**
  * copy inputsteam to outputstream
  *
  * @param input inputsteam

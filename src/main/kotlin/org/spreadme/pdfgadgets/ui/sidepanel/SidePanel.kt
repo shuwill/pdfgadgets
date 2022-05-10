@@ -21,6 +21,7 @@ import java.awt.Cursor
 @Composable
 fun SidePanel(
     sidePanelUIState: SidePanelUIState,
+    reverseDirection: Boolean = false,
     content: @Composable BoxScope.(SidePanelUIState) -> Unit
 ) {
 
@@ -32,25 +33,43 @@ fun SidePanel(
     ) {
         Box(modifier = Modifier.fillMaxSize()) {
             content(sidePanelUIState)
-            Box(
-                modifier = Modifier.fillMaxSize().zIndex(1f),
-                contentAlignment = Alignment.CenterEnd
-            ) {
-                SidePanelVerticalSplitter(
-                    sideViewState,
-                    onResize = {
-                        sideViewState.expandedSize = (sideViewState.expandedSize + it)
-                            .coerceAtLeast(sideViewState.expandedMinSize)
-                    }
-                )
-            }
+            DraggableVerticalSplitter(
+                sideViewState,
+                reverseDirection
+            )
         }
+    }
+}
+
+@Composable
+fun DraggableVerticalSplitter(
+    sideViewState: SidePanelUIState,
+    reverseDirection: Boolean = false
+) {
+    val contentAlignment = if (reverseDirection) {
+        Alignment.CenterStart
+    } else {
+        Alignment.CenterEnd
+    }
+    Box(
+        modifier = Modifier.fillMaxSize().zIndex(1f),
+        contentAlignment = contentAlignment
+    ) {
+        SidePanelVerticalSplitter(
+            sideViewState,
+            reverseDirection,
+            onResize = {
+                sideViewState.expandedSize = (sideViewState.expandedSize + it)
+                    .coerceAtLeast(sideViewState.expandedMinSize)
+            }
+        )
     }
 }
 
 @Composable
 fun SidePanelVerticalSplitter(
     sideViewState: SidePanelUIState,
+    reverseDirection: Boolean = false,
     onResize: (delta: Dp) -> Unit,
 ) {
     val density = LocalDensity.current
@@ -66,7 +85,8 @@ fun SidePanelVerticalSplitter(
                     orientation = Orientation.Horizontal,
                     startDragImmediately = true,
                     onDragStarted = { sideViewState.isResizing = true },
-                    onDragStopped = { sideViewState.isResizing = false }
+                    onDragStopped = { sideViewState.isResizing = false },
+                    reverseDirection = reverseDirection
                 ).pointerHoverIcon(PointerIcon(Cursor(Cursor.W_RESIZE_CURSOR)))
             } else {
                 this

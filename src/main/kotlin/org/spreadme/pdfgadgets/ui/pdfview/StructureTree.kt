@@ -17,7 +17,9 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import com.itextpdf.kernel.pdf.PdfStream
 import org.spreadme.pdfgadgets.model.StructureNode
+import org.spreadme.pdfgadgets.resources.R
 import org.spreadme.pdfgadgets.ui.common.VerticalScrollable
 import org.spreadme.pdfgadgets.ui.common.clickable
 import org.spreadme.pdfgadgets.ui.sidepanel.SidePanelUIState
@@ -26,19 +28,23 @@ import org.spreadme.pdfgadgets.utils.choose
 @Composable
 fun StructureTree(
     structureRoot: StructureNode,
-    sidePanelUIState: SidePanelUIState
+    sidePanelUIState: SidePanelUIState,
+    onPdfStream: (PdfStream) -> Unit
 ) {
     VerticalScrollable(sidePanelUIState) {
         Column(
             modifier = Modifier.fillMaxSize()
         ) {
-            structureRoot.childs().forEach { StructureNodeView(it) }
+            structureRoot.childs().forEach { StructureNodeView(it, onPdfStream) }
         }
     }
 }
 
 @Composable
-private fun StructureNodeView(node: StructureNode) {
+private fun StructureNodeView(
+    node: StructureNode,
+    onPdfStream: (PdfStream) -> Unit
+) {
     var expanded by remember { node.expanded }
     Row(
         modifier = Modifier
@@ -50,7 +56,7 @@ private fun StructureNodeView(node: StructureNode) {
         horizontalArrangement = Arrangement.Start
     ) {
         StructureNodePrefix(node.hasChild(), node.expanded)
-        StructureNodeName(node)
+        StructureNodeName(node, onPdfStream)
     }
 
     AnimatedVisibility(
@@ -60,7 +66,7 @@ private fun StructureNodeView(node: StructureNode) {
     ) {
         Column {
             node.childs().forEach {
-                StructureNodeView(it)
+                StructureNodeView(it, onPdfStream)
             }
         }
     }
@@ -87,7 +93,10 @@ private fun StructureNodePrefix(
 }
 
 @Composable
-private fun StructureNodeName(node: StructureNode) {
+private fun StructureNodeName(
+    node: StructureNode,
+    onPdfStream: (PdfStream) -> Unit
+) {
     Icon(
         painter = painterResource(node.type.icon),
         contentDescription = "",
@@ -97,13 +106,13 @@ private fun StructureNodeName(node: StructureNode) {
     Text(
         text = node.toString(),
         style = MaterialTheme.typography.caption,
-        color = if (node.isCanParse()) {
+        color = if (node.isStream()) {
             MaterialTheme.colors.primary
         } else {
             MaterialTheme.colors.onBackground
         },
         textAlign = TextAlign.Start,
-        textDecoration = if (node.isCanParse()) {
+        textDecoration = if (node.isStream()) {
             TextDecoration.Underline
         } else {
             null
@@ -111,13 +120,29 @@ private fun StructureNodeName(node: StructureNode) {
         softWrap = false,
         overflow = TextOverflow.Ellipsis,
         modifier = Modifier.run {
-            if (node.isCanParse()) {
+            if (node.isStream()) {
                 this.clickable(true) {
-
+                    onPdfStream(node.pdfObject as PdfStream)
                 }
             } else {
                 this
             }
         }
     )
+
+    node.pdfObject.indirectReference?.let {
+        Icon(
+            painter = painterResource(R.Icons.pdfindirect_reference),
+            contentDescription = "",
+            tint = MaterialTheme.colors.onBackground,
+            modifier = Modifier.padding(horizontal = 8.dp).size(16.dp)
+        )
+        Text(
+            it.toString(),
+            style = MaterialTheme.typography.caption,
+            color = MaterialTheme.colors.onBackground,
+            softWrap = false,
+            overflow = TextOverflow.Ellipsis
+        )
+    }
 }

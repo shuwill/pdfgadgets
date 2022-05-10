@@ -28,4 +28,8 @@ val pdfParseModule = module {
     single<PdfMetadataParser> {
         DefaultPdfMetadataParser()
     }
+
+    single {
+        PdfStreamParser()
+    }
 }

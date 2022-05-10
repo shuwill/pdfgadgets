@@ -2,7 +2,6 @@ package org.spreadme.pdfgadgets.repository
 
 import com.artifex.mupdf.fitz.Context
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.withContext
 import mu.KotlinLogging
@@ -11,9 +10,9 @@ import org.jetbrains.exposed.sql.select
 import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.jetbrains.exposed.sql.update
-import org.spreadme.pdfgadgets.config.DBHelper
 import org.spreadme.pdfgadgets.config.AppConfig
 import org.spreadme.pdfgadgets.config.AppConfigs
+import org.spreadme.pdfgadgets.config.DBHelper
 import org.spreadme.pdfgadgets.config.MupdfConfig
 import org.spreadme.pdfgadgets.model.FileMetadatas
 import org.spreadme.pdfgadgets.utils.copy
@@ -42,7 +41,6 @@ class DefaultAppConfigRepository : AppConfigRepository {
 
         // download the mupdf lib
         message.value = "load the mupdf lib"
-
         logger.info("load the mupdf lib ${MupdfConfig.libName}")
         val library = Paths.get(MupdfConfig.cache_root, MupdfConfig.libName)
         if (!Files.exists(library)) {
@@ -66,12 +64,12 @@ class DefaultAppConfigRepository : AppConfigRepository {
 
         // open the db
         message.value = "open the app db"
-
         DBHelper.help("${AppConfig.appPath}/${AppConfig.appName}.db")
             .createTable(FileMetadatas)
             .createTable(AppConfigs)
 
         // load some config from db
+        message.value = "load application config"
         transaction {
             AppConfigs.selectAll().forEach {
                 if (it[AppConfigs.key] == AppConfigs.DARK_CONFIG) {
@@ -79,7 +77,6 @@ class DefaultAppConfigRepository : AppConfigRepository {
                 }
             }
         }
-        delay(5_000)
     }
 
     override suspend fun config(configKey: String, configValue: String) {

@@ -16,18 +16,19 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.koin.core.component.inject
 import org.spreadme.pdfgadgets.common.LoadableAppComponent
 import org.spreadme.pdfgadgets.repository.FileMetadataParser
 import org.spreadme.pdfgadgets.repository.FileMetadataRepository
 import org.spreadme.pdfgadgets.repository.PdfMetadataParser
+import org.spreadme.pdfgadgets.repository.PdfStreamParser
 import org.spreadme.pdfgadgets.ui.frame.ApplicationViewModel
 import org.spreadme.pdfgadgets.ui.frame.LoadProgressViewModel
 import org.spreadme.pdfgadgets.ui.frame.MainApplicationFrame
 import org.spreadme.pdfgadgets.ui.sidepanel.SidePanel
 import org.spreadme.pdfgadgets.ui.sidepanel.SidePanelMode
+import org.spreadme.pdfgadgets.ui.sidepanel.SidePanelUIState
 import org.spreadme.pdfgadgets.ui.toolbars.ToolbarsViewModel
 import java.nio.file.Path
 
@@ -39,9 +40,11 @@ class PdfViewAppComponent(
     private val fileMetadataRepository by inject<FileMetadataRepository>()
     private val fileMetadataParser by inject<FileMetadataParser>()
     private val pdfMetadataParser by inject<PdfMetadataParser>()
+    private val pdfStreamParser by inject<PdfStreamParser>()
 
     private val toolbarsViewModel = getViewModel<ToolbarsViewModel>(true)
     private val loadProgressViewModel = getViewModel<LoadProgressViewModel>()
+    private val pdfStreamViewModel = getViewModel<PdfStreamViewModel>(pdfStreamParser)
     private lateinit var pdfViewModel: PdfViewModel
 
     @Composable
@@ -57,6 +60,7 @@ class PdfViewAppComponent(
             toolbarsViewModel.onChangeScale = pdfpdfViewModel::onChangeScalue
             SidePanelGroup(pdfpdfViewModel)
             PageDetailGroup(pdfpdfViewModel)
+            StructureDetailPanel()
         }
     }
 
@@ -86,8 +90,12 @@ class PdfViewAppComponent(
 
         // PDF Structure View Component
         AnimatedVisibility(pdfViewModel.hasSideView(SidePanelMode.STRUCTURE)) {
-            SidePanel(pdfViewModel.sideViewModel(SidePanelMode.STRUCTURE)) {
-                StructureTree(pdfViewModel.pdfMetadata.structureRoot, it)
+            SidePanel(pdfViewModel.sideViewModel(SidePanelMode.STRUCTURE)) { sidePanelUIState ->
+                StructureTree(pdfViewModel.pdfMetadata.structureRoot, sidePanelUIState) { pdfStream ->
+                    pdfStreamViewModel.enabled = true
+                    pdfStreamViewModel.pdfStream = pdfStream
+                    pdfStreamViewModel.reset()
+                }
             }
         }
 
@@ -104,7 +112,7 @@ class PdfViewAppComponent(
     }
 
     @Composable
-    fun PageDetailGroup(
+    fun RowScope.PageDetailGroup(
         pdfViewModel: PdfViewModel
     ) {
         val lazyListState = rememberLazyListState(pdfViewModel.initScrollIndex, pdfViewModel.initScrollOffset)
@@ -119,7 +127,7 @@ class PdfViewAppComponent(
             }
         }
 
-        Box(modifier = Modifier.fillMaxSize().background(MaterialTheme.colors.surface)) {
+        Box(modifier = Modifier.weight(1f).background(MaterialTheme.colors.surface)) {
             LazyColumn(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Center,
@@ -163,10 +171,18 @@ class PdfViewAppComponent(
         }
     }
 
+    @Composable
+    fun RowScope.StructureDetailPanel() {
+        AnimatedVisibility(pdfStreamViewModel.enabled) {
+            SidePanel(SidePanelUIState(), true) {
+                StructureDetailPanel(pdfStreamViewModel)
+            }
+        }
+    }
+
     override suspend fun load() {
         val fileMetadata = fileMetadataParser.parse(path)
         name = fileMetadata.name
-        delay(5_000)
         val pdfMetadata = pdfMetadataParser.parse(fileMetadata)
         fileMetadataRepository.save(fileMetadata)
         pdfViewModel = getViewModel(pdfMetadata)
