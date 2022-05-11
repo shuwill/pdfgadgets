@@ -10,15 +10,47 @@ import com.itextpdf.io.source.RandomAccessFileOrArray
 import com.itextpdf.io.source.RandomAccessSourceFactory
 import com.itextpdf.kernel.pdf.*
 import com.itextpdf.kernel.pdf.canvas.parser.util.PdfCanvasParser
+import com.itextpdf.kernel.pdf.xobject.PdfImageXObject
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.bouncycastle.util.encoders.Hex
+import org.spreadme.pdfgadgets.model.PdfImageInfo
+import org.spreadme.pdfgadgets.utils.applyMask
+import org.spreadme.pdfgadgets.utils.getArray
+import org.spreadme.pdfgadgets.utils.getBoolean
 
 class PdfStreamParser {
 
     suspend fun parse(pdfStream: PdfStream, keywordColor: Color): List<AnnotatedString> {
         return withContext(Dispatchers.IO) {
             contentStream(pdfStream, keywordColor)
+        }
+    }
+
+    suspend fun getImage(pdfStream: PdfStream): PdfImageInfo {
+        return withContext(Dispatchers.IO) {
+            val pdfImage = PdfImageXObject(pdfStream)
+
+            val softMask = maskImage(pdfStream, PdfName.SMask)
+            val mask = maskImage(pdfStream, PdfName.Mask)
+
+            val bufferedImage = if (softMask != null) {
+                applyMask(
+                    pdfImage.bufferedImage, softMask.bufferedImage,
+                    softMask.getBoolean(PdfName.Interpolate, false),
+                    true,
+                    softMask.getArray(PdfName("MATTE"))
+                )
+            } else if (mask != null && mask.getBoolean(PdfName.ImageMask, false)) {
+                applyMask(
+                    pdfImage.bufferedImage, mask.bufferedImage,
+                    mask.getBoolean(PdfName.Interpolate, false),
+                    true, null
+                )
+            } else {
+                pdfImage.bufferedImage
+            }
+            PdfImageInfo(bufferedImage, pdfImage.identifyImageFileExtension())
         }
     }
 
@@ -84,5 +116,13 @@ class PdfStreamParser {
             }
             else -> builder.append(obj).append(" ")
         }
+    }
+
+    private fun maskImage(pdfStream: PdfStream, pdfName: PdfName): PdfImageXObject? {
+        val pdfObject = pdfStream[pdfName]
+        if (pdfObject != null && pdfObject is PdfStream && pdfObject[PdfName.Subtype] == PdfName.Image) {
+            return PdfImageXObject(pdfObject)
+        }
+        return null
     }
 }

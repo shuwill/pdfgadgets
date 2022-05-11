@@ -28,7 +28,6 @@ import org.spreadme.pdfgadgets.ui.frame.LoadProgressViewModel
 import org.spreadme.pdfgadgets.ui.frame.MainApplicationFrame
 import org.spreadme.pdfgadgets.ui.sidepanel.SidePanel
 import org.spreadme.pdfgadgets.ui.sidepanel.SidePanelMode
-import org.spreadme.pdfgadgets.ui.sidepanel.SidePanelUIState
 import org.spreadme.pdfgadgets.ui.toolbars.ToolbarsViewModel
 import java.nio.file.Path
 
@@ -44,7 +43,7 @@ class PdfViewAppComponent(
 
     private val toolbarsViewModel = getViewModel<ToolbarsViewModel>(true)
     private val loadProgressViewModel = getViewModel<LoadProgressViewModel>()
-    private val pdfStreamViewModel = getViewModel<PdfStreamViewModel>(pdfStreamParser)
+    private val pdfStreamViewModel = getViewModel<PdfStreamViewModel>(pdfStreamParser, applicationViewModel.composeWindow)
     private lateinit var pdfViewModel: PdfViewModel
 
     @Composable
@@ -174,7 +173,7 @@ class PdfViewAppComponent(
     @Composable
     fun RowScope.StructureDetailPanel() {
         AnimatedVisibility(pdfStreamViewModel.enabled) {
-            SidePanel(SidePanelUIState(), true) {
+            SidePanel(pdfStreamViewModel.sidePanelUIState, true) {
                 StructureDetailPanel(pdfStreamViewModel)
             }
         }

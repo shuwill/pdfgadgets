@@ -62,7 +62,7 @@ class DefaultSignatureParser : SignatureParser {
 
             return Signature(fieldName, signedLength.toLong(), SignatureResult(pkcS7), signatureCoversWholeDocument)
         } catch (e: Exception) {
-
+            e.printStackTrace()
         }
         return null
     }

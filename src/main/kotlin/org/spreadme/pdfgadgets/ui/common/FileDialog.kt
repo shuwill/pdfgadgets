@@ -1,8 +1,6 @@
 package org.spreadme.pdfgadgets.ui.common
 
 import java.awt.FileDialog
-import java.io.File
-import java.io.FilenameFilter
 import java.nio.file.Files
 import java.nio.file.Path
 import java.nio.file.Paths
@@ -16,10 +14,13 @@ fun FileDialog(
     onFileOpen: (Path) -> Unit = {},
     onFileSave: (Path) -> Unit = {}
 ) {
-    val fileDialog = FileDialog(parent, title, mode.value())
-    fileDialog.isVisible = true
-    if (mode == FileDialogMode.LOAD) {
-        fileDialog.filenameFilter = ApplicationFilenameFilter(exts)
+    val fileDialog = FileDialog(parent, title, mode.value()).apply {
+        isVisible = true
+        setFilenameFilter { _, name ->
+            exts.any {
+                name.endsWith(it)
+            }
+        }
     }
     if (fileDialog.directory != null && fileDialog.file != null) {
         val path = Paths.get(fileDialog.directory, fileDialog.file)
@@ -37,18 +38,5 @@ enum class FileDialogMode(private val mode: Int) {
 
     fun value(): Int {
         return mode
-    }
-}
-
-class ApplicationFilenameFilter(
-    private val exts: ArrayList<String>
-) : FilenameFilter {
-
-    override fun accept(dir: File?, name: String?): Boolean {
-        if(exts.isEmpty()) {
-            return true
-        }
-        val ext = name?.split(".")?.last() ?: ""
-        return exts.contains(ext)
     }
 }
