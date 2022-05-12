@@ -3,6 +3,7 @@ package org.spreadme.pdfgadgets
 import org.koin.core.context.startKoin
 import org.spreadme.pdfgadgets.common.Application
 import org.spreadme.pdfgadgets.di.appConfigLoadModule
+import org.spreadme.pdfgadgets.di.asn1ParserMoudle
 import org.spreadme.pdfgadgets.di.fileMetadataModule
 import org.spreadme.pdfgadgets.di.pdfParseModule
 
@@ -19,7 +20,8 @@ class PDFGadgetsApp : Application() {
             modules(
                 appConfigLoadModule,
                 fileMetadataModule,
-                pdfParseModule
+                pdfParseModule,
+                asn1ParserMoudle
             )
         }
     }

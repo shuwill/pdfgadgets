@@ -33,3 +33,9 @@ val pdfParseModule = module {
         PdfStreamParser()
     }
 }
+
+val asn1ParserMoudle = module {
+    single {
+        ASN1Parser()
+    }
+}

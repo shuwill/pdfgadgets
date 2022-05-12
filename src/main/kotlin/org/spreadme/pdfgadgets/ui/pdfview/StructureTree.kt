@@ -17,7 +17,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import com.itextpdf.kernel.pdf.PdfStream
 import org.spreadme.pdfgadgets.model.StructureNode
 import org.spreadme.pdfgadgets.resources.R
 import org.spreadme.pdfgadgets.ui.common.VerticalScrollable
@@ -29,13 +28,13 @@ import org.spreadme.pdfgadgets.utils.choose
 fun StructureTree(
     structureRoot: StructureNode,
     sidePanelUIState: SidePanelUIState,
-    onPdfStream: (PdfStream) -> Unit
+    onClick: (StructureNode) -> Unit
 ) {
     VerticalScrollable(sidePanelUIState) {
         Column(
             modifier = Modifier.fillMaxSize()
         ) {
-            structureRoot.childs().forEach { StructureNodeView(it, onPdfStream) }
+            structureRoot.childs().forEach { StructureNodeView(it, onClick) }
         }
     }
 }
@@ -43,7 +42,7 @@ fun StructureTree(
 @Composable
 private fun StructureNodeView(
     node: StructureNode,
-    onPdfStream: (PdfStream) -> Unit
+    onClick: (StructureNode) -> Unit
 ) {
     var expanded by remember { node.expanded }
     Row(
@@ -56,7 +55,7 @@ private fun StructureNodeView(
         horizontalArrangement = Arrangement.Start
     ) {
         StructureNodePrefix(node.hasChild(), node.expanded)
-        StructureNodeName(node, onPdfStream)
+        StructureNodeName(node, onClick)
     }
 
     AnimatedVisibility(
@@ -66,7 +65,7 @@ private fun StructureNodeView(
     ) {
         Column {
             node.childs().forEach {
-                StructureNodeView(it, onPdfStream)
+                StructureNodeView(it, onClick)
             }
         }
     }
@@ -95,7 +94,7 @@ private fun StructureNodePrefix(
 @Composable
 private fun StructureNodeName(
     node: StructureNode,
-    onPdfStream: (PdfStream) -> Unit
+    onClick: (StructureNode) -> Unit
 ) {
     Icon(
         painter = painterResource(node.type.icon),
@@ -106,13 +105,13 @@ private fun StructureNodeName(
     Text(
         text = node.toString(),
         style = MaterialTheme.typography.caption,
-        color = if (node.isStream()) {
+        color = if (node.isParseable()) {
             MaterialTheme.colors.primary
         } else {
             MaterialTheme.colors.onBackground
         },
         textAlign = TextAlign.Start,
-        textDecoration = if (node.isStream()) {
+        textDecoration = if (node.isParseable()) {
             TextDecoration.Underline
         } else {
             null
@@ -120,9 +119,9 @@ private fun StructureNodeName(
         softWrap = false,
         overflow = TextOverflow.Ellipsis,
         modifier = Modifier.run {
-            if (node.isStream()) {
+            if (node.isParseable()) {
                 this.clickable(true) {
-                    onPdfStream(node.pdfObject as PdfStream)
+                    onClick(node)
                 }
             } else {
                 this

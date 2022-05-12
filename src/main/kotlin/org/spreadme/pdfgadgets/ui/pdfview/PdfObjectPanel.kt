@@ -12,40 +12,43 @@ import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Download
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.toPainter
 import androidx.compose.ui.unit.dp
 import org.spreadme.pdfgadgets.ui.common.FileDialog
 import org.spreadme.pdfgadgets.ui.common.FileDialogMode
-import org.spreadme.pdfgadgets.ui.common.LoadProgressIndicator
 import org.spreadme.pdfgadgets.ui.common.clickable
 import java.awt.image.BufferedImage
 import java.nio.file.Path
 
 @Composable
 fun StructureDetailPanel(
-    pdfStreamViewModel: PdfStreamViewModel
+    pdfObjectViewModel: PdfObjectViewModel
 ) {
     Column(Modifier.fillMaxSize()) {
         ToolBar(
-            pdfStreamViewModel,
-            pdfStreamViewModel::onClose,
-            pdfStreamViewModel::onSave
+            pdfObjectViewModel,
+            pdfObjectViewModel::onClose,
+            pdfObjectViewModel::onSave
         )
-        if (!pdfStreamViewModel.finished) {
-            LoadProgressIndicator(Modifier.fillMaxSize())
+        val keywordColor = MaterialTheme.colors.primary
+        LaunchedEffect(pdfObjectViewModel.uid) {
+            pdfObjectViewModel.parse(keywordColor)
         }
-        Column(Modifier.fillMaxSize().padding(8.dp)) {
-            PdfStreamDetail(pdfStreamViewModel)
+        if(pdfObjectViewModel.finished) {
+            Column(Modifier.fillMaxSize().padding(8.dp)) {
+                PdfStreamDetail(pdfObjectViewModel)
+            }
         }
     }
 }
 
 @Composable
 private fun ToolBar(
-    viewModel: PdfStreamViewModel,
+    viewModel: PdfObjectViewModel,
     onClose: () -> Unit,
     onSave: (Path) -> Unit
 ) {
@@ -94,19 +97,11 @@ private fun ToolBar(
 }
 
 @Composable
-private fun PdfStreamDetail(viewModel: PdfStreamViewModel) {
-    val keywordColor = MaterialTheme.colors.primary
-    var errorMessage by remember { mutableStateOf("") }
-    LaunchedEffect(viewModel.uid) {
-        viewModel.stream(keywordColor) { exception ->
-            exception.printStackTrace()
-            errorMessage = exception.message.toString()
-        }
-    }
+private fun PdfStreamDetail(viewModel: PdfObjectViewModel) {
     if (viewModel.finished) {
-        if (viewModel.streamContent.isNotEmpty()) {
+        if (viewModel.annotatedStrings.isNotEmpty()) {
             LazyColumn(Modifier.fillMaxSize()) {
-                items(viewModel.streamContent) { item ->
+                items(viewModel.annotatedStrings) { item ->
                     SelectionContainer {
                         Text(
                             item,
@@ -121,12 +116,14 @@ private fun PdfStreamDetail(viewModel: PdfStreamViewModel) {
                 PdfImageDetail(Modifier.wrapContentSize(), it.bufferedImage)
             }
         }
-        if (errorMessage.isNotBlank()) {
-            Text(
-                errorMessage,
-                style = MaterialTheme.typography.body2,
-                color = MaterialTheme.colors.onBackground
-            )
+        viewModel.errorMessage?.let {
+            if (it.isNotBlank()) {
+                Text(
+                    it,
+                    style = MaterialTheme.typography.body2,
+                    color = MaterialTheme.colors.onBackground
+                )
+            }
         }
     }
 }

@@ -26,7 +26,7 @@ class PdfViewModel(
 
     val searchedPositions: SnapshotStateList<Position> = mutableStateListOf()
 
-    private var sidePanelModes = mutableStateListOf<SidePanelMode>()
+    private var sidePanelModes = mutableStateListOf(SidePanelMode.STRUCTURE)
     private val sidePanelModels = mutableStateMapOf<SidePanelMode, SidePanelUIState>()
     private val excludeModesMap = mutableMapOf<SidePanelMode, ArrayList<SidePanelMode>>()
 

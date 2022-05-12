@@ -19,10 +19,7 @@ import androidx.compose.ui.zIndex
 import kotlinx.coroutines.launch
 import org.koin.core.component.inject
 import org.spreadme.pdfgadgets.common.LoadableAppComponent
-import org.spreadme.pdfgadgets.repository.FileMetadataParser
-import org.spreadme.pdfgadgets.repository.FileMetadataRepository
-import org.spreadme.pdfgadgets.repository.PdfMetadataParser
-import org.spreadme.pdfgadgets.repository.PdfStreamParser
+import org.spreadme.pdfgadgets.repository.*
 import org.spreadme.pdfgadgets.ui.frame.ApplicationViewModel
 import org.spreadme.pdfgadgets.ui.frame.LoadProgressViewModel
 import org.spreadme.pdfgadgets.ui.frame.MainApplicationFrame
@@ -40,10 +37,11 @@ class PdfViewAppComponent(
     private val fileMetadataParser by inject<FileMetadataParser>()
     private val pdfMetadataParser by inject<PdfMetadataParser>()
     private val pdfStreamParser by inject<PdfStreamParser>()
+    private val asN1Parser by inject<ASN1Parser>()
 
     private val toolbarsViewModel = getViewModel<ToolbarsViewModel>(true)
     private val loadProgressViewModel = getViewModel<LoadProgressViewModel>()
-    private val pdfStreamViewModel = getViewModel<PdfStreamViewModel>(pdfStreamParser, applicationViewModel.composeWindow)
+    private val pdfObjectViewModel = getViewModel<PdfObjectViewModel>(pdfStreamParser, asN1Parser, applicationViewModel.composeWindow)
     private lateinit var pdfViewModel: PdfViewModel
 
     @Composable
@@ -90,10 +88,8 @@ class PdfViewAppComponent(
         // PDF Structure View Component
         AnimatedVisibility(pdfViewModel.hasSideView(SidePanelMode.STRUCTURE)) {
             SidePanel(pdfViewModel.sideViewModel(SidePanelMode.STRUCTURE)) { sidePanelUIState ->
-                StructureTree(pdfViewModel.pdfMetadata.structureRoot, sidePanelUIState) { pdfStream ->
-                    pdfStreamViewModel.enabled = true
-                    pdfStreamViewModel.pdfStream = pdfStream
-                    pdfStreamViewModel.reset()
+                StructureTree(pdfViewModel.pdfMetadata.structureRoot, sidePanelUIState) { node ->
+                    pdfObjectViewModel.reset(node)
                 }
             }
         }
@@ -172,9 +168,9 @@ class PdfViewAppComponent(
 
     @Composable
     fun RowScope.StructureDetailPanel() {
-        AnimatedVisibility(pdfStreamViewModel.enabled) {
-            SidePanel(pdfStreamViewModel.sidePanelUIState, true) {
-                StructureDetailPanel(pdfStreamViewModel)
+        AnimatedVisibility(pdfObjectViewModel.enabled) {
+            SidePanel(pdfObjectViewModel.sidePanelUIState, true) {
+                StructureDetailPanel(pdfObjectViewModel)
             }
         }
     }

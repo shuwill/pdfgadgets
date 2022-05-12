@@ -17,6 +17,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import kotlinx.coroutines.flow.MutableStateFlow
+import mu.KotlinLogging
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 import org.spreadme.pdfgadgets.repository.AppConfigRepository
@@ -27,6 +28,8 @@ import org.spreadme.pdfgadgets.ui.common.LoadText
 class ApplicationBootstrap(
     private val applicationViewModel: ApplicationViewModel
 ) : KoinComponent {
+
+    private val logger = KotlinLogging.logger {}
 
     private val appConfigRepository by inject<AppConfigRepository>()
 
@@ -43,7 +46,7 @@ class ApplicationBootstrap(
         }
 
         if (!applicationViewModel.finished) {
-            println("bootstrap")
+            logger.info("the application bootstrap!!!!")
             AppLoadProgressIndicator(applicationViewModel.loadMessage)
         }
 
