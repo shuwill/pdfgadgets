@@ -11,6 +11,7 @@ import com.itextpdf.kernel.pdf.PdfName
 import com.itextpdf.kernel.pdf.PdfStream
 import com.itextpdf.kernel.pdf.PdfString
 import org.spreadme.pdfgadgets.common.ViewModel
+import org.spreadme.pdfgadgets.model.ASN1Node
 import org.spreadme.pdfgadgets.model.PdfImageInfo
 import org.spreadme.pdfgadgets.model.StructureNode
 import org.spreadme.pdfgadgets.repository.ASN1Parser
@@ -34,6 +35,7 @@ class PdfObjectViewModel(
 
     var pdfImageInfo by mutableStateOf<PdfImageInfo?>(null)
     val annotatedStrings = arrayListOf<AnnotatedString>()
+    var asn1Node by mutableStateOf<ASN1Node?>(null)
     var errorMessage by mutableStateOf<String?>(null)
 
     var finished by mutableStateOf(false)
@@ -52,8 +54,7 @@ class PdfObjectViewModel(
                 }
                 if (node.isSignatureContent() && node.pdfObject is PdfString) {
                     val byteArray = node.pdfObject.valueBytes
-                    val content = asN1Parser.parse(byteArray)
-                    annotatedStrings.addAll(parseString(content))
+                    asn1Node = asN1Parser.parse(byteArray)
                 }
             }
         } catch (e: Exception) {

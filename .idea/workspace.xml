@@ -1,0 +1,435 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="fd4a568c-9515-436d-b67e-95b0dca3c528" name="Changes" comment="pdf gadgets">
+      <change afterPath="$PROJECT_DIR$/src/main/kotlin/org/spreadme/pdfgadgets/model/ASN1NodeType.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/kotlin/org/spreadme/pdfgadgets/ui/pdfview/ASN1StructureTree.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/kotlin/org/spreadme/pdfgadgets/model/ASN1Node.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/org/spreadme/pdfgadgets/model/ASN1Node.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/kotlin/org/spreadme/pdfgadgets/model/StructureNode.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/org/spreadme/pdfgadgets/model/StructureNode.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/kotlin/org/spreadme/pdfgadgets/repository/ASN1Parser.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/org/spreadme/pdfgadgets/repository/ASN1Parser.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/kotlin/org/spreadme/pdfgadgets/ui/pdfview/PdfObjectPanel.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/org/spreadme/pdfgadgets/ui/pdfview/PdfObjectPanel.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/kotlin/org/spreadme/pdfgadgets/ui/pdfview/PdfObjectViewModel.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/org/spreadme/pdfgadgets/ui/pdfview/PdfObjectViewModel.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/kotlin/org/spreadme/pdfgadgets/ASN1ParserTest.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/kotlin/org/spreadme/pdfgadgets/ASN1ParserTest.kt" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="CompilerWorkspaceConfiguration">
+    <option name="MAKE_PROJECT_ON_SAVE" value="true" />
+  </component>
+  <component name="ExternalProjectsData">
+    <projectState path="$PROJECT_DIR$">
+      <ProjectState />
+    </projectState>
+  </component>
+  <component name="ExternalProjectsManager">
+    <system id="GRADLE">
+      <state>
+        <projects_view>
+          <tree_state>
+            <expand>
+              <path>
+                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
+                <item name="pdfgadgets" type="f1a62948:ProjectNode" />
+              </path>
+            </expand>
+            <select />
+          </tree_state>
+        </projects_view>
+      </state>
+    </system>
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Kotlin Interface" />
+        <option value="Class" />
+        <option value="Kotlin Data Class" />
+        <option value="Kotlin Class" />
+        <option value="Kotlin Enum" />
+        <option value="Kotlin File" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
+  </component>
+  <component name="MavenImportPreferences">
+    <option name="generalSettings">
+      <MavenGeneralSettings>
+        <option name="mavenHome" value="/opt/homebrew/Cellar/maven/3.8.1/libexec" />
+      </MavenGeneralSettings>
+    </option>
+  </component>
+  <component name="ProjectId" id="28TlDFdV43DxFG25OGqC9aTo3UL" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true">
+    <ConfirmationsSetting value="2" id="Add" />
+  </component>
+  <component name="ProjectViewState">
+    <option name="autoscrollFromSource" value="true" />
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;/Users/wangshuwei/Documents/dev/opensource/itext7&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;Libraries&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.0&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.0&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;
+  },
+  &quot;keyToStringList&quot;: {
+    &quot;DatabaseDriversLRU&quot;: [
+      &quot;sqlite&quot;
+    ]
+  }
+}</component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/src/main/resources/drawables" />
+      <recent name="$PROJECT_DIR$/src/main/resources" />
+      <recent name="$PROJECT_DIR$/src/main/kotlin/org/spreadme/pdfgadgets/ui/pdfview" />
+      <recent name="$PROJECT_DIR$/src/main/kotlin/org/spreadme/pdfgadgets/ui/common" />
+      <recent name="$PROJECT_DIR$/src/main/kotlin/org/spreadme/pdfgadgets/ui/toolbar" />
+    </key>
+    <key name="MoveKotlinTopLevelDeclarationsDialog.RECENTS_KEY">
+      <recent name="org.spreadme.pdfgadgets.config" />
+      <recent name="org.spreadme.pdfgadgets.ui.frame" />
+      <recent name="org.spreadme.pdfgadgets.model" />
+      <recent name="org.spreadme.pdfgadgets.ui.side" />
+    </key>
+    <key name="CopyKotlinDeclarationDialog.RECENTS_KEY">
+      <recent name="org.spreadme.pdfgadgets.utils" />
+      <recent name="org.spreadme.pdfgadgets.ui.toolbar" />
+      <recent name="org.spreadme.pdfgadgets.repository" />
+      <recent name="org.spreadme.pdfgadgets.model" />
+    </key>
+    <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="com.itextpdf.kernel.pdf.xobject" />
+    </key>
+  </component>
+  <component name="RunManager" selected="Kotlin.AppKt">
+    <configuration name="ASN1ParserTest.parse" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+      <ExternalSystemSettings>
+        <option name="executionName" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" value="" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list>
+            <option value=":test" />
+            <option value="--tests" />
+            <option value="&quot;org.spreadme.pdfgadgets.ASN1ParserTest.parse&quot;" />
+          </list>
+        </option>
+        <option name="vmOptions" />
+      </ExternalSystemSettings>
+      <ExternalSystemDebugServerProcess>false</ExternalSystemDebugServerProcess>
+      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
+      <DebugAllEnabled>false</DebugAllEnabled>
+      <method v="2" />
+    </configuration>
+    <configuration name="ApplicationConfigLoaderTest.testConfigLoad" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+      <ExternalSystemSettings>
+        <option name="executionName" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" value="" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list>
+            <option value=":test" />
+            <option value="--tests" />
+            <option value="&quot;org.spreadme.pdfgadgets.ApplicationConfigLoaderTest.testConfigLoad&quot;" />
+          </list>
+        </option>
+        <option name="vmOptions" />
+      </ExternalSystemSettings>
+      <ExternalSystemDebugServerProcess>false</ExternalSystemDebugServerProcess>
+      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
+      <DebugAllEnabled>false</DebugAllEnabled>
+      <method v="2" />
+    </configuration>
+    <configuration name="SqlLiteDatabaseTest" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+      <ExternalSystemSettings>
+        <option name="executionName" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" value="" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list>
+            <option value=":test" />
+            <option value="--tests" />
+            <option value="&quot;org.spreadme.pdfgadgets.SqlLiteDatabaseTest&quot;" />
+          </list>
+        </option>
+        <option name="vmOptions" />
+      </ExternalSystemSettings>
+      <ExternalSystemDebugServerProcess>false</ExternalSystemDebugServerProcess>
+      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
+      <DebugAllEnabled>false</DebugAllEnabled>
+      <method v="2" />
+    </configuration>
+    <configuration name="SqlLiteDatabaseTest.createDb" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+      <ExternalSystemSettings>
+        <option name="executionName" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" value="" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list>
+            <option value=":test" />
+            <option value="--tests" />
+            <option value="&quot;org.spreadme.pdfgadgets.SqlLiteDatabaseTest.createDb&quot;" />
+          </list>
+        </option>
+        <option name="vmOptions" />
+      </ExternalSystemSettings>
+      <ExternalSystemDebugServerProcess>false</ExternalSystemDebugServerProcess>
+      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
+      <DebugAllEnabled>false</DebugAllEnabled>
+      <method v="2" />
+    </configuration>
+    <configuration name="AppKt" type="JetRunConfigurationType" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="org.spreadme.pdfgadgets.AppKt" />
+      <module name="pdfgadgets.main" />
+      <shortenClasspath name="NONE" />
+      <option name="VM_PARAMETERS" value="-Xmx500M -XX:+HeapDumpOnOutOfMemoryError" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <list>
+      <item itemvalue="Gradle.ASN1ParserTest.parse" />
+      <item itemvalue="Gradle.ApplicationConfigLoaderTest.testConfigLoad" />
+      <item itemvalue="Gradle.SqlLiteDatabaseTest" />
+      <item itemvalue="Gradle.SqlLiteDatabaseTest.createDb" />
+      <item itemvalue="Kotlin.AppKt" />
+    </list>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Kotlin.AppKt" />
+        <item itemvalue="Gradle.ASN1ParserTest.parse" />
+        <item itemvalue="Gradle.ApplicationConfigLoaderTest.testConfigLoad" />
+        <item itemvalue="Gradle.SqlLiteDatabaseTest.createDb" />
+        <item itemvalue="Gradle.SqlLiteDatabaseTest" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="fd4a568c-9515-436d-b67e-95b0dca3c528" name="Changes" comment="" />
+      <created>1651248334595</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1651248334595</updated>
+      <workItem from="1651248335775" duration="365000" />
+      <workItem from="1651248711463" duration="4087000" />
+      <workItem from="1651252879157" duration="18000" />
+      <workItem from="1651288046987" duration="78000" />
+      <workItem from="1651288134064" duration="19483000" />
+      <workItem from="1651313643743" duration="18344000" />
+      <workItem from="1651365474946" duration="35975000" />
+      <workItem from="1651451632877" duration="35579000" />
+      <workItem from="1651538128616" duration="39117000" />
+      <workItem from="1651623631835" duration="558000" />
+      <workItem from="1651625191412" duration="36355000" />
+      <workItem from="1651673223791" duration="2143000" />
+      <workItem from="1651675379437" duration="75000" />
+      <workItem from="1651734780738" duration="18831000" />
+      <workItem from="1651798096407" duration="2890000" />
+      <workItem from="1651824953727" duration="10603000" />
+      <workItem from="1651880405741" duration="11501000" />
+      <workItem from="1651936584690" duration="83000" />
+      <workItem from="1651969639825" duration="30581000" />
+      <workItem from="1652058772022" duration="5244000" />
+      <workItem from="1652105957226" duration="327000" />
+      <workItem from="1652106394339" duration="55000" />
+      <workItem from="1652146365674" duration="28883000" />
+      <workItem from="1652230329767" duration="23704000" />
+      <workItem from="1652328217736" duration="14609000" />
+      <workItem from="1652432726077" duration="8918000" />
+    </task>
+    <task id="LOCAL-00001" summary="init application frame">
+      <created>1651413815981</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1651413815981</updated>
+    </task>
+    <task id="LOCAL-00002" summary="pdf gadgets application">
+      <created>1651502374381</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1651502374381</updated>
+    </task>
+    <task id="LOCAL-00003" summary="pdf gadgets application">
+      <created>1651572344234</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1651572344234</updated>
+    </task>
+    <task id="LOCAL-00004" summary="init sqllite">
+      <created>1651591479114</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1651591479114</updated>
+    </task>
+    <task id="LOCAL-00005" summary="pdf gadgets application">
+      <created>1651627794621</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1651627794621</updated>
+    </task>
+    <task id="LOCAL-00006" summary="init sqllite">
+      <created>1651627813211</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1651627813211</updated>
+    </task>
+    <task id="LOCAL-00007" summary="pdf gadgets application">
+      <created>1651675424111</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1651675424111</updated>
+    </task>
+    <task id="LOCAL-00008" summary="pdf gadgets application">
+      <created>1651763799998</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1651763799998</updated>
+    </task>
+    <task id="LOCAL-00009" summary="pdf gadgets application">
+      <created>1651936658659</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1651936658659</updated>
+    </task>
+    <task id="LOCAL-00010" summary="component and view model">
+      <created>1651996617546</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1651996617547</updated>
+    </task>
+    <task id="LOCAL-00011" summary="component and view model">
+      <created>1652019217449</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1652019217450</updated>
+    </task>
+    <task id="LOCAL-00012" summary="pdf gadgets">
+      <created>1652195567306</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1652195567306</updated>
+    </task>
+    <task id="LOCAL-00013" summary="pdf gadgets">
+      <created>1652281127407</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1652281127407</updated>
+    </task>
+    <task id="LOCAL-00014" summary="pdf gadgets">
+      <created>1652369451571</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL-00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1652369451571</updated>
+    </task>
+    <option name="localTasksCounter" value="15" />
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.History.Properties">
+    <option name="COLUMN_ID_ORDER">
+      <list>
+        <option value="Default.Root" />
+        <option value="Default.Author" />
+        <option value="Default.Date" />
+        <option value="Default.Subject" />
+      </list>
+    </option>
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <option name="SHOW_DIRTY_RECURSIVELY" value="true" />
+    <MESSAGE value="init application frame" />
+    <MESSAGE value="init sqllite" />
+    <MESSAGE value="pdf gadgets application" />
+    <MESSAGE value="component and view model" />
+    <MESSAGE value="pdf gadgets" />
+    <option name="LAST_COMMIT_MESSAGE" value="pdf gadgets" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/com/itextpdf/kernel/pdf/xobject/ImagePdfBytesInfo.java</url>
+          <line>94</line>
+          <option name="timeStamp" value="2" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="kotlin-line">
+          <url>file://$PROJECT_DIR$/src/test/kotlin/org/spreadme/pdfgadgets/ASN1ParserTest.kt</url>
+          <line>27</line>
+          <option name="timeStamp" value="5" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="kotlin-line">
+          <url>file://$PROJECT_DIR$/src/main/kotlin/org/spreadme/pdfgadgets/ui/pdfview/PdfObjectViewModel.kt</url>
+          <line>54</line>
+          <option name="timeStamp" value="13" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="kotlin-line">
+          <url>file://$PROJECT_DIR$/src/test/kotlin/org/spreadme/pdfgadgets/ASN1ParserTest.kt</url>
+          <line>28</line>
+          <option name="timeStamp" value="15" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
+  </component>
+</project>

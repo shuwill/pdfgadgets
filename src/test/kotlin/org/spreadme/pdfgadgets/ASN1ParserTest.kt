@@ -25,6 +25,7 @@ class ASN1ParserTest  : KoinTest {
         val base64String = "MIHqMIGVAgEAMDAxFjAUBgNVBAMMDWV4YW1wbGUubG9jYWwxFjAUBgNVBAoMDURlbW9uc3RyYXRpb24wXDANBgkqhkiG9w0BAQEFAANLADBIAkEAqu7qhOa63jTfT3KdAxp53ep7HHiJ9F6n6SIqBOeIqIStHK2wKT6PCk8qjRyHIz0nBiNT8gfYumzcAa+V8nX11QIDAQABoAAwDQYJKoZIhvcNAQELBQADQQCVwaST6W+IYTR5OPPSTUif+kjL3q0PgPEMg8pOLCW099+IU53PjsMxveFl+PzmNOq+VoXA/BEy9sv4EEaDkvtY"
         val byteArray = Base64.getDecoder().decode(base64String)
 
-        asn1Parser.parse(byteArray)
+        val asN1Node = asn1Parser.parse(byteArray)
+        println(asN1Node)
     }
 }

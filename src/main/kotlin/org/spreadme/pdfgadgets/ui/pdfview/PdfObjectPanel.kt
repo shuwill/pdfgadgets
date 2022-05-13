@@ -115,6 +115,8 @@ private fun PdfStreamDetail(viewModel: PdfObjectViewModel) {
             viewModel.pdfImageInfo?.let {
                 PdfImageDetail(Modifier.wrapContentSize(), it.bufferedImage)
             }
+        } else if(viewModel.asn1Node != null) {
+            ASN1StructureTree(viewModel.asn1Node!!, viewModel.sidePanelUIState)
         }
         viewModel.errorMessage?.let {
             if (it.isNotBlank()) {

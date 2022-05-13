@@ -47,7 +47,7 @@ class StructureNode(
     }
 
     fun isPdfStream() = pdfObject is PdfStream
-    fun isSignatureContent() = pdfObject is PdfString && paths[paths.size - 2] == PdfName.V.toString()
+    fun isSignatureContent() = paths[paths.size - 2] == PdfName.V.toString() && paths.last() == PdfName.Contents.toString()
 
     fun isParseable() = isPdfStream() || isSignatureContent()
 
