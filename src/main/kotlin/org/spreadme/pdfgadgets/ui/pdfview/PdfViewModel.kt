@@ -67,7 +67,6 @@ class PdfViewModel(
     }
 
     fun onViewTypeChange(viewType: PdfViewType) {
-        println(viewType)
         this.viewType = viewType
     }
 

@@ -1,16 +1,12 @@
 package org.spreadme.pdfgadgets.ui.pdfview
 
 import androidx.compose.foundation.*
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.BoxScope
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.PathEffect
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.toPainter
@@ -21,7 +17,10 @@ import androidx.compose.ui.input.pointer.pointerHoverIcon
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
-import org.spreadme.pdfgadgets.model.*
+import org.spreadme.pdfgadgets.model.PageMetadata
+import org.spreadme.pdfgadgets.model.PageRenderInfo
+import org.spreadme.pdfgadgets.model.Position
+import org.spreadme.pdfgadgets.model.Signature
 import org.spreadme.pdfgadgets.ui.common.gesture.dragMotionEvent
 import org.spreadme.pdfgadgets.ui.theme.LocalExtraColors
 import java.awt.Cursor
@@ -91,11 +90,9 @@ fun BoxScope.AsyncPage(
         )
 
         if (viewType == PdfViewType.TEXT_SELECT) {
-            Texts(
-                page,
-                pageRenderInfo!!.textRenderInfos,
-                scale,
-                MaterialTheme.colors.primary
+            TextBlock(
+                pageRenderInfo!!.textBlockPositions,
+                scale
             )
         } else if (viewType == PdfViewType.DRAW) {
             // draw area
@@ -105,51 +102,22 @@ fun BoxScope.AsyncPage(
 }
 
 @Composable
-fun Texts(
-    page: PageMetadata,
-    textRenderInfos: List<TextRenderInfo>,
-    scale: Float,
-    tint: Color
+fun TextBlock(
+    positions: List<Position>,
+    scale: Float
 ) {
-    var startOffset by remember { mutableStateOf(Offset.Infinite) }
-    var endOffset by remember { mutableStateOf(Offset.Infinite) }
-    Canvas(
-        Modifier.fillMaxSize()
-            .pointerHoverIcon(PointerIcon(Cursor(Cursor.TEXT_CURSOR)))
-            .dragMotionEvent(
-                onDragStart = { pointerInputChange ->
-                    startOffset = pointerInputChange.position
-                    pointerInputChange.consumeDownChange()
-
-                },
-                onDragEnd = { pointerInputChange ->
-                    endOffset = pointerInputChange.position
-                    pointerInputChange.consumeDownChange()
-                }
-            )
-    ) {
-        textRenderInfos.forEach {
-            val rectangle = it.position.rectangle
-            Rectangle(
-                modifier = Modifier.border(1.dp, tint),
-                rectangle,
-                page.mediabox.height,
-                scale = scale
-            )
-
-            drawRect(
-                color = tint,
-                topLeft = Offset(
-                    x = (rectangle.x.dp.toPx() * scale),
-                    y = ((page.mediabox.height.dp.toPx() - rectangle.y.dp.toPx() - rectangle.height.dp.toPx()) * scale)
-                ),
-                size = Size(
-                    width = (rectangle.width.dp.toPx() * scale),
-                    height = (rectangle.height.dp.toPx() * scale)
-                ),
-                style = Stroke(1f)
-            )
-        }
+    positions.forEach {
+        val rectangle = it.rectangle
+        Box(
+            modifier = Modifier
+                .size((rectangle.width * scale).dp, (rectangle.height * scale).dp)
+                .offset(
+                    x = (rectangle.x * scale).dp,
+                    y = (rectangle.y * scale).dp
+                )
+                .border(1.dp, color = MaterialTheme.colors.secondary)
+                .pointerHoverIcon(PointerIcon(Cursor(Cursor.TEXT_CURSOR)))
+        )
     }
 }
 
