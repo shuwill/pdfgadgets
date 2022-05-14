@@ -18,6 +18,7 @@ import org.spreadme.pdfgadgets.ui.frame.AppFrameComponent
 import org.spreadme.pdfgadgets.ui.frame.ApplicationBootstrap
 import org.spreadme.pdfgadgets.ui.theme.PDFGadgetsTheme
 import java.awt.Taskbar
+import javax.swing.JFrame
 
 class MainActivity : Activity() {
 
@@ -35,7 +36,10 @@ class MainActivity : Activity() {
 
     override fun onCreate() {
         if (Taskbar.isTaskbarSupported()) {
-            Taskbar.getTaskbar().iconImage = AppConfig.appIcon(R.Drawables.appIcon)
+            val taskbar = Taskbar.getTaskbar()
+            if(taskbar.isSupported(Taskbar.Feature.ICON_IMAGE)) {
+                Taskbar.getTaskbar().iconImage = AppConfig.appIcon(R.Drawables.appIcon)
+            }
         }
 
         application {

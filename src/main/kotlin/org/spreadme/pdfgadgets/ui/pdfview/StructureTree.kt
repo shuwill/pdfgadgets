@@ -117,7 +117,7 @@ private fun StructureNodeName(
             null
         },
         softWrap = false,
-        overflow = TextOverflow.Ellipsis,
+        overflow = TextOverflow.Clip,
         modifier = Modifier.run {
             if (node.isParseable()) {
                 this.clickable(true) {
@@ -141,7 +141,7 @@ private fun StructureNodeName(
             style = MaterialTheme.typography.caption,
             color = MaterialTheme.colors.onBackground,
             softWrap = false,
-            overflow = TextOverflow.Ellipsis
+            overflow = TextOverflow.Clip
         )
     }
 }
