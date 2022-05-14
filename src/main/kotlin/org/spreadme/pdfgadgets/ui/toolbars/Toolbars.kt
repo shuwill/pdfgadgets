@@ -23,6 +23,7 @@ import org.spreadme.pdfgadgets.resources.R
 import org.spreadme.pdfgadgets.ui.common.DropdownTextInputField
 import org.spreadme.pdfgadgets.ui.common.TextSearchInputField
 import org.spreadme.pdfgadgets.ui.common.clickable
+import org.spreadme.pdfgadgets.ui.pdfview.PdfViewType
 import org.spreadme.pdfgadgets.ui.sidepanel.SidePanelMode
 import org.spreadme.pdfgadgets.ui.theme.LocalExtraColors
 import org.spreadme.pdfgadgets.ui.toolbars.ToolbarsViewModel.Companion.SCALES
@@ -40,12 +41,13 @@ fun Toolbars(
             toolbarsViewModel.enabled,
             onSidePanelModeChange = toolbarsViewModel::changeSideViewMode
         )
-        ScaleBar(
-            Modifier.fillMaxSize().weight(0.6f),
+        OperableBar(
+            Modifier.fillMaxSize().weight(0.8f),
             toolbarsViewModel.enabled,
             toolbarsViewModel.scale,
             onScaleTypeChange = toolbarsViewModel::changeScale,
-            onScaleChange = toolbarsViewModel::changeScale
+            onScaleChange = toolbarsViewModel::changeScale,
+            onViewTypeChange = toolbarsViewModel::changePdfViewType
         )
         TextSearchBar(
             toolbarsViewModel.searchKeyword,
@@ -93,12 +95,13 @@ fun SidePanelSwitchBar(
 }
 
 @Composable
-fun ScaleBar(
+fun OperableBar(
     modifier: Modifier = Modifier,
     enabled: Boolean,
     scale: Int,
     onScaleTypeChange: (ScaleType) -> Unit,
-    onScaleChange: (Int) -> Unit
+    onScaleChange: (Int) -> Unit,
+    onViewTypeChange: (PdfViewType) -> Unit
 ) {
     Row(
         modifier,
@@ -121,6 +124,11 @@ fun ScaleBar(
             iconResource = R.Icons.zoom_out,
             enabled = enabled,
             onScaleChange = onScaleTypeChange
+        )
+        PdfViewTypeSwitchBar(
+            Modifier.padding(start = 16.dp),
+            enabled = enabled,
+            onViewTypeChange
         )
     }
 }
@@ -176,6 +184,34 @@ fun ScaleDropdownInput(
         enabled = enabled
     ) {
         onScaleChange(it.replace("%", "").toInt())
+    }
+}
+
+@Composable
+fun PdfViewTypeSwitchBar(
+    modifier: Modifier = Modifier,
+    enabled: Boolean,
+    onViewTypeChange: (PdfViewType) -> Unit
+) {
+    Row(
+        modifier,
+        horizontalArrangement = Arrangement.Start,
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        PdfViewType.values().forEach { type ->
+            Icon(
+                painterResource(type.icon),
+                contentDescription = "",
+                tint = if (enabled) {
+                    MaterialTheme.colors.onBackground
+                } else {
+                    LocalExtraColors.current.iconDisable
+                },
+                modifier = Modifier.padding(start = 8.dp).size(16.dp).clickable{
+                    onViewTypeChange(type)
+                }
+            )
+        }
     }
 }
 
@@ -306,11 +342,12 @@ fun ViewBarPreview() {
 @Composable
 @Preview
 fun ScaleBarPreview() {
-    ScaleBar(
+    OperableBar(
         Modifier.fillMaxWidth().height(48.dp).background(MaterialTheme.colors.background),
         true,
         100,
         onScaleTypeChange = {},
-        onScaleChange = {}
+        onScaleChange = {},
+        onViewTypeChange = {}
     )
 }

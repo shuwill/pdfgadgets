@@ -15,6 +15,7 @@ class PdfViewModel(
 ) : ViewModel() {
 
     var scale by mutableStateOf(1.0f)
+    var viewType by mutableStateOf(PdfViewType.ONLY_VIEW)
 
     var initScrollIndex = 0
     var initScrollOffset = 0
@@ -63,6 +64,11 @@ class PdfViewModel(
 
     fun onChangeScalue(scale: Float) {
         this.scale = scale
+    }
+
+    fun onViewTypeChange(viewType: PdfViewType) {
+        println(viewType)
+        this.viewType = viewType
     }
 
     fun onScroll(position: Position, scrollFinish: () -> Unit) {

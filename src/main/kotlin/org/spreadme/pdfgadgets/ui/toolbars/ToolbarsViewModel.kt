@@ -6,6 +6,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import org.spreadme.pdfgadgets.common.ViewModel
 import org.spreadme.pdfgadgets.model.Position
+import org.spreadme.pdfgadgets.ui.pdfview.PdfViewType
 import org.spreadme.pdfgadgets.ui.sidepanel.SidePanelMode
 
 class ToolbarsViewModel(
@@ -24,13 +25,19 @@ class ToolbarsViewModel(
 
     var onChangeSideViewMode: (sidePanelMode: SidePanelMode) -> Unit = {}
     var onChangeScale: (scale: Float) -> Unit = {}
+    var onViewTypeChange: (PdfViewType) -> Unit = {}
 
     var onSearch: (String) -> List<Position> = { listOf() }
     var onCleanSearch: () -> Unit = {}
     var onScroll: (postion: Position, scrollFinish: () -> Unit) -> Unit = { _: Position, _: () -> Unit -> }
 
+
     fun changeSideViewMode(sidePanelMode: SidePanelMode) {
         onChangeSideViewMode(sidePanelMode)
+    }
+
+    fun changePdfViewType(viewType: PdfViewType) {
+        onViewTypeChange(viewType)
     }
 
     fun changeScale(type: ScaleType) {

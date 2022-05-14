@@ -56,6 +56,7 @@ class PdfViewAppComponent(
             val pdfpdfViewModel = remember { pdfViewModel }
             toolbarsViewModel.onChangeSideViewMode = pdfpdfViewModel::onChangeSideViewMode
             toolbarsViewModel.onChangeScale = pdfpdfViewModel::onChangeScalue
+            toolbarsViewModel.onViewTypeChange = pdfpdfViewModel::onViewTypeChange
             toolbarsViewModel.onSearch = pdfpdfViewModel::onSearch
             toolbarsViewModel.onCleanSearch = pdfpdfViewModel::onCleanSeach
             toolbarsViewModel.onScroll = pdfpdfViewModel::onScroll

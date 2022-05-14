@@ -1,9 +1,10 @@
 package org.spreadme.pdfgadgets.repository
 
-import java.awt.image.BufferedImage
+import org.spreadme.pdfgadgets.model.PageMetadata
+import org.spreadme.pdfgadgets.model.PageRenderInfo
 import java.io.Closeable
 
 interface PdfRenderer: Closeable {
 
-    suspend fun render(index: Int, dpi: Float): BufferedImage
+    suspend fun render(page: PageMetadata, dpi: Float): PageRenderInfo
 }

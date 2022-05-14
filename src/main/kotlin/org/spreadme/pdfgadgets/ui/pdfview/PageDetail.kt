@@ -1,9 +1,6 @@
 package org.spreadme.pdfgadgets.ui.pdfview
 
-import androidx.compose.foundation.Canvas
-import androidx.compose.foundation.background
-import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.fillMaxSize
@@ -13,6 +10,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.PathEffect
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.toPainter
@@ -20,13 +18,10 @@ import androidx.compose.ui.input.pointer.PointerIcon
 import androidx.compose.ui.input.pointer.consumeDownChange
 import androidx.compose.ui.input.pointer.consumePositionChange
 import androidx.compose.ui.input.pointer.pointerHoverIcon
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
-import org.spreadme.pdfgadgets.model.PageMetadata
-import org.spreadme.pdfgadgets.model.Position
-import org.spreadme.pdfgadgets.model.Signature
-import org.spreadme.pdfgadgets.ui.common.AsyncImage
-import org.spreadme.pdfgadgets.ui.common.Rectangle
+import org.spreadme.pdfgadgets.model.*
 import org.spreadme.pdfgadgets.ui.common.gesture.dragMotionEvent
 import org.spreadme.pdfgadgets.ui.theme.LocalExtraColors
 import java.awt.Cursor
@@ -44,15 +39,17 @@ fun PageDetail(
                 // pdf signature
                 signature(pageViewModel.page, pdfViewModel.scale)
                 // page view
-                pageImage(pageViewModel.page, pdfViewModel.scale)
+                AsyncPage(
+                    pdfViewModel.viewType,
+                    pageViewModel.page,
+                    pdfViewModel.scale
+                )
                 // searched text
                 searchedText(
                     pageViewModel.page,
                     pageViewModel.searchPosition,
                     pdfViewModel.scale
                 )
-                // draw area
-                drawArea()
             }
         }
     }
@@ -67,8 +64,7 @@ fun mediabox(
     // mediabox size
     Rectangle(
         modifier = Modifier.background(MaterialTheme.colors.background.copy(0.65f))
-            .border(1.dp, color = LocalExtraColors.current.border)
-            .pointerHoverIcon(PointerIcon(Cursor(Cursor.CROSSHAIR_CURSOR))),
+            .border(1.dp, color = LocalExtraColors.current.border),
         page.mediabox,
         page.mediabox.height,
         scale = scale,
@@ -77,22 +73,83 @@ fun mediabox(
 }
 
 @Composable
-fun pageImage(
+fun BoxScope.AsyncPage(
+    viewType: PdfViewType,
     page: PageMetadata,
     scale: Float
 ) {
-    // page size
-    Rectangle(
-        modifier = Modifier,
-        page.pageSize,
-        page.mediabox.height,
-        scale = scale
-    ) {
-        AsyncImage(
-            load = { page.loadImage(2.0f).toPainter() },
-            painterFor = { it },
+    val pageRenderInfo by produceState<PageRenderInfo?>(null) {
+        value = page.render(2.0f)
+    }
+
+    if (pageRenderInfo != null) {
+        Image(
+            painter = pageRenderInfo!!.pageImage.toPainter(),
+            contentDescription = "",
+            contentScale = ContentScale.Fit,
             modifier = Modifier.matchParentSize()
         )
+
+        if (viewType == PdfViewType.TEXT_SELECT) {
+            Texts(
+                page,
+                pageRenderInfo!!.textRenderInfos,
+                scale,
+                MaterialTheme.colors.primary
+            )
+        } else if (viewType == PdfViewType.DRAW) {
+            // draw area
+            drawArea()
+        }
+    }
+}
+
+@Composable
+fun Texts(
+    page: PageMetadata,
+    textRenderInfos: List<TextRenderInfo>,
+    scale: Float,
+    tint: Color
+) {
+    var startOffset by remember { mutableStateOf(Offset.Infinite) }
+    var endOffset by remember { mutableStateOf(Offset.Infinite) }
+    Canvas(
+        Modifier.fillMaxSize()
+            .pointerHoverIcon(PointerIcon(Cursor(Cursor.TEXT_CURSOR)))
+            .dragMotionEvent(
+                onDragStart = { pointerInputChange ->
+                    startOffset = pointerInputChange.position
+                    pointerInputChange.consumeDownChange()
+
+                },
+                onDragEnd = { pointerInputChange ->
+                    endOffset = pointerInputChange.position
+                    pointerInputChange.consumeDownChange()
+                }
+            )
+    ) {
+        textRenderInfos.forEach {
+            val rectangle = it.position.rectangle
+            Rectangle(
+                modifier = Modifier.border(1.dp, tint),
+                rectangle,
+                page.mediabox.height,
+                scale = scale
+            )
+
+            drawRect(
+                color = tint,
+                topLeft = Offset(
+                    x = (rectangle.x.dp.toPx() * scale),
+                    y = ((page.mediabox.height.dp.toPx() - rectangle.y.dp.toPx() - rectangle.height.dp.toPx()) * scale)
+                ),
+                size = Size(
+                    width = (rectangle.width.dp.toPx() * scale),
+                    height = (rectangle.height.dp.toPx() * scale)
+                ),
+                style = Stroke(1f)
+            )
+        }
     }
 }
 
@@ -153,12 +210,12 @@ fun searchedText(
 
 @Composable
 fun drawArea() {
-
     var offset by remember { mutableStateOf(Offset.Infinite) }
     var size by remember { mutableStateOf(Size.Zero) }
     val color = MaterialTheme.colors.secondary
     Canvas(
         modifier = Modifier.fillMaxSize()
+            .pointerHoverIcon(PointerIcon(Cursor(Cursor.CROSSHAIR_CURSOR)))
             .dragMotionEvent(
                 onDragStart = { pointerInputChange ->
                     size = Size.Zero

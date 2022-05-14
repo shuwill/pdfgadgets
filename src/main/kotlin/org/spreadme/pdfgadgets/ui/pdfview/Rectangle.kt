@@ -1,4 +1,4 @@
-package org.spreadme.pdfgadgets.ui.common
+package org.spreadme.pdfgadgets.ui.pdfview
 
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.RepeatMode

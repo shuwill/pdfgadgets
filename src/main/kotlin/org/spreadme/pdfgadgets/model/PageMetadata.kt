@@ -15,7 +15,7 @@ class PageMetadata(
     var enabled: MutableState<Boolean> = mutableStateOf(true),
 ) {
 
-    suspend fun loadImage(dpi: Float): BufferedImage {
-        return renderer.render(index - 1, dpi)
+    suspend fun render(dpi: Float): PageRenderInfo {
+        return renderer.render(this, dpi)
     }
 }

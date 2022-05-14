@@ -52,5 +52,9 @@ object R {
 
         const val lignt = "icons/light.svg"
         const val dark = "icons/dark.svg"
+
+        const val cursor_hand = "icons/cursor-hand.svg"
+        const val cursor_text = "icons/cursor-text.svg"
+        const val cursor_draw = "icons/cursor-draw.svg"
     }
 }

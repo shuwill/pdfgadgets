@@ -31,7 +31,7 @@ class DefaultPdfMetadataParser : PdfMetadataParser, KoinComponent {
         )
 
         // pdf renderer
-        val renderer = MupdfRenderer(fileMetadata)
+        val renderer = DefaultPdfRenderer(fileMetadata, document)
 
         // signatures
         val signatures = signatureParser.parse(document)
