@@ -184,7 +184,7 @@ class PdfViewAppComponent(
         name = fileMetadata.name
         val pdfMetadata = pdfMetadataParser.parse(fileMetadata)
         fileMetadataRepository.save(fileMetadata)
-        val pageViewModels = pdfMetadata.pages.map { PageViewModel(it) }.toList()
+        val pageViewModels = pdfMetadata.pages.map { getViewModel<PageViewModel>(it, single = false) }.toList()
         pdfViewModel = getViewModel(pdfMetadata, pageViewModels, pdfTextSearcher)
     }
 

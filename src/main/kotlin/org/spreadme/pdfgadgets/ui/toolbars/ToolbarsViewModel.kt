@@ -19,6 +19,7 @@ class ToolbarsViewModel(
     var enabled by mutableStateOf(enabled)
     var scale by mutableStateOf(100)
     var searchKeyword by mutableStateOf("")
+    var currentIndex = mutableStateOf(0)
     var position = mutableStateListOf<Position>()
 
     var onChangeSideViewMode: (sidePanelMode: SidePanelMode) -> Unit = {}
@@ -56,6 +57,7 @@ class ToolbarsViewModel(
     }
 
     fun searchText() {
+        currentIndex.value = 0
         position.clear()
         position.addAll(onSearch(searchKeyword))
     }

@@ -39,7 +39,7 @@ fun StructureDetailPanel(
             pdfObjectViewModel.parse(keywordColor)
         }
         if(pdfObjectViewModel.finished) {
-            Column(Modifier.fillMaxSize().padding(8.dp)) {
+            Column(Modifier.fillMaxSize()) {
                 PdfStreamDetail(pdfObjectViewModel)
             }
         }
@@ -100,7 +100,7 @@ private fun ToolBar(
 private fun PdfStreamDetail(viewModel: PdfObjectViewModel) {
     if (viewModel.finished) {
         if (viewModel.annotatedStrings.isNotEmpty()) {
-            LazyColumn(Modifier.fillMaxSize()) {
+            LazyColumn(Modifier.fillMaxSize().padding(8.dp)) {
                 items(viewModel.annotatedStrings) { item ->
                     SelectionContainer {
                         Text(
@@ -135,7 +135,7 @@ private fun PdfImageDetail(
     modifier: Modifier = Modifier,
     bufferedImage: BufferedImage
 ) {
-    Box(modifier) {
+    Box(modifier.padding(8.dp)) {
         Image(
             bufferedImage.toPainter(),
             contentDescription = ""

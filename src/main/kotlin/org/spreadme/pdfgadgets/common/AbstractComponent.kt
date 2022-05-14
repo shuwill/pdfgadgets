@@ -14,9 +14,14 @@ abstract class AbstractComponent(
 
     inline fun <reified T : ViewModel> getViewModel(
         vararg params: Any?,
+        single: Boolean = false,
         block: T.() -> Unit = {}
     ): T {
-        val key = T::class.java.name
+        val key = T::class.java.name + if (single) {
+            ""
+        } else {
+            "-${UUID.randomUUID()}"
+        }
         synchronized(viewModels) {
             val previous = viewModels[key]
             if (previous == null) {

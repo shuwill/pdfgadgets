@@ -43,7 +43,7 @@ private fun ASN1NodeView(node: ASN1Node) {
             .fillMaxWidth()
             .height(32.dp)
             .selectable(true) { expanded = !expanded }
-            .padding(start = (24 * node.level).dp),
+            .padding(start = (16 * node.level).dp),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.Start
     ) {

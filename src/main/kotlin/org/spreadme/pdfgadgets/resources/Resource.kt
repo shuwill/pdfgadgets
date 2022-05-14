@@ -42,6 +42,7 @@ object R {
         const val zoom_in = "icons/zoom_in.svg"
 
         const val signature = "icons/signature.svg"
+        const val signature_verify = "icons/signature-verify.svg"
         const val ds = "icons/ds.svg"
 
         const val pdffile = "icons/pdffile.svg"

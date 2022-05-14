@@ -11,9 +11,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material.icons.filled.ArrowDropUp
 import androidx.compose.material.icons.filled.Close
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -55,6 +53,7 @@ fun Toolbars(
             toolbarsViewModel.enabled,
             toolbarsViewModel::searchText,
             toolbarsViewModel.position,
+            toolbarsViewModel.currentIndex,
             toolbarsViewModel.onScroll,
             toolbarsViewModel::cleanSearch
         ) {
@@ -187,6 +186,7 @@ fun TextSearchBar(
     enabled: Boolean,
     onSeach: () -> Unit,
     positions: List<Position>,
+    currentIndex: MutableState<Int>,
     onScroll: (postion: Position, scrollFinish: () -> Unit) -> Unit,
     onClean: () -> Unit,
     onValueChange: (String) -> Unit
@@ -226,7 +226,7 @@ fun TextSearchBar(
             enabled = enabled
         ) {
             if (positions.isNotEmpty()) {
-                SearchResultDetail(positions, onScroll)
+                SearchResultDetail(currentIndex, positions, onScroll)
             }
             if (searchKeyword.isNotEmpty()) {
                 Icon(
@@ -245,6 +245,7 @@ fun TextSearchBar(
 
 @Composable
 fun SearchResultDetail(
+    currentIndex: MutableState<Int> = mutableStateOf(0),
     positions: List<Position>,
     onScroll: (postion: Position, scrollFinish: () -> Unit) -> Unit,
 ) {
@@ -252,7 +253,6 @@ fun SearchResultDetail(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.Center
     ) {
-        val currentIndex = remember { mutableStateOf(0) }
         Text(
             "${currentIndex.value}/${positions.size}",
             color = MaterialTheme.colors.onBackground,

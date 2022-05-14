@@ -69,7 +69,7 @@ fun VerifyDetail(verify: Boolean) {
         verticalAlignment = Alignment.CenterVertically
     ) {
         Icon(
-            painter = painterResource(R.Icons.signature),
+            painter = painterResource(R.Icons.signature_verify),
             contentDescription = "verify result",
             tint = verify.choose(LocalExtraColors.current.success, LocalExtraColors.current.error),
             modifier = Modifier.padding(start = 16.dp).size(16.dp)

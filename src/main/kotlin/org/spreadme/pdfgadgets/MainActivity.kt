@@ -18,7 +18,7 @@ import org.spreadme.pdfgadgets.ui.frame.AppFrameComponent
 import org.spreadme.pdfgadgets.ui.frame.ApplicationBootstrap
 import org.spreadme.pdfgadgets.ui.theme.PDFGadgetsTheme
 import java.awt.Taskbar
-import javax.swing.JFrame
+import java.awt.Toolkit
 
 class MainActivity : Activity() {
 
@@ -42,8 +42,10 @@ class MainActivity : Activity() {
             }
         }
 
+        val screen = Toolkit.getDefaultToolkit().screenSize
+        
         application {
-            val windowState = rememberWindowState(width = 1278.dp, height = 760.dp)
+            val windowState = rememberWindowState(width = (screen.width * .80).dp, height = (screen.height * .80).dp)
             Window(
                 onCloseRequest = {
                     onDestory()
