@@ -13,10 +13,12 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import org.spreadme.pdfgadgets.ui.common.LoadProgressIndicator
 import org.spreadme.pdfgadgets.ui.common.Toast
+import org.spreadme.pdfgadgets.ui.common.clickable
 import org.spreadme.pdfgadgets.ui.theme.LocalExtraColors
 import org.spreadme.pdfgadgets.ui.toolbars.ActionBar
 import org.spreadme.pdfgadgets.ui.toolbars.Toolbars
@@ -29,6 +31,7 @@ fun MainApplicationFrame(
     loadProgressViewModel: LoadProgressViewModel,
     content: @Composable RowScope.() -> Unit
 ) {
+    val focusManager = LocalFocusManager.current
     Column(
         Modifier.fillMaxSize(),
         verticalArrangement = Arrangement.Top
@@ -51,7 +54,7 @@ fun MainApplicationFrame(
                 else -> {}
             }
             Box(Modifier.fillMaxSize()) {
-                Row(Modifier.fillMaxSize()) {
+                Row(Modifier.fillMaxSize().clickable { focusManager.clearFocus() }) {
                     ActionBar(applicationViewModel, progressState)
                     Box(Modifier.fillMaxHeight().width(1.dp).background(LocalExtraColors.current.border))
                     content()

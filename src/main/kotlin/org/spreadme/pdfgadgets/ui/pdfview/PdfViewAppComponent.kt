@@ -38,6 +38,7 @@ class PdfViewAppComponent(
     private val pdfMetadataParser by inject<PdfMetadataParser>()
     private val pdfStreamParser by inject<PdfStreamParser>()
     private val asN1Parser by inject<ASN1Parser>()
+    private val pdfTextSearcher by inject<PdfTextSearcher>()
 
     private val toolbarsViewModel = getViewModel<ToolbarsViewModel>(true)
     private val loadProgressViewModel = getViewModel<LoadProgressViewModel>()
@@ -55,6 +56,9 @@ class PdfViewAppComponent(
             val pdfpdfViewModel = remember { pdfViewModel }
             toolbarsViewModel.onChangeSideViewMode = pdfpdfViewModel::onChangeSideViewMode
             toolbarsViewModel.onChangeScale = pdfpdfViewModel::onChangeScalue
+            toolbarsViewModel.onSearch = pdfpdfViewModel::onSearch
+            toolbarsViewModel.onCleanSearch = pdfpdfViewModel::onCleanSeach
+            toolbarsViewModel.onScroll = pdfpdfViewModel::onScroll
             SidePanelGroup(pdfpdfViewModel)
             PageDetailGroup(pdfpdfViewModel)
             StructureDetailPanel()
@@ -131,7 +135,7 @@ class PdfViewAppComponent(
                     .horizontalScroll(horizontalScollState),
                 state = lazyListState
             ) {
-                itemsIndexed(pdfViewModel.pdfMetadata.pages) { _, item ->
+                itemsIndexed(pdfViewModel.pageViewModels) { _, item ->
                     PageDetail(item, pdfViewModel)
                 }
             }
@@ -180,7 +184,8 @@ class PdfViewAppComponent(
         name = fileMetadata.name
         val pdfMetadata = pdfMetadataParser.parse(fileMetadata)
         fileMetadataRepository.save(fileMetadata)
-        pdfViewModel = getViewModel(pdfMetadata)
+        val pageViewModels = pdfMetadata.pages.map { PageViewModel(it) }.toList()
+        pdfViewModel = getViewModel(pdfMetadata, pageViewModels, pdfTextSearcher)
     }
 
     override fun content(): Path = path

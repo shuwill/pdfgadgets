@@ -1,9 +1,11 @@
 package org.spreadme.pdfgadgets.ui.toolbars
 
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import org.spreadme.pdfgadgets.common.ViewModel
+import org.spreadme.pdfgadgets.model.Position
 import org.spreadme.pdfgadgets.ui.sidepanel.SidePanelMode
 
 class ToolbarsViewModel(
@@ -17,9 +19,14 @@ class ToolbarsViewModel(
     var enabled by mutableStateOf(enabled)
     var scale by mutableStateOf(100)
     var searchKeyword by mutableStateOf("")
+    var position = mutableStateListOf<Position>()
 
     var onChangeSideViewMode: (sidePanelMode: SidePanelMode) -> Unit = {}
     var onChangeScale: (scale: Float) -> Unit = {}
+
+    var onSearch: (String) -> List<Position> = { listOf() }
+    var onCleanSearch: () -> Unit = {}
+    var onScroll: (postion: Position, scrollFinish: () -> Unit) -> Unit = { _: Position, _: () -> Unit -> }
 
     fun changeSideViewMode(sidePanelMode: SidePanelMode) {
         onChangeSideViewMode(sidePanelMode)
@@ -46,5 +53,16 @@ class ToolbarsViewModel(
     fun changeScale(scale: Int) {
         this.scale = scale
         onChangeScale(this.scale / 100.0f)
+    }
+
+    fun searchText() {
+        position.clear()
+        position.addAll(onSearch(searchKeyword))
+    }
+
+    fun cleanSearch(){
+        position.clear()
+        searchKeyword = ""
+        onCleanSearch()
     }
 }

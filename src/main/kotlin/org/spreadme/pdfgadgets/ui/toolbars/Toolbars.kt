@@ -6,12 +6,21 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Text
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowDropDown
+import androidx.compose.material.icons.filled.ArrowDropUp
+import androidx.compose.material.icons.filled.Close
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.input.key.*
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import org.spreadme.pdfgadgets.model.Position
 import org.spreadme.pdfgadgets.resources.R
 import org.spreadme.pdfgadgets.ui.common.DropdownTextInputField
 import org.spreadme.pdfgadgets.ui.common.TextSearchInputField
@@ -43,7 +52,11 @@ fun Toolbars(
         TextSearchBar(
             toolbarsViewModel.searchKeyword,
             Modifier.fillMaxSize().weight(0.2f),
-            toolbarsViewModel.enabled
+            toolbarsViewModel.enabled,
+            toolbarsViewModel::searchText,
+            toolbarsViewModel.position,
+            toolbarsViewModel.onScroll,
+            toolbarsViewModel::cleanSearch
         ) {
             toolbarsViewModel.searchKeyword = it
         }
@@ -172,6 +185,10 @@ fun TextSearchBar(
     searchKeyword: String,
     modifier: Modifier = Modifier,
     enabled: Boolean,
+    onSeach: () -> Unit,
+    positions: List<Position>,
+    onScroll: (postion: Position, scrollFinish: () -> Unit) -> Unit,
+    onClean: () -> Unit,
     onValueChange: (String) -> Unit
 ) {
     Row(
@@ -185,7 +202,15 @@ fun TextSearchBar(
             modifier = Modifier.padding(16.dp, 8.dp)
                 .fillMaxHeight().widthIn(240.dp, 272.dp)
                 .clip(RoundedCornerShape(8.dp))
-                .background(MaterialTheme.colors.surface),
+                .background(MaterialTheme.colors.surface)
+                .onPreviewKeyEvent {
+                    if (it.key == Key.Enter && it.type == KeyEventType.KeyDown) {
+                        onSeach()
+                        true
+                    } else {
+                        false
+                    }
+                },
             textStyle = MaterialTheme.typography.caption.copy(
                 color = if (enabled) {
                     MaterialTheme.colors.onSurface
@@ -199,7 +224,71 @@ fun TextSearchBar(
                 LocalExtraColors.current.iconDisable
             },
             enabled = enabled
+        ) {
+            if (positions.isNotEmpty()) {
+                SearchResultDetail(positions, onScroll)
+            }
+            if (searchKeyword.isNotEmpty()) {
+                Icon(
+                    Icons.Default.Close,
+                    contentDescription = "",
+                    tint = MaterialTheme.colors.onBackground,
+                    modifier = Modifier.padding(start = 4.dp, end = 8.dp).size(12.dp)
+                        .clickable {
+                            onClean()
+                        }
+                )
+            }
+        }
+    }
+}
+
+@Composable
+fun SearchResultDetail(
+    positions: List<Position>,
+    onScroll: (postion: Position, scrollFinish: () -> Unit) -> Unit,
+) {
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.Center
+    ) {
+        val currentIndex = remember { mutableStateOf(0) }
+        Text(
+            "${currentIndex.value}/${positions.size}",
+            color = MaterialTheme.colors.onBackground,
+            style = MaterialTheme.typography.overline
         )
+
+        Spacer(modifier = Modifier.padding(4.dp).fillMaxHeight().width(1.dp))
+        Icon(
+            Icons.Default.ArrowDropDown,
+            contentDescription = "",
+            tint = MaterialTheme.colors.onBackground,
+            modifier = Modifier.padding(end = 4.dp).size(16.dp)
+                .clickable {
+                    if (currentIndex.value < positions.size) {
+                        val position = positions[currentIndex.value++]
+                        onScroll(position) {
+                            position.selected.value = true
+                        }
+                    }
+                }
+        )
+        Icon(
+            Icons.Default.ArrowDropUp,
+            contentDescription = "",
+            tint = MaterialTheme.colors.onBackground,
+            modifier = Modifier.padding(end = 4.dp).size(16.dp)
+                .clickable {
+                    if (currentIndex.value > 1) {
+                        val position = positions[(--currentIndex.value) - 1]
+                        onScroll(position) {
+                            position.selected.value = true
+                        }
+                    }
+                }
+        )
+
     }
 }
 

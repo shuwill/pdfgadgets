@@ -32,6 +32,10 @@ val pdfParseModule = module {
     single {
         PdfStreamParser()
     }
+
+    single<PdfTextSearcher> {
+        DefaultPdfTextSearcher()
+    }
 }
 
 val asn1ParserMoudle = module {

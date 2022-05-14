@@ -1,8 +1,5 @@
 package org.spreadme.pdfgadgets.ui.pdfview
 
-import org.spreadme.pdfgadgets.model.PageMetadata
-import org.spreadme.pdfgadgets.ui.common.gesture.dragMotionEvent
-
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -13,7 +10,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.*
-import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
@@ -26,33 +22,33 @@ import androidx.compose.ui.input.pointer.consumePositionChange
 import androidx.compose.ui.input.pointer.pointerHoverIcon
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
-
+import org.spreadme.pdfgadgets.model.PageMetadata
 import org.spreadme.pdfgadgets.model.Position
 import org.spreadme.pdfgadgets.model.Signature
 import org.spreadme.pdfgadgets.ui.common.AsyncImage
 import org.spreadme.pdfgadgets.ui.common.Rectangle
+import org.spreadme.pdfgadgets.ui.common.gesture.dragMotionEvent
 import org.spreadme.pdfgadgets.ui.theme.LocalExtraColors
-
 import java.awt.Cursor
 import kotlin.math.abs
 
 @Composable
 fun PageDetail(
-    page: PageMetadata,
+    pageViewModel: PageViewModel,
     pdfViewModel: PdfViewModel
 ) {
-    if (page.enabled.value) {
+    if (pageViewModel.page.enabled.value) {
         Box(modifier = Modifier.padding(start = 0.dp, 24.dp).fillMaxSize()) {
             // mediabox
-            mediabox(page, pdfViewModel.scale) {
+            mediabox(pageViewModel.page, pdfViewModel.scale) {
                 // pdf signature
-                signature(page, pdfViewModel.scale)
+                signature(pageViewModel.page, pdfViewModel.scale)
                 // page view
-                pageImage(page, pdfViewModel.scale)
+                pageImage(pageViewModel.page, pdfViewModel.scale)
                 // searched text
                 searchedText(
-                    page,
-                    pdfViewModel.searchedPositions,
+                    pageViewModel.page,
+                    pageViewModel.searchPosition,
                     pdfViewModel.scale
                 )
                 // draw area
@@ -138,7 +134,7 @@ fun signature(
 @Composable
 fun searchedText(
     page: PageMetadata,
-    positiones: SnapshotStateList<Position>,
+    positiones: List<Position>,
     scale: Float
 ) {
     val positionesState = remember { positiones }

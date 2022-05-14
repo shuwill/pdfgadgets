@@ -12,7 +12,7 @@ abstract class AbstractComponent(
 
     val viewModels: MutableMap<String, ViewModel> = mutableMapOf()
 
-    inline fun <reified T : ViewModel> AbstractComponent.getViewModel(
+    inline fun <reified T : ViewModel> getViewModel(
         vararg params: Any?,
         block: T.() -> Unit = {}
     ): T {

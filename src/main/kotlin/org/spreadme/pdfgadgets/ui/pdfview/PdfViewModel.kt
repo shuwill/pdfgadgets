@@ -1,15 +1,17 @@
 package org.spreadme.pdfgadgets.ui.pdfview
 
 import androidx.compose.runtime.*
-import androidx.compose.runtime.snapshots.SnapshotStateList
 import org.spreadme.pdfgadgets.common.ViewModel
 import org.spreadme.pdfgadgets.model.PdfMetadata
 import org.spreadme.pdfgadgets.model.Position
+import org.spreadme.pdfgadgets.repository.PdfTextSearcher
 import org.spreadme.pdfgadgets.ui.sidepanel.SidePanelMode
 import org.spreadme.pdfgadgets.ui.sidepanel.SidePanelUIState
 
 class PdfViewModel(
-    val pdfMetadata: PdfMetadata
+    val pdfMetadata: PdfMetadata,
+    val pageViewModels: List<PageViewModel>,
+    private val pdfTextSearcher: PdfTextSearcher
 ) : ViewModel() {
 
     var scale by mutableStateOf(1.0f)
@@ -23,8 +25,6 @@ class PdfViewModel(
     var scrollOffset by mutableStateOf(initScrollOffset)
 
     var scrollFinish: () -> Unit = {}
-
-    val searchedPositions: SnapshotStateList<Position> = mutableStateListOf()
 
     private var sidePanelModes = mutableStateListOf(SidePanelMode.STRUCTURE)
     private val sidePanelModels = mutableStateMapOf<SidePanelMode, SidePanelUIState>()
@@ -76,4 +76,18 @@ class PdfViewModel(
         this.scrollFinish = scrollFinish
     }
 
+    fun onSearch(keyword: String): List<Position> {
+        val positions = pdfTextSearcher.search(pdfMetadata, keyword)
+        pageViewModels.forEach { pageViewModel ->
+            pageViewModel.searchPosition.clear()
+            pageViewModel.searchPosition.addAll(positions.filter { p -> p.index == pageViewModel.page.index })
+        }
+        return positions
+    }
+
+    fun onCleanSeach() {
+        pageViewModels.forEach { pageViewModel ->
+            pageViewModel.searchPosition.clear()
+        }
+    }
 }
