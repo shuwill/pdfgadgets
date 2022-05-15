@@ -25,6 +25,10 @@ data class Position(
         return scrollOffset.toInt()
     }
 
+    fun contain(rectangle: Rectangle) {
+        this.rectangle.contains(rectangle)
+    }
+
     override fun toString(): String {
         return "Position(index=$index, offsetX=$rectangle.x, offsetY=$rectangle.y)"
     }

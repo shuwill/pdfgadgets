@@ -59,3 +59,20 @@ fun Rectangle(
         content()
     }
 }
+
+@Composable
+fun Rectangle(
+    modifier: Modifier = Modifier,
+    scale: Float,
+    rectangle: Rectangle
+) {
+    Box(
+        modifier = Modifier
+            .size((rectangle.width * scale).dp, (rectangle.height * scale).dp)
+            .offset(
+                x = (rectangle.x * scale).dp,
+                y = (rectangle.y * scale).dp
+            )
+            .then(modifier)
+    )
+}

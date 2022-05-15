@@ -1,7 +1,10 @@
 package org.spreadme.pdfgadgets.ui.pdfview
 
 import androidx.compose.foundation.*
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxScope
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
@@ -10,17 +13,12 @@ import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.PathEffect
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.toPainter
-import androidx.compose.ui.input.pointer.PointerIcon
-import androidx.compose.ui.input.pointer.consumeDownChange
-import androidx.compose.ui.input.pointer.consumePositionChange
-import androidx.compose.ui.input.pointer.pointerHoverIcon
+import androidx.compose.ui.input.pointer.*
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
-import org.spreadme.pdfgadgets.model.PageMetadata
-import org.spreadme.pdfgadgets.model.PageRenderInfo
-import org.spreadme.pdfgadgets.model.Position
-import org.spreadme.pdfgadgets.model.Signature
+import org.spreadme.pdfgadgets.model.*
+import org.spreadme.pdfgadgets.ui.common.clickable
 import org.spreadme.pdfgadgets.ui.common.gesture.dragMotionEvent
 import org.spreadme.pdfgadgets.ui.theme.LocalExtraColors
 import java.awt.Cursor
@@ -72,7 +70,7 @@ fun mediabox(
 }
 
 @Composable
-fun BoxScope.AsyncPage(
+fun AsyncPage(
     viewType: PdfViewType,
     page: PageMetadata,
     scale: Float
@@ -82,43 +80,70 @@ fun BoxScope.AsyncPage(
     }
 
     if (pageRenderInfo != null) {
-        Image(
-            painter = pageRenderInfo!!.pageImage.toPainter(),
-            contentDescription = "",
-            contentScale = ContentScale.Fit,
-            modifier = Modifier.matchParentSize()
-        )
-
-        if (viewType == PdfViewType.TEXT_SELECT) {
-            TextBlock(
-                pageRenderInfo!!.textBlockPositions,
-                scale
+        // page size
+        Rectangle(
+            modifier = Modifier,
+            page.pageSize,
+            page.mediabox.height,
+            scale = scale
+        ) {
+            Image(
+                painter = pageRenderInfo!!.pageImage.toPainter(),
+                contentDescription = "",
+                contentScale = ContentScale.Fit,
+                modifier = Modifier.matchParentSize()
             )
-        } else if (viewType == PdfViewType.DRAW) {
-            // draw area
-            drawArea()
+
+            if (viewType == PdfViewType.TEXT_SELECT) {
+                TextBlocks(
+                    pageRenderInfo!!.textBlocks,
+                    scale
+                )
+            } else if (viewType == PdfViewType.DRAW) {
+                // draw area
+                drawArea()
+            }
         }
     }
 }
 
 @Composable
-fun TextBlock(
-    positions: List<Position>,
+fun TextBlocks(
+    textBlocks: List<TextBlock>,
     scale: Float
 ) {
-    positions.forEach {
-        val rectangle = it.rectangle
-        Box(
-            modifier = Modifier
-                .size((rectangle.width * scale).dp, (rectangle.height * scale).dp)
-                .offset(
-                    x = (rectangle.x * scale).dp,
-                    y = (rectangle.y * scale).dp
-                )
-                .border(1.dp, color = MaterialTheme.colors.secondary)
-                .pointerHoverIcon(PointerIcon(Cursor(Cursor.TEXT_CURSOR)))
-        )
+    textBlocks.forEach { block ->
+        TextBlock(block, scale)
     }
+}
+
+@Composable
+fun TextBlock(
+    textBlock: TextBlock,
+    scale: Float
+){
+    val rectangle = textBlock.position.rectangle
+    var backgounrdAlpha  by remember { mutableStateOf(0.0f) }
+    Rectangle(
+        Modifier.border(1.dp, color = MaterialTheme.colors.secondary)
+            .background(MaterialTheme.colors.secondary.copy(backgounrdAlpha))
+            .pointerHoverIcon(PointerIcon(Cursor(Cursor.TEXT_CURSOR)))
+            .pointerMoveFilter(
+                onEnter = {
+                    backgounrdAlpha = 0.65f
+                    true
+                },
+                onExit = {
+                    backgounrdAlpha = 0.0f
+                    true
+                }
+            )
+            .clickable {
+                println(textBlock.toString())
+            },
+        scale,
+        rectangle
+    )
 }
 
 @Composable

@@ -8,6 +8,7 @@ data class Signature(
     val signedLength: Long,
     val signatureResult: SignatureResult,
     val signatureCoversWholeDocument: Boolean,
+    var lastSignatureCoversWholeDocument: Boolean = false,
     var position: Position? = null,
     val expand: MutableState<Boolean> = mutableStateOf(false)
 ) {

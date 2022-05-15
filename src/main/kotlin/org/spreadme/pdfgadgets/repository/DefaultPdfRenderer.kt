@@ -5,6 +5,7 @@ import com.itextpdf.kernel.geom.Rectangle
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import org.spreadme.pdfgadgets.model.*
+import org.spreadme.pdfgadgets.ui.pdfview.TextBlock
 import java.awt.image.BufferedImage
 
 class DefaultPdfRenderer(fileMetadata: FileMetadata): PdfRenderer {
@@ -31,31 +32,29 @@ class DefaultPdfRenderer(fileMetadata: FileMetadata): PdfRenderer {
                 val image = BufferedImage(width, height, BufferedImage.TYPE_USHORT_555_RGB)
                 image.setRGB(0, 0, width, height, pixmap.pixels, 0, width)
 
-                val textBlockPositions = arrayListOf<Position>()
-                val textRenderInfos = arrayListOf<TextRenderInfo>()
+                // text info
+                val textBlocks = arrayListOf<TextBlock>()
                 val structuredText = loadPage.toStructuredText()
                 structuredText.blocks.forEach {block ->
                     val blockRect = block.bbox
                     val textBlockRectangle = Rectangle(blockRect.x0, blockRect.y0, blockRect.x1 - blockRect.x0, blockRect.y1 - blockRect.y0)
+                    val chars = arrayListOf<Char>()
                     var blank = true
                     block.lines.forEach { line ->
                         line.chars.forEach {char ->
                             if(!char.isWhitespace){
-                                val rect = char.quad.toRect()
-                                val rectangle = Rectangle(rect.x0, rect.y0, rect.x1 - rect.x0, rect.y1 - rect.y0)
-                                textRenderInfos.add(TextRenderInfo(Char(char.c).toString(),
-                                    Position(page.index, page.pageSize, rectangle)))
                                 blank = false
                             }
+                            chars.add(char.c.toChar())
                         }
                     }
                     if(!blank) {
-                        textBlockPositions.add(Position(page.index, page.pageSize, textBlockRectangle))
+                        val textBlock = TextBlock(chars, Position(page.index, page.pageSize, textBlockRectangle))
+                        textBlocks.add(textBlock)
                     }
-
                 }
 
-                return PageRenderInfo(image, textRenderInfos, textBlockPositions)
+                return PageRenderInfo(image, textBlocks)
             } finally {
                 drawDevice?.close()
                 drawDevice?.destroy()

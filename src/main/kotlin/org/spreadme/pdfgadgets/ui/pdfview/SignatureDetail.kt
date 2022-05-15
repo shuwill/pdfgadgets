@@ -42,7 +42,7 @@ fun SignatureDetail(
             state = rememberDialogState(width = 560.dp, height = 420.dp)
         ) {
             //Verify Info
-            VerifyDetail(signature.signatureResult.verifySignature)
+            VerifyDetail(signature.signatureResult.verifySignature && signature.lastSignatureCoversWholeDocument)
             //Certificate Info
             CertificateDetail(signature.signatureResult.signingCertificate)
             //Timestamp info

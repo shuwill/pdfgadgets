@@ -4,11 +4,12 @@ import java.awt.image.BufferedImage
 
 class PageRenderInfo(
     val pageImage: BufferedImage,
-    val textRenderInfos: List<TextRenderInfo>,
-    val textBlockPositions: List<Position>
+    val textBlocks: List<TextBlock>,
 )
 
-data class TextRenderInfo(
-    val text: String,
+data class TextBlock(
+    val chars: List<Char>,
     val position: Position
-)
+) {
+    override fun toString() = String(chars.toCharArray())
+}

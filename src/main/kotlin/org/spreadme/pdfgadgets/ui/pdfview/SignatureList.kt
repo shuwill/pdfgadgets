@@ -72,7 +72,7 @@ fun SignatureListDetail(
         modifier = Modifier.fillMaxSize(),
     ) {
         val expanded by remember { signature.expand }
-        SignatureBrief(signature.expand, signature.signatureResult)
+        SignatureBrief(signature.expand, signature.signatureResult, signature.lastSignatureCoversWholeDocument)
         SignatureExpandDetail(expanded, signature, onScroll)
     }
 }
@@ -80,7 +80,8 @@ fun SignatureListDetail(
 @Composable
 private fun SignatureBrief(
     expanded: MutableState<Boolean>,
-    signatureResult: SignatureResult
+    signatureResult: SignatureResult,
+    lastSignatureCoversWholeDocument: Boolean
 ) {
     Row(
         modifier = Modifier.fillMaxWidth().height(42.dp).selectable(true) {
@@ -98,10 +99,11 @@ private fun SignatureBrief(
             }
         )
 
+        val verify = signatureResult.verifySignature && lastSignatureCoversWholeDocument
         Icon(
             painter = painterResource(R.Icons.signature_verify),
             contentDescription = "",
-            tint = signatureResult.verifySignature.choose(LocalExtraColors.current.success, LocalExtraColors.current.error),
+            tint = verify.choose(LocalExtraColors.current.success, LocalExtraColors.current.error),
             modifier = Modifier.padding(start = 8.dp).size(16.dp)
         )
 
