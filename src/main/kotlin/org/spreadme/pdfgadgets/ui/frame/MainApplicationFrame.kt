@@ -36,11 +36,6 @@ fun MainApplicationFrame(
         Modifier.fillMaxSize(),
         verticalArrangement = Arrangement.Top
     ) {
-        Toolbars(
-            modifier = Modifier.fillMaxWidth().height(48.dp).background(MaterialTheme.colors.background),
-            toolbarsViewModel = toolbarsViewModel
-        )
-        Divider(color = LocalExtraColors.current.border)
         Box(Modifier.fillMaxSize()) {
             val progressState = remember { loadProgressViewModel }
             when (progressState.status) {
@@ -56,8 +51,19 @@ fun MainApplicationFrame(
             Box(Modifier.fillMaxSize()) {
                 Row(Modifier.fillMaxSize().clickable { focusManager.clearFocus() }) {
                     ActionBar(applicationViewModel, progressState)
-                    Box(Modifier.fillMaxHeight().width(1.dp).background(LocalExtraColors.current.border))
-                    content()
+                    Column(Modifier.fillMaxSize()) {
+                        Toolbars(
+                            modifier = Modifier.fillMaxWidth().height(48.dp).background(MaterialTheme.colors.background),
+                            toolbarsViewModel = toolbarsViewModel
+                        )
+                        Divider(color = LocalExtraColors.current.border)
+                        Row(
+                            Modifier.fillMaxSize()
+                        ){
+                            content()
+                        }
+                    }
+
                 }
             }
         }
