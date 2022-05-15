@@ -35,7 +35,8 @@ class DefaultPdfMetadataParser : PdfMetadataParser, KoinComponent {
 
         // signatures
         val signatures = signatureParser.parse(document)
-        val lastSignatureCoversWholeDocument = signatures.last().signatureCoversWholeDocument
+        val lastSignatureCoversWholeDocument = signatures.isNotEmpty() &&
+                signatures.last().signatureCoversWholeDocument
         val signatureMap = signatures.associateBy { it.fieldName }
 
         // pages info

@@ -7,6 +7,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.awt.ComposeWindow
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.window.WindowState
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 import mu.KotlinLogging
@@ -102,6 +103,9 @@ class ApplicationViewModel(
         progressViewModel: LoadProgressViewModel,
         component: LoadableAppComponent<Path>,
     ) {
+        progressViewModel.onSuccess = {
+            openCurrentTab(component)
+        }
         progressViewModel.start()
         viewModelScope.launch {
             try {
@@ -117,9 +121,6 @@ class ApplicationViewModel(
                 progressViewModel.fail(message)
                 progressViewModel.onFail()
             }
-        }
-        progressViewModel.onSuccess = {
-            openCurrentTab(component)
         }
     }
 

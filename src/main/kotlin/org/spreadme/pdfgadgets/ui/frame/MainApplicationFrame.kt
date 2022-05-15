@@ -57,9 +57,7 @@ fun MainApplicationFrame(
                             toolbarsViewModel = toolbarsViewModel
                         )
                         Divider(color = LocalExtraColors.current.border)
-                        Row(
-                            Modifier.fillMaxSize()
-                        ){
+                        Row(Modifier.fillMaxSize()){
                             content()
                         }
                     }

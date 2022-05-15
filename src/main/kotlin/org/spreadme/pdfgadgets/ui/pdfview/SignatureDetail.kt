@@ -65,7 +65,14 @@ fun VerifyDetail(verify: Boolean) {
                     LocalExtraColors.current.errorBackground
                 )
             )
-            .border(1.dp, LocalExtraColors.current.successBorder, RoundedCornerShape(8.dp)),
+            .border(
+                1.dp,
+                verify.choose(
+                    LocalExtraColors.current.successBorder,
+                    LocalExtraColors.current.errorBorder
+                ),
+                RoundedCornerShape(8.dp)
+            ),
         verticalAlignment = Alignment.CenterVertically
     ) {
         Icon(
