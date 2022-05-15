@@ -64,7 +64,8 @@ fun Rectangle(
 fun Rectangle(
     modifier: Modifier = Modifier,
     scale: Float,
-    rectangle: Rectangle
+    rectangle: Rectangle,
+    content: @Composable BoxScope.() -> Unit = {}
 ) {
     Box(
         modifier = Modifier
@@ -74,5 +75,7 @@ fun Rectangle(
                 y = (rectangle.y * scale).dp
             )
             .then(modifier)
-    )
+    ){
+        content()
+    }
 }

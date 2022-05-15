@@ -65,11 +65,25 @@ enum class ASN1NodeType(
     DERT61String(false),
     DERGraphicString(false),
     DERVideotexString(false),
-    ASN1UTCTime(false),
-    ASN1GeneralizedTime(false),
+    ASN1UTCTime(false) {
+        override fun toString(primitive: ASN1Primitive): String {
+            if (primitive is org.bouncycastle.asn1.ASN1UTCTime) {
+                return "UTCTime [${primitive.time}]"
+            }
+            return super.toString(primitive)
+        }
+    },
+    ASN1GeneralizedTime(false) {
+        override fun toString(primitive: ASN1Primitive): String {
+            if(primitive is org.bouncycastle.asn1.ASN1GeneralizedTime){
+                return "GeneralizedTime [${primitive.time}]"
+            }
+            return super.toString(primitive)
+        }
+    },
     BERApplicationSpecific(false),
     DERApplicationSpecific(false),
-    DLApplicationSpecific(false),
+    DLApplicationSpecific(true),
     ASN1Enumerated(false),
     ASN1External(true),
     DERNull(false),

@@ -2,10 +2,7 @@ package org.spreadme.pdfgadgets.model
 
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
-import org.bouncycastle.asn1.ASN1Primitive
-import org.bouncycastle.asn1.ASN1Sequence
-import org.bouncycastle.asn1.ASN1Set
-import org.bouncycastle.asn1.ASN1TaggedObject
+import org.bouncycastle.asn1.*
 
 class ASN1Node(
     val primitive: ASN1Primitive,

@@ -1,11 +1,18 @@
 package org.spreadme.pdfgadgets.ui.pdfview
 
-import androidx.compose.foundation.*
+import androidx.compose.foundation.Canvas
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
+import androidx.compose.foundation.gestures.forEachGesture
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material.DropdownMenu
+import androidx.compose.material.DropdownMenuItem
 import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
@@ -18,11 +25,15 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import org.spreadme.pdfgadgets.model.*
+import org.spreadme.pdfgadgets.ui.common.awaitEventFirstDown
 import org.spreadme.pdfgadgets.ui.common.clickable
 import org.spreadme.pdfgadgets.ui.common.gesture.dragMotionEvent
 import org.spreadme.pdfgadgets.ui.theme.LocalExtraColors
 import java.awt.Cursor
+import java.awt.Toolkit
+import java.awt.datatransfer.StringSelection
 import kotlin.math.abs
+
 
 @Composable
 fun PageDetail(
@@ -121,9 +132,11 @@ fun TextBlocks(
 fun TextBlock(
     textBlock: TextBlock,
     scale: Float
-){
+) {
     val rectangle = textBlock.position.rectangle
-    var backgounrdAlpha  by remember { mutableStateOf(0.0f) }
+    var backgounrdAlpha by remember { mutableStateOf(0.0f) }
+    var contextMenuEnabled by remember { mutableStateOf(false) }
+
     Rectangle(
         Modifier.border(1.dp, color = MaterialTheme.colors.secondary)
             .background(MaterialTheme.colors.secondary.copy(backgounrdAlpha))
@@ -138,12 +151,35 @@ fun TextBlock(
                     true
                 }
             )
-            .clickable {
-                println(textBlock.toString())
+            .pointerInput(textBlock) {
+                forEachGesture {
+                    awaitPointerEventScope {
+                        val event = awaitEventFirstDown()
+                        if (event.buttons.isSecondaryPressed) {
+                            event.changes.forEach { it.consumeDownChange() }
+                            contextMenuEnabled = true
+                        }
+                    }
+                }
             },
         scale,
         rectangle
-    )
+    ){
+        DropdownMenu(
+            expanded = contextMenuEnabled,
+            onDismissRequest = {
+                contextMenuEnabled = false
+            }
+        ) {
+            DropdownMenuItem(onClick = {
+                val clipboard = Toolkit.getDefaultToolkit().systemClipboard
+                clipboard.setContents(StringSelection(textBlock.toString()), null)
+                contextMenuEnabled = false
+            }) {
+                Text("Copy", style = MaterialTheme.typography.caption)
+            }
+        }
+    }
 }
 
 @Composable

@@ -5,8 +5,7 @@ import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.input.pointer.PointerIcon
-import androidx.compose.ui.input.pointer.pointerHoverIcon
+import androidx.compose.ui.input.pointer.*
 import java.awt.Cursor
 
 
@@ -22,4 +21,14 @@ fun Modifier.clickable(
         indication = null,
         interactionSource = remember { MutableInteractionSource() }
     )
+}
+
+suspend fun AwaitPointerEventScope.awaitEventFirstDown(): PointerEvent {
+    var event: PointerEvent
+    do {
+        event = awaitPointerEvent()
+    } while (
+        !event.changes.all { it.changedToDown() }
+    )
+    return event
 }
