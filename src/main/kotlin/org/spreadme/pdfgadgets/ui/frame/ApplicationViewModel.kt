@@ -134,4 +134,10 @@ class ApplicationViewModel(
             appConfigRepository.config(configKey, configValue)
         }
     }
+
+    override fun onCleared() {
+        components.forEach {
+            it.close()
+        }
+    }
 }
