@@ -1,27 +1,26 @@
 package org.spreadme.pdfgadgets.ui.pdfview
 
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
-import mu.KotlinLogging
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
+import kotlinx.coroutines.launch
 import org.spreadme.pdfgadgets.common.ViewModel
+import org.spreadme.pdfgadgets.common.viewModelScope
 import org.spreadme.pdfgadgets.model.PageMetadata
+import org.spreadme.pdfgadgets.model.PageRenderInfo
 import org.spreadme.pdfgadgets.model.Position
-import java.nio.file.Files
 
 class PageViewModel(
     val page: PageMetadata
-): ViewModel() {
+) : ViewModel() {
 
-    private val logger = KotlinLogging.logger {}
-
+    var pageRenderInfo by mutableStateOf<PageRenderInfo?>(null)
     val searchPosition = mutableStateListOf<Position>()
 
-    override fun onCleared() {
-        val pageImagePath = page.pageImagePath()
-        pageImagePath?.let {
-            if (Files.exists(it)) {
-                Files.delete(it)
-                logger.debug("delete the index $pageImagePath")
-            }
+    fun onRender() {
+        viewModelScope.launch {
+            pageRenderInfo = page.render(2f)
         }
     }
 }

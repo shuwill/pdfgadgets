@@ -44,14 +44,18 @@ fun PageDetail(
         Box(modifier = Modifier.padding(start = 0.dp, 24.dp).fillMaxSize()) {
             // mediabox
             mediabox(pageViewModel.page, pdfViewModel.scale) {
+                pageViewModel.onRender()
+                if (pageViewModel.pageRenderInfo != null) {
+                    // page view
+                    AsyncPage(
+                        pdfViewModel.viewType,
+                        pageViewModel.page,
+                        pageViewModel.pageRenderInfo!!,
+                        pdfViewModel.scale
+                    )
+                }
                 // pdf signature
                 signature(pageViewModel.page, pdfViewModel.scale)
-                // page view
-                AsyncPage(
-                    pdfViewModel.viewType,
-                    pageViewModel.page,
-                    pdfViewModel.scale
-                )
                 // searched text
                 searchedText(
                     pageViewModel.page,
@@ -84,36 +88,31 @@ fun mediabox(
 fun AsyncPage(
     viewType: PdfViewType,
     page: PageMetadata,
+    pageRenderInfo: PageRenderInfo,
     scale: Float
 ) {
-    val pageRenderInfo by produceState<PageRenderInfo?>(null) {
-        value = page.render(2.0f)
-    }
+    // page size
+    Rectangle(
+        modifier = Modifier,
+        page.pageSize,
+        page.mediabox.height,
+        scale = scale
+    ) {
+        Image(
+            painter = pageRenderInfo.pageImage.toPainter(),
+            contentDescription = "",
+            contentScale = ContentScale.Fit,
+            modifier = Modifier.matchParentSize()
+        )
 
-    if (pageRenderInfo != null) {
-        // page size
-        Rectangle(
-            modifier = Modifier,
-            page.pageSize,
-            page.mediabox.height,
-            scale = scale
-        ) {
-            Image(
-                painter = pageRenderInfo!!.pageImage.toPainter(),
-                contentDescription = "",
-                contentScale = ContentScale.Fit,
-                modifier = Modifier.matchParentSize()
+        if (viewType == PdfViewType.TEXT_SELECT) {
+            TextBlocks(
+                pageRenderInfo.textBlocks,
+                scale
             )
-
-            if (viewType == PdfViewType.TEXT_SELECT) {
-                TextBlocks(
-                    pageRenderInfo!!.textBlocks,
-                    scale
-                )
-            } else if (viewType == PdfViewType.DRAW) {
-                // draw area
-                drawArea()
-            }
+        } else if (viewType == PdfViewType.DRAW) {
+            // draw area
+            drawArea()
         }
     }
 }
@@ -164,7 +163,7 @@ fun TextBlock(
             },
         scale,
         rectangle
-    ){
+    ) {
         DropdownMenu(
             expanded = contextMenuEnabled,
             onDismissRequest = {

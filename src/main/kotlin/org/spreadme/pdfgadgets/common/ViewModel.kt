@@ -1,10 +1,9 @@
 package org.spreadme.pdfgadgets.common
 
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.SupervisorJob
-import kotlinx.coroutines.cancel
+import kotlinx.coroutines.*
+import mu.KotlinLogging
 import java.io.Closeable
+import java.util.*
 import kotlin.coroutines.CoroutineContext
 
 abstract class ViewModel {
@@ -74,15 +73,18 @@ val ViewModel.viewModelScope: CoroutineScope
         }
         return setTagIfAbsent(
             JOB_KEY,
-            CloseableCoroutineScope(SupervisorJob() + Dispatchers.Default)
+            CloseableCoroutineScope(CoroutineName(this::class.simpleName ?: UUID.randomUUID().toString()) + SupervisorJob() + Dispatchers.Default)
         )
     }
 
 internal class CloseableCoroutineScope(context: CoroutineContext) : Closeable, CoroutineScope {
 
+    private val logger = KotlinLogging.logger {}
+
     override val coroutineContext: CoroutineContext = context
 
     override fun close() {
+        logger.debug("${coroutineContext[CoroutineName]} canceled!!!")
         coroutineContext.cancel()
     }
 
