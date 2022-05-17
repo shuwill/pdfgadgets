@@ -15,12 +15,14 @@ class PageViewModel(
     val page: PageMetadata
 ) : ViewModel() {
 
+    val enabled by mutableStateOf(true)
     var pageRenderInfo by mutableStateOf<PageRenderInfo?>(null)
     val searchPosition = mutableStateListOf<Position>()
 
-    fun onRender() {
+    fun onRender(scale: Float) {
         viewModelScope.launch {
-            pageRenderInfo = page.render(2f)
+            println("beging render page [${page.index}]")
+            pageRenderInfo = page.render(2f * scale)
         }
     }
 }

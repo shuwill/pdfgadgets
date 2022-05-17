@@ -4,15 +4,14 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="fd4a568c-9515-436d-b67e-95b0dca3c528" name="Changes" comment="pdf gadgets">
-      <change afterPath="$PROJECT_DIR$/src/main/kotlin/org/spreadme/pdfgadgets/model/ASN1NodeType.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/kotlin/org/spreadme/pdfgadgets/ui/pdfview/ASN1StructureTree.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/kotlin/org/spreadme/pdfgadgets/model/ASN1Node.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/org/spreadme/pdfgadgets/model/ASN1Node.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/kotlin/org/spreadme/pdfgadgets/model/StructureNode.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/org/spreadme/pdfgadgets/model/StructureNode.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/kotlin/org/spreadme/pdfgadgets/repository/ASN1Parser.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/org/spreadme/pdfgadgets/repository/ASN1Parser.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/kotlin/org/spreadme/pdfgadgets/ui/pdfview/PdfObjectPanel.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/org/spreadme/pdfgadgets/ui/pdfview/PdfObjectPanel.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/kotlin/org/spreadme/pdfgadgets/ui/pdfview/PdfObjectViewModel.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/org/spreadme/pdfgadgets/ui/pdfview/PdfObjectViewModel.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/kotlin/org/spreadme/pdfgadgets/ASN1ParserTest.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/kotlin/org/spreadme/pdfgadgets/ASN1ParserTest.kt" afterDir="false" />
+    <list default="true" id="fd4a568c-9515-436d-b67e-95b0dca3c528" name="Changes" comment="fix some bugs">
+      <change afterPath="$PROJECT_DIR$/src/main/kotlin/org/spreadme/pdfgadgets/model/PixmapMetadata.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/mupdf/src/main/java/com/artifex/mupdf/fitz/Pixmap.java" beforeDir="false" afterPath="$PROJECT_DIR$/mupdf/src/main/java/com/artifex/mupdf/fitz/Pixmap.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/kotlin/org/spreadme/pdfgadgets/model/PageRenderInfo.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/org/spreadme/pdfgadgets/model/PageRenderInfo.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/kotlin/org/spreadme/pdfgadgets/repository/DefaultPdfRenderer.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/org/spreadme/pdfgadgets/repository/DefaultPdfRenderer.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/kotlin/org/spreadme/pdfgadgets/ui/pdfview/PageDetail.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/org/spreadme/pdfgadgets/ui/pdfview/PageDetail.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/kotlin/org/spreadme/pdfgadgets/ui/pdfview/PageViewModel.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/org/spreadme/pdfgadgets/ui/pdfview/PageViewModel.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/kotlin/org/spreadme/pdfgadgets/ui/pdfview/PdfViewAppComponent.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/org/spreadme/pdfgadgets/ui/pdfview/PdfViewAppComponent.kt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -47,12 +46,12 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
-        <option value="Kotlin Interface" />
         <option value="Class" />
-        <option value="Kotlin Data Class" />
-        <option value="Kotlin Class" />
-        <option value="Kotlin Enum" />
         <option value="Kotlin File" />
+        <option value="Kotlin Interface" />
+        <option value="Kotlin Enum" />
+        <option value="Kotlin Class" />
+        <option value="Kotlin Data Class" />
       </list>
     </option>
   </component>
@@ -69,6 +68,9 @@
       </MavenGeneralSettings>
     </option>
   </component>
+  <component name="ProblemsViewState">
+    <option name="selectedTabId" value="CurrentFile" />
+  </component>
   <component name="ProjectId" id="28TlDFdV43DxFG25OGqC9aTo3UL" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true">
     <ConfirmationsSetting value="2" id="Add" />
@@ -78,29 +80,29 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;/Users/wangshuwei/Documents/dev/opensource/itext7&quot;,
-    &quot;project.structure.last.edited&quot;: &quot;Libraries&quot;,
-    &quot;project.structure.proportion&quot;: &quot;0.0&quot;,
-    &quot;project.structure.side.proportion&quot;: &quot;0.0&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "last_opened_file_path": "/Users/wangshuwei/Documents/dev/opensource/jmupdf",
+    "project.structure.last.edited": "Libraries",
+    "project.structure.proportion": "0.0",
+    "project.structure.side.proportion": "0.0",
+    "settings.editor.selected.configurable": "preferences.pluginManager"
   },
-  &quot;keyToStringList&quot;: {
-    &quot;DatabaseDriversLRU&quot;: [
-      &quot;sqlite&quot;
+  "keyToStringList": {
+    "DatabaseDriversLRU": [
+      "sqlite"
     ]
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/src/test/resources" />
+      <recent name="$PROJECT_DIR$/screenshot" />
+      <recent name="$PROJECT_DIR$/src/main/resources/icons" />
       <recent name="$PROJECT_DIR$/src/main/resources/drawables" />
       <recent name="$PROJECT_DIR$/src/main/resources" />
-      <recent name="$PROJECT_DIR$/src/main/kotlin/org/spreadme/pdfgadgets/ui/pdfview" />
-      <recent name="$PROJECT_DIR$/src/main/kotlin/org/spreadme/pdfgadgets/ui/common" />
-      <recent name="$PROJECT_DIR$/src/main/kotlin/org/spreadme/pdfgadgets/ui/toolbar" />
     </key>
     <key name="MoveKotlinTopLevelDeclarationsDialog.RECENTS_KEY">
       <recent name="org.spreadme.pdfgadgets.config" />
@@ -270,7 +272,18 @@
       <workItem from="1652146365674" duration="28883000" />
       <workItem from="1652230329767" duration="23704000" />
       <workItem from="1652328217736" duration="14609000" />
-      <workItem from="1652432726077" duration="8918000" />
+      <workItem from="1652432726077" duration="12976000" />
+      <workItem from="1652492179879" duration="9021000" />
+      <workItem from="1652502280027" duration="28194000" />
+      <workItem from="1652571752085" duration="7194000" />
+      <workItem from="1652580343619" duration="27860000" />
+      <workItem from="1652667238439" duration="5498000" />
+      <workItem from="1652688200162" duration="668000" />
+      <workItem from="1652705574021" duration="609000" />
+      <workItem from="1652713981070" duration="25000" />
+      <workItem from="1652714699063" duration="2810000" />
+      <workItem from="1652752710085" duration="57000" />
+      <workItem from="1652758498820" duration="19470000" />
     </task>
     <task id="LOCAL-00001" summary="init application frame">
       <created>1651413815981</created>
@@ -370,7 +383,70 @@
       <option name="project" value="LOCAL" />
       <updated>1652369451571</updated>
     </task>
-    <option name="localTasksCounter" value="15" />
+    <task id="LOCAL-00015" summary="text search">
+      <created>1652502235203</created>
+      <option name="number" value="00015" />
+      <option name="presentableId" value="LOCAL-00015" />
+      <option name="project" value="LOCAL" />
+      <updated>1652502235203</updated>
+    </task>
+    <task id="LOCAL-00016" summary="pdf gadgets">
+      <created>1652512113515</created>
+      <option name="number" value="00016" />
+      <option name="presentableId" value="LOCAL-00016" />
+      <option name="project" value="LOCAL" />
+      <updated>1652512113515</updated>
+    </task>
+    <task id="LOCAL-00017" summary="pdf gadgets">
+      <created>1652538457140</created>
+      <option name="number" value="00017" />
+      <option name="presentableId" value="LOCAL-00017" />
+      <option name="project" value="LOCAL" />
+      <updated>1652538457140</updated>
+    </task>
+    <task id="LOCAL-00018" summary="pdf gadgets">
+      <created>1652541751320</created>
+      <option name="number" value="00018" />
+      <option name="presentableId" value="LOCAL-00018" />
+      <option name="project" value="LOCAL" />
+      <updated>1652541751320</updated>
+    </task>
+    <task id="LOCAL-00019" summary="pdf gadgets">
+      <created>1652580445181</created>
+      <option name="number" value="00019" />
+      <option name="presentableId" value="LOCAL-00019" />
+      <option name="project" value="LOCAL" />
+      <updated>1652580445182</updated>
+    </task>
+    <task id="LOCAL-00020" summary="pdf gadgets">
+      <created>1652582620992</created>
+      <option name="number" value="00020" />
+      <option name="presentableId" value="LOCAL-00020" />
+      <option name="project" value="LOCAL" />
+      <updated>1652582620992</updated>
+    </task>
+    <task id="LOCAL-00021" summary="cache page image and text blocks">
+      <created>1652597421131</created>
+      <option name="number" value="00021" />
+      <option name="presentableId" value="LOCAL-00021" />
+      <option name="project" value="LOCAL" />
+      <updated>1652597421131</updated>
+    </task>
+    <task id="LOCAL-00022" summary="fix some bugs">
+      <created>1652625940836</created>
+      <option name="number" value="00022" />
+      <option name="presentableId" value="LOCAL-00022" />
+      <option name="project" value="LOCAL" />
+      <updated>1652625940836</updated>
+    </task>
+    <task id="LOCAL-00023" summary="fix some bugs">
+      <created>1652717397710</created>
+      <option name="number" value="00023" />
+      <option name="presentableId" value="LOCAL-00023" />
+      <option name="project" value="LOCAL" />
+      <updated>1652717397710</updated>
+    </task>
+    <option name="localTasksCounter" value="24" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -403,8 +479,11 @@
     <MESSAGE value="init sqllite" />
     <MESSAGE value="pdf gadgets application" />
     <MESSAGE value="component and view model" />
+    <MESSAGE value="text search" />
     <MESSAGE value="pdf gadgets" />
-    <option name="LAST_COMMIT_MESSAGE" value="pdf gadgets" />
+    <MESSAGE value="cache page image and text blocks" />
+    <MESSAGE value="fix some bugs" />
+    <option name="LAST_COMMIT_MESSAGE" value="fix some bugs" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -413,21 +492,6 @@
           <url>file://$PROJECT_DIR$/src/main/java/com/itextpdf/kernel/pdf/xobject/ImagePdfBytesInfo.java</url>
           <line>94</line>
           <option name="timeStamp" value="2" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="kotlin-line">
-          <url>file://$PROJECT_DIR$/src/test/kotlin/org/spreadme/pdfgadgets/ASN1ParserTest.kt</url>
-          <line>27</line>
-          <option name="timeStamp" value="5" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="kotlin-line">
-          <url>file://$PROJECT_DIR$/src/main/kotlin/org/spreadme/pdfgadgets/ui/pdfview/PdfObjectViewModel.kt</url>
-          <line>54</line>
-          <option name="timeStamp" value="13" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="kotlin-line">
-          <url>file://$PROJECT_DIR$/src/test/kotlin/org/spreadme/pdfgadgets/ASN1ParserTest.kt</url>
-          <line>28</line>
-          <option name="timeStamp" value="15" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

@@ -1,9 +1,7 @@
 package org.spreadme.pdfgadgets.model
 
-import java.awt.image.BufferedImage
-
 class PageRenderInfo(
-    val pageImage: BufferedImage,
+    val pixmapMetadata: PixmapMetadata,
     val textBlocks: List<TextBlock>,
 )
 

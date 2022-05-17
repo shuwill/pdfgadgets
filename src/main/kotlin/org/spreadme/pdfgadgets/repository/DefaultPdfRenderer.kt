@@ -5,21 +5,21 @@ import com.itextpdf.kernel.geom.Rectangle
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import org.spreadme.pdfgadgets.model.*
-import java.awt.image.BufferedImage
 
 class DefaultPdfRenderer(fileMetadata: FileMetadata) : PdfRenderer {
 
     private val mutex = Mutex()
+    private val file = fileMetadata
     private val pageImageRender = Document.openDocument(fileMetadata.path) as PDFDocument
 
     override suspend fun render(page: PageMetadata, dpi: Float): PageRenderInfo {
-        mutex.withLock {
+        val lockKey = "${file.name}-${page.index}"
+        mutex.withLock(lockKey) {
             var loadPage: Page? = null
             var pixmap: Pixmap? = null
             var drawDevice: DrawDevice? = null
             try {
                 loadPage = pageImageRender.loadPage(page.index - 1)
-
                 // text info
                 val textBlocks = page.textBlocks.ifEmpty {
                     val textBlocks = arrayListOf<TextBlock>()
@@ -46,9 +46,9 @@ class DefaultPdfRenderer(fileMetadata: FileMetadata) : PdfRenderer {
                             textBlocks.add(textBlock)
                         }
                     }
+                    page.textBlocks = textBlocks
                     textBlocks
                 }
-
 
                 val scale = Matrix().scale(dpi)
                 pixmap = loadPage.toPixmap(scale, ColorSpace.DeviceBGR, true, true)
@@ -56,13 +56,9 @@ class DefaultPdfRenderer(fileMetadata: FileMetadata) : PdfRenderer {
 
                 drawDevice = DrawDevice(pixmap)
                 loadPage.run(drawDevice, scale)
+                val pixmapMetadata = PixmapMetadata(pixmap.width, pixmap.height, pixmap.pixels)
 
-                val width = pixmap.width
-                val height = pixmap.height
-                val image = BufferedImage(width, height, BufferedImage.TYPE_USHORT_555_RGB)
-                image.setRGB(0, 0, width, height, pixmap.pixels, 0, width)
-
-                return PageRenderInfo(image, textBlocks)
+                return PageRenderInfo(pixmapMetadata, textBlocks)
             } finally {
                 drawDevice?.close()
                 drawDevice?.destroy()

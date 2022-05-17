@@ -28,7 +28,7 @@ public class Pixmap
 		Context.init();
 	}
 
-	private long pointer;
+	public long pointer;
 
 	protected native void finalize();
 

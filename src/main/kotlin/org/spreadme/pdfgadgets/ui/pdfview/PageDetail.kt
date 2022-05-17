@@ -24,7 +24,10 @@ import androidx.compose.ui.input.pointer.*
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
-import org.spreadme.pdfgadgets.model.*
+import org.spreadme.pdfgadgets.model.PageMetadata
+import org.spreadme.pdfgadgets.model.Position
+import org.spreadme.pdfgadgets.model.Signature
+import org.spreadme.pdfgadgets.model.TextBlock
 import org.spreadme.pdfgadgets.ui.common.awaitEventFirstDown
 import org.spreadme.pdfgadgets.ui.common.clickable
 import org.spreadme.pdfgadgets.ui.common.gesture.dragMotionEvent
@@ -40,20 +43,16 @@ fun PageDetail(
     pageViewModel: PageViewModel,
     pdfViewModel: PdfViewModel
 ) {
-    if (pageViewModel.page.enabled.value) {
+    if (pageViewModel.enabled) {
         Box(modifier = Modifier.padding(start = 0.dp, 24.dp).fillMaxSize()) {
             // mediabox
             mediabox(pageViewModel.page, pdfViewModel.scale) {
-                pageViewModel.onRender()
-                if (pageViewModel.pageRenderInfo != null) {
-                    // page view
-                    AsyncPage(
-                        pdfViewModel.viewType,
-                        pageViewModel.page,
-                        pageViewModel.pageRenderInfo!!,
-                        pdfViewModel.scale
-                    )
-                }
+                // page view
+                AsyncPage(
+                    pageViewModel,
+                    pdfViewModel.viewType,
+                    pdfViewModel.scale
+                )
                 // pdf signature
                 signature(pageViewModel.page, pdfViewModel.scale)
                 // searched text
@@ -86,33 +85,38 @@ fun mediabox(
 
 @Composable
 fun AsyncPage(
+    pageViewModel: PageViewModel,
     viewType: PdfViewType,
-    page: PageMetadata,
-    pageRenderInfo: PageRenderInfo,
     scale: Float
 ) {
-    // page size
-    Rectangle(
-        modifier = Modifier,
-        page.pageSize,
-        page.mediabox.height,
-        scale = scale
-    ) {
-        Image(
-            painter = pageRenderInfo.pageImage.toPainter(),
-            contentDescription = "",
-            contentScale = ContentScale.Fit,
-            modifier = Modifier.matchParentSize()
-        )
+    LaunchedEffect(scale){
+        pageViewModel.onRender(scale)
+    }
 
-        if (viewType == PdfViewType.TEXT_SELECT) {
-            TextBlocks(
-                pageRenderInfo.textBlocks,
-                scale
+    pageViewModel.pageRenderInfo?.let {pageRenderInfo ->
+        // page size
+        Rectangle(
+            modifier = Modifier,
+            pageViewModel.page.pageSize,
+            pageViewModel.page.mediabox.height,
+            scale = scale
+        ) {
+            Image(
+                painter = pageRenderInfo.pixmapMetadata.toBufferedImage().toPainter(),
+                contentDescription = "",
+                contentScale = ContentScale.Fit,
+                modifier = Modifier.matchParentSize()
             )
-        } else if (viewType == PdfViewType.DRAW) {
-            // draw area
-            drawArea()
+
+            if (viewType == PdfViewType.TEXT_SELECT) {
+                TextBlocks(
+                    pageRenderInfo.textBlocks,
+                    scale
+                )
+            } else if (viewType == PdfViewType.DRAW) {
+                // draw area
+                drawArea()
+            }
         }
     }
 }
@@ -133,23 +137,11 @@ fun TextBlock(
     scale: Float
 ) {
     val rectangle = textBlock.position.rectangle
-    var backgounrdAlpha by remember { mutableStateOf(0.0f) }
     var contextMenuEnabled by remember { mutableStateOf(false) }
 
     Rectangle(
         Modifier.border(1.dp, color = MaterialTheme.colors.secondary)
-            .background(MaterialTheme.colors.secondary.copy(backgounrdAlpha))
             .pointerHoverIcon(PointerIcon(Cursor(Cursor.TEXT_CURSOR)))
-            .pointerMoveFilter(
-                onEnter = {
-                    backgounrdAlpha = 0.65f
-                    true
-                },
-                onExit = {
-                    backgounrdAlpha = 0.0f
-                    true
-                }
-            )
             .pointerInput(textBlock) {
                 forEachGesture {
                     awaitPointerEventScope {
