@@ -6,6 +6,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.pointer.*
+import androidx.compose.ui.layout.layout
 import java.awt.Cursor
 
 
@@ -31,4 +32,11 @@ suspend fun AwaitPointerEventScope.awaitEventFirstDown(): PointerEvent {
         !event.changes.all { it.changedToDown() }
     )
     return event
+}
+
+fun Modifier.withoutWidthConstraints() = layout { measurable, constraints ->
+    val placeable = measurable.measure(constraints.copy(maxWidth = Int.MAX_VALUE))
+    layout(constraints.maxWidth, placeable.height) {
+        placeable.place(0, 0)
+    }
 }

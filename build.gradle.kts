@@ -29,6 +29,7 @@ dependencies {
     implementation("io.insert-koin", "koin-core", "3.1.6")
 
     implementation("com.itextpdf", "itext7-core", "7.2.1")
+    implementation("org.apache.commons","commons-imaging", "1.0-alpha2")
 
     implementation("org.xerial", "sqlite-jdbc", "3.36.0.3")
     implementation("org.jetbrains.exposed", "exposed-core", "0.38.1")

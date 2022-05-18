@@ -5,29 +5,46 @@ import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.withStyle
-import com.itextpdf.io.source.PdfTokenizer
-import com.itextpdf.io.source.RandomAccessFileOrArray
-import com.itextpdf.io.source.RandomAccessSourceFactory
 import com.itextpdf.kernel.pdf.*
-import com.itextpdf.kernel.pdf.canvas.parser.util.PdfCanvasParser
 import com.itextpdf.kernel.pdf.xobject.PdfImageXObject
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import org.bouncycastle.util.encoders.Hex
+import org.koin.core.component.KoinComponent
+import org.koin.core.component.inject
+import org.spreadme.pdfgadgets.model.OperatorName
 import org.spreadme.pdfgadgets.model.PdfImageInfo
 import org.spreadme.pdfgadgets.utils.applyMask
 import org.spreadme.pdfgadgets.utils.getArray
 import org.spreadme.pdfgadgets.utils.getBoolean
+import java.io.ByteArrayInputStream
 
-class PdfStreamParser {
+class PdfStreamParser : KoinComponent {
 
-    suspend fun parse(pdfStream: PdfStream, keywordColor: Color): List<AnnotatedString> {
+    private val customPdfCanvasProcessor by inject<CustomPdfCanvasProcessor>()
+
+    companion object {
+        val OPERATOR_STYLE = Color(25, 55, 156)
+        val NUMBER_STYLE = Color(51, 86, 18)
+        val STRING_STYLE = Color(128, 35, 32)
+        val ESCAPE_STYLE = Color(179, 49, 36)
+        val NAME_STYLE = Color(140, 38, 145)
+    }
+
+    suspend fun parse(pdfStream: PdfStream): List<AnnotatedString> {
         return withContext(Dispatchers.IO) {
-            contentStream(pdfStream, keywordColor)
+            contentStream(pdfStream)
         }
     }
 
-    suspend fun getImage(pdfStream: PdfStream): PdfImageInfo {
+    suspend fun parseXml(pdfStream: PdfStream): List<AnnotatedString> {
+        return withContext(Dispatchers.IO) {
+            ByteArrayInputStream(pdfStream.getBytes(true)).bufferedReader().lines()
+                .map { buildAnnotatedString { append(it) } }
+                .toList()
+        }
+    }
+
+    suspend fun parseImage(pdfStream: PdfStream): PdfImageInfo {
         return withContext(Dispatchers.IO) {
             val pdfImage = PdfImageXObject(pdfStream)
 
@@ -54,8 +71,9 @@ class PdfStreamParser {
         }
     }
 
-    private fun contentStream(pdfStream: PdfStream, keywordColor: Color): List<AnnotatedString> {
+    private fun contentStream(pdfStream: PdfStream): List<AnnotatedString> {
         val annotatedStrings = arrayListOf<AnnotatedString>()
+        val indentRule = IndentRule()
         if (pdfStream[PdfName.Length1] != null) {
             val bytes = pdfStream.getBytes(false)
             val annotatedString = buildAnnotatedString {
@@ -63,58 +81,115 @@ class PdfStreamParser {
             }
             annotatedStrings.add(annotatedString)
         } else if (pdfStream[PdfName.Length1] == null) {
-            val bytes = pdfStream.bytes
-            val tokenizer = PdfTokenizer(RandomAccessFileOrArray(RandomAccessSourceFactory().createSource(bytes)))
-            val canvasParser = PdfCanvasParser(tokenizer)
-            val tokens = arrayListOf<PdfObject>()
+            val tokens = customPdfCanvasProcessor.parsePdfStream(pdfStream.bytes)
+            var tokenbuilder = AnnotatedString.Builder()
 
-            while (canvasParser.parse(tokens).size > 0) {
-                // operator is at the end
-                val operator = tokens[tokens.size - 1].toString()
-                // operands are in front of their operator
-                val builder = StringBuilder()
-                for (i in 0 until tokens.size - 1) {
-                    appendContents(builder, tokens[i])
+            tokens.forEach {
+                if (it is PdfLiteral) {
+                    addOperators(it, tokenbuilder, indentRule)
+                } else {
+                    addOperand(it, tokenbuilder, indentRule)
                 }
-                val operands = builder.toString()
-
-                val content = buildAnnotatedString {
-                    operands.let {
-                        if (it.isNotBlank()) {
-                            append(it)
-                        }
-                    }
-                    withStyle(style = SpanStyle(color = keywordColor)) {
-                        append(operator)
-                        append("\n")
-                    }
+                if(tokenbuilder.toAnnotatedString().endsWith("\n")){
+                    annotatedStrings.add(tokenbuilder.toAnnotatedString())
+                    tokenbuilder = AnnotatedString.Builder()
                 }
-                annotatedStrings.add(content)
             }
         }
         return annotatedStrings
     }
 
-    private fun appendContents(builder: StringBuilder, obj: PdfObject) {
-        when (obj.type) {
-            PdfObject.STRING -> {
-                val pdfString = obj as PdfString
-                if (pdfString.isHexWriting) {
-                    builder.append("<").append(Hex.toHexString(pdfString.valueBytes)).append(">")
-                } else {
-                    builder.append("(").append(obj).append(") ")
+    private fun addOperators(literal: PdfLiteral, operators: AnnotatedString.Builder, indentRule: IndentRule) {
+        val operator = literal.toString()
+
+        if (operator == OperatorName.END_TEXT || operator == OperatorName.RESTORE
+            || operator == OperatorName.END_MARKED_CONTENT
+        ) {
+            indentRule.indent--
+        }
+        addIndent(operators, indentRule)
+
+        operators.append(buildAnnotatedString(operator + "\n", OPERATOR_STYLE))
+        // nested opening operators
+        if (operator == OperatorName.BEGIN_TEXT ||
+            operator == OperatorName.SAVE ||
+            operator == OperatorName.BEGIN_MARKED_CONTENT ||
+            operator == OperatorName.BEGIN_MARKED_CONTENT_SEQ
+        ) {
+            indentRule.indent++
+        }
+        indentRule.needIndent = true
+    }
+
+    private fun addOperand(pdfObject: PdfObject, operands: AnnotatedString.Builder, indentRule: IndentRule) {
+        addIndent(operands, indentRule)
+        when (pdfObject) {
+            is PdfName -> {
+                operands.append(buildAnnotatedString("$pdfObject ", NAME_STYLE))
+            }
+            is PdfBoolean -> {
+                operands.append(buildAnnotatedString("$pdfObject "))
+            }
+            is PdfArray -> {
+                for (elem in pdfObject) {
+                    addOperand(elem, operands, indentRule)
                 }
             }
-            PdfObject.DICTIONARY -> {
-                val dict = obj as PdfDictionary
-                builder.append("<<")
-                for (key in dict.keySet()) {
-                    builder.append(key).append(" ")
-                    appendContents(builder, dict[key, false])
+            is PdfString -> {
+                val bytes = pdfObject.valueBytes
+                for (b in bytes) {
+                    val chr = b.toInt() and 0xff
+                    if (chr == '('.code || chr == ')'.code || chr == '\\'.code) {
+                        // PDF reserved characters must be escaped
+                        val str = "\\" + chr.toChar()
+                        operands.append(buildAnnotatedString(str, ESCAPE_STYLE))
+
+                    } else if (chr < 0x20 || chr > 0x7e) {
+                        // non-printable ASCII is shown as an octal escape
+                        val str = String.format("\\%03o", chr)
+                        operands.append(buildAnnotatedString(str, ESCAPE_STYLE))
+
+                    } else {
+                        val str = chr.toChar().toString()
+                        operands.append(buildAnnotatedString(str, STRING_STYLE))
+
+                    }
                 }
-                builder.append(">> ")
             }
-            else -> builder.append(obj).append(" ")
+            is PdfNumber -> {
+                operands.append(buildAnnotatedString("$pdfObject ", NUMBER_STYLE))
+            }
+            is PdfDictionary -> {
+                pdfObject.entrySet().forEach {
+                    addOperand(it.key, operands, indentRule)
+                    addOperand(it.value, operands, indentRule)
+                }
+            }
+            is PdfNull -> {
+                operands.append(buildAnnotatedString("null "))
+            }
+            else -> {
+                operands.append(buildAnnotatedString("$pdfObject "))
+            }
+        }
+    }
+
+    private fun addIndent(indent: AnnotatedString.Builder, indentRule: IndentRule) {
+        if (indentRule.needIndent) {
+            for (i in 0 until indentRule.indent) {
+                indent.append("    ")
+            }
+            indentRule.needIndent = false
+        }
+    }
+
+    private fun buildAnnotatedString(text: String, style: Color? = null) = buildAnnotatedString {
+        if (style != null) {
+            withStyle(style = SpanStyle(style)) {
+                append(text)
+            }
+        } else {
+            append(text)
         }
     }
 
@@ -126,3 +201,8 @@ class PdfStreamParser {
         return null
     }
 }
+
+data class IndentRule(
+    var indent: Int = 0,
+    var needIndent: Boolean = false
+)

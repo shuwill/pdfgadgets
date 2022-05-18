@@ -33,6 +33,10 @@ val pdfParseModule = module {
         PdfStreamParser()
     }
 
+    single {
+        CustomPdfCanvasProcessor()
+    }
+
     single<PdfTextSearcher> {
         DefaultPdfTextSearcher()
     }

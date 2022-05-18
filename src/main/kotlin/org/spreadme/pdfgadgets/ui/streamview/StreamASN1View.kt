@@ -1,4 +1,4 @@
-package org.spreadme.pdfgadgets.ui.pdfview
+package org.spreadme.pdfgadgets.ui.streamview
 
 import androidx.compose.animation.*
 import androidx.compose.foundation.layout.*
@@ -18,19 +18,17 @@ import androidx.compose.ui.unit.dp
 import org.spreadme.pdfgadgets.model.ASN1Node
 import org.spreadme.pdfgadgets.ui.common.VerticalScrollable
 import org.spreadme.pdfgadgets.ui.common.clickable
-import org.spreadme.pdfgadgets.ui.sidepanel.SidePanelUIState
 import org.spreadme.pdfgadgets.utils.choose
 
 @Composable
-fun ASN1StructureTree(
-    asN1Node: ASN1Node,
-    sidePanelUIState: SidePanelUIState,
+fun StreamASN1View(
+    streamASN1UIState: StreamASN1UIState
 ) {
-    VerticalScrollable(sidePanelUIState) {
+    VerticalScrollable(streamASN1UIState.sidePanelUIState) {
         Column(
             modifier = Modifier.fillMaxSize()
         ) {
-            asN1Node.childs().forEach { ASN1NodeView(it) }
+            streamASN1UIState.root.childs().forEach { ASN1NodeView(it) }
         }
     }
 }

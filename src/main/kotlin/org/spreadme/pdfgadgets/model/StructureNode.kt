@@ -9,46 +9,39 @@ class StructureNode(
     val pdfObject: PdfObject,
     val type: PdfObjectType,
     val level: Int = 1,
-    var paths: ArrayList<String> = arrayListOf(),
-    var childs: List<StructureNode>  = listOf(),
+    val parent: StructureNode? = null,
+    var childs: List<StructureNode> = listOf(),
     val expanded: MutableState<Boolean> = mutableStateOf(false)
 ) {
 
-    constructor(pdfObject: PdfObject): this(null, pdfObject, 0, arrayListOf())
+    constructor(trailer: PdfObject) : this(null, trailer, 0)
 
-    constructor(pdfName: PdfName? = null, pdfObject: PdfObject, level: Int = 0, paths: ArrayList<String>) : this(
+    constructor(pdfName: PdfName? = null, pdfObject: PdfObject, level: Int = 0, parent: StructureNode? = null) : this(
         pdfName,
         pdfObject,
         getPdfObjectType(pdfObject.type.toInt()),
         level,
-        paths
-    ){
-        if(pdfName != null) {
-            paths.add(pdfName.toString())
-        } else {
-            paths.add(type.toString(pdfObject))
-        }
-    }
+        parent
+    )
 
     fun hasChild(): Boolean = type.hasChild && pdfName != PdfName.Parent
 
     fun childs(): List<StructureNode> {
-        if(childs.isNotEmpty()) {
+        if (childs.isNotEmpty()) {
             return childs
         }
         if (pdfObject is PdfDictionary && pdfName != PdfName.Parent) {
-            childs = pdfObject.entrySet().map { StructureNode(it.key, it.value, level + 1, ArrayList(paths)) }.toList()
+            childs = pdfObject.entrySet().map { StructureNode(it.key, it.value, level + 1, this) }.toList()
         } else if (pdfObject is PdfStream) {
-            childs = pdfObject.entrySet().map { StructureNode(it.key, it.value, level + 1, ArrayList(paths)) }.toList()
+            childs = pdfObject.entrySet().map { StructureNode(it.key, it.value, level + 1, this) }.toList()
         } else if (pdfObject is PdfArray) {
-            childs = pdfObject.map { StructureNode(null, it, level + 1, ArrayList(paths)) }.toList()
+            childs = pdfObject.map { StructureNode(null, it, level + 1) }.toList()
         }
         return childs
     }
 
     fun isPdfStream() = pdfObject is PdfStream
-    fun isSignatureContent() = paths[paths.size - 2] == PdfName.V.toString() && paths.last() == PdfName.Contents.toString()
-
+    fun isSignatureContent() = this.parent?.pdfName == PdfName.V && this.pdfName == PdfName.Contents
     fun isParseable() = isPdfStream() || isSignatureContent()
 
     override fun toString(): String {
