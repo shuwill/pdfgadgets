@@ -58,6 +58,7 @@ class PdfObjectViewModel(
                 }
             }
         } catch (e: Exception) {
+            e.printStackTrace()
             errorMessage = e.message
         }
         finished = true

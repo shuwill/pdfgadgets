@@ -89,11 +89,11 @@ fun AsyncPage(
     viewType: PdfViewType,
     scale: Float
 ) {
-    LaunchedEffect(scale){
+    LaunchedEffect(scale) {
         pageViewModel.onRender(scale)
     }
 
-    pageViewModel.pageRenderInfo?.let {pageRenderInfo ->
+    pageViewModel.pageRenderInfo?.let { pageRenderInfo ->
         // page size
         Rectangle(
             modifier = Modifier,
@@ -102,7 +102,7 @@ fun AsyncPage(
             scale = scale
         ) {
             Image(
-                painter = pageRenderInfo.pixmapMetadata.toBufferedImage().toPainter(),
+                pageRenderInfo.bufferedImage.toPainter(),
                 contentDescription = "",
                 contentScale = ContentScale.Fit,
                 modifier = Modifier.matchParentSize()

@@ -4,9 +4,12 @@ import com.artifex.mupdf.fitz.*
 import com.itextpdf.kernel.geom.Rectangle
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
+import mu.KotlinLogging
 import org.spreadme.pdfgadgets.model.*
 
 class DefaultPdfRenderer(fileMetadata: FileMetadata) : PdfRenderer {
+
+    private val logger = KotlinLogging.logger {}
 
     private val mutex = Mutex()
     private val file = fileMetadata
@@ -19,6 +22,8 @@ class DefaultPdfRenderer(fileMetadata: FileMetadata) : PdfRenderer {
             var pixmap: Pixmap? = null
             var drawDevice: DrawDevice? = null
             try {
+                logger.debug("begin render ${file.name}: page[${page.index}], dpi[$dpi]")
+                val start = System.currentTimeMillis()
                 loadPage = pageImageRender.loadPage(page.index - 1)
                 // text info
                 val textBlocks = page.textBlocks.ifEmpty {
@@ -57,8 +62,12 @@ class DefaultPdfRenderer(fileMetadata: FileMetadata) : PdfRenderer {
                 drawDevice = DrawDevice(pixmap)
                 loadPage.run(drawDevice, scale)
                 val pixmapMetadata = PixmapMetadata(pixmap.width, pixmap.height, pixmap.pixels)
+                val bufferedImage = pixmapMetadata.toBufferedImage()
 
-                return PageRenderInfo(pixmapMetadata, textBlocks)
+                val end = System.currentTimeMillis()
+                logger.debug("end render ${file.name}: page[${page.index}], dpi[$dpi], cost ${end-start} ms")
+
+                return PageRenderInfo(bufferedImage, textBlocks)
             } finally {
                 drawDevice?.close()
                 drawDevice?.destroy()

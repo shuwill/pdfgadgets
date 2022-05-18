@@ -5,13 +5,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.produceState
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.loadImageBitmap
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
-import java.io.File
 
 @Composable
 fun <T> AsyncImage(
@@ -24,17 +19,14 @@ fun <T> AsyncImage(
 ) {
 
     val image: T? by produceState<T?>(null) {
-        value = withContext(Dispatchers.IO) {
-            try {
-                load()
-            }catch (e: Exception) {
-                onFailure(e)
-                null
-            }
+        try {
+            value = load()
+        } catch (e: Exception) {
+            onFailure(e)
         }
     }
 
-    if(image != null) {
+    if (image != null) {
         Image(
             painter = painterFor(image!!),
             contentDescription = contentDescription,
@@ -43,5 +35,3 @@ fun <T> AsyncImage(
         )
     }
 }
-
-fun loadImageBitmap(file: File): ImageBitmap = file.inputStream().buffered().use(::loadImageBitmap)

@@ -5,13 +5,16 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="fd4a568c-9515-436d-b67e-95b0dca3c528" name="Changes" comment="fix some bugs">
-      <change afterPath="$PROJECT_DIR$/src/main/kotlin/org/spreadme/pdfgadgets/model/PixmapMetadata.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mupdf/src/main/java/com/artifex/mupdf/fitz/Pixmap.java" beforeDir="false" afterPath="$PROJECT_DIR$/mupdf/src/main/java/com/artifex/mupdf/fitz/Pixmap.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/spreadme/pdfgadgets/signatures/SignExceptionMessageConstant.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/kotlin/org/spreadme/pdfgadgets/model/PageRenderInfo.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/org/spreadme/pdfgadgets/model/PageRenderInfo.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/kotlin/org/spreadme/pdfgadgets/model/PdfImageInfo.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/org/spreadme/pdfgadgets/model/PdfImageInfo.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/kotlin/org/spreadme/pdfgadgets/repository/DefaultPdfRenderer.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/org/spreadme/pdfgadgets/repository/DefaultPdfRenderer.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/kotlin/org/spreadme/pdfgadgets/repository/PdfStreamParser.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/org/spreadme/pdfgadgets/repository/PdfStreamParser.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/kotlin/org/spreadme/pdfgadgets/ui/common/AsyncImage.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/org/spreadme/pdfgadgets/ui/common/AsyncImage.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/kotlin/org/spreadme/pdfgadgets/ui/pdfview/PageDetail.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/org/spreadme/pdfgadgets/ui/pdfview/PageDetail.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/kotlin/org/spreadme/pdfgadgets/ui/pdfview/PageViewModel.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/org/spreadme/pdfgadgets/ui/pdfview/PageViewModel.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/kotlin/org/spreadme/pdfgadgets/ui/pdfview/PdfViewAppComponent.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/org/spreadme/pdfgadgets/ui/pdfview/PdfViewAppComponent.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/kotlin/org/spreadme/pdfgadgets/ui/pdfview/PdfObjectPanel.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/org/spreadme/pdfgadgets/ui/pdfview/PdfObjectPanel.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/kotlin/org/spreadme/pdfgadgets/ui/pdfview/PdfObjectViewModel.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/org/spreadme/pdfgadgets/ui/pdfview/PdfObjectViewModel.kt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -80,22 +83,22 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "last_opened_file_path": "/Users/wangshuwei/Documents/dev/opensource/jmupdf",
-    "project.structure.last.edited": "Libraries",
-    "project.structure.proportion": "0.0",
-    "project.structure.side.proportion": "0.0",
-    "settings.editor.selected.configurable": "preferences.pluginManager"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;/Users/wangshuwei/Documents/dev/opensource/jmupdf&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;Libraries&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.0&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.0&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;
   },
-  "keyToStringList": {
-    "DatabaseDriversLRU": [
-      "sqlite"
+  &quot;keyToStringList&quot;: {
+    &quot;DatabaseDriversLRU&quot;: [
+      &quot;sqlite&quot;
     ]
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/src/test/resources" />
@@ -117,6 +120,7 @@
       <recent name="org.spreadme.pdfgadgets.model" />
     </key>
     <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="org.spreadme.pdfgadgets.signatures" />
       <recent name="com.itextpdf.kernel.pdf.xobject" />
     </key>
   </component>
@@ -284,6 +288,7 @@
       <workItem from="1652714699063" duration="2810000" />
       <workItem from="1652752710085" duration="57000" />
       <workItem from="1652758498820" duration="19470000" />
+      <workItem from="1652835032932" duration="7701000" />
     </task>
     <task id="LOCAL-00001" summary="init application frame">
       <created>1651413815981</created>
@@ -492,6 +497,31 @@
           <url>file://$PROJECT_DIR$/src/main/java/com/itextpdf/kernel/pdf/xobject/ImagePdfBytesInfo.java</url>
           <line>94</line>
           <option name="timeStamp" value="2" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.itextpdf/kernel/7.2.1/b9eff262f2ea0a3a6f2d4a9866c3f41112d73faf/kernel-7.2.1-sources.jar!/com/itextpdf/kernel/pdf/filters/DctDecodeFilter.java</url>
+          <line>63</line>
+          <option name="timeStamp" value="29" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.itextpdf/kernel/7.2.1/b9eff262f2ea0a3a6f2d4a9866c3f41112d73faf/kernel-7.2.1-sources.jar!/com/itextpdf/kernel/pdf/xobject/PdfImageXObject.java</url>
+          <line>187</line>
+          <option name="timeStamp" value="30" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.itextpdf/kernel/7.2.1/b9eff262f2ea0a3a6f2d4a9866c3f41112d73faf/kernel-7.2.1-sources.jar!/com/itextpdf/kernel/pdf/xobject/ImagePdfBytesInfo.java</url>
+          <line>95</line>
+          <option name="timeStamp" value="31" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.itextpdf/kernel/7.2.1/b9eff262f2ea0a3a6f2d4a9866c3f41112d73faf/kernel-7.2.1-sources.jar!/com/itextpdf/kernel/pdf/xobject/PdfImageXObject.java</url>
+          <line>210</line>
+          <option name="timeStamp" value="32" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.itextpdf/kernel/7.2.1/b9eff262f2ea0a3a6f2d4a9866c3f41112d73faf/kernel-7.2.1-sources.jar!/com/itextpdf/kernel/pdf/xobject/PdfImageXObject.java</url>
+          <line>216</line>
+          <option name="timeStamp" value="35" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

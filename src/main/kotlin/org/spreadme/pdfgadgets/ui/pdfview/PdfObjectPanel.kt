@@ -16,12 +16,15 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.painter.BitmapPainter
+import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.graphics.toComposeImageBitmap
 import androidx.compose.ui.graphics.toPainter
 import androidx.compose.ui.unit.dp
+import org.jetbrains.skia.Image
 import org.spreadme.pdfgadgets.ui.common.FileDialog
 import org.spreadme.pdfgadgets.ui.common.FileDialogMode
 import org.spreadme.pdfgadgets.ui.common.clickable
-import java.awt.image.BufferedImage
 import java.nio.file.Path
 
 @Composable
@@ -38,7 +41,7 @@ fun StructureDetailPanel(
         LaunchedEffect(pdfObjectViewModel.uid) {
             pdfObjectViewModel.parse(keywordColor)
         }
-        if(pdfObjectViewModel.finished) {
+        if (pdfObjectViewModel.finished) {
             Column(Modifier.fillMaxSize()) {
                 PdfStreamDetail(pdfObjectViewModel)
             }
@@ -113,9 +116,18 @@ private fun PdfStreamDetail(viewModel: PdfObjectViewModel) {
             }
         } else if (viewModel.pdfImageInfo != null) {
             viewModel.pdfImageInfo?.let {
-                PdfImageDetail(Modifier.wrapContentSize(), it.bufferedImage)
+                it.bufferedImage?.let { bufferedImage ->
+                    PdfImageDetail(Modifier.wrapContentSize(), bufferedImage.toPainter())
+                }
+                it.imageBytes?.let { imageBytes ->
+                    PdfImageDetail(
+                        Modifier.wrapContentSize(),
+                        BitmapPainter(Image.makeFromEncoded(imageBytes).toComposeImageBitmap())
+                    )
+
+                }
             }
-        } else if(viewModel.asn1Node != null) {
+        } else if (viewModel.asn1Node != null) {
             ASN1StructureTree(viewModel.asn1Node!!, viewModel.sidePanelUIState)
         }
         viewModel.errorMessage?.let {
@@ -133,11 +145,11 @@ private fun PdfStreamDetail(viewModel: PdfObjectViewModel) {
 @Composable
 private fun PdfImageDetail(
     modifier: Modifier = Modifier,
-    bufferedImage: BufferedImage
+    painter: Painter
 ) {
     Box(modifier.padding(8.dp)) {
         Image(
-            bufferedImage.toPainter(),
+            painter,
             contentDescription = ""
         )
     }

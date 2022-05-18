@@ -30,8 +30,6 @@ class PdfStreamParser {
     suspend fun getImage(pdfStream: PdfStream): PdfImageInfo {
         return withContext(Dispatchers.IO) {
             val pdfImage = PdfImageXObject(pdfStream)
-            pdfImage.imageBytes
-
 
             val softMask = maskImage(pdfStream, PdfName.SMask)
             val mask = maskImage(pdfStream, PdfName.Mask)
@@ -52,7 +50,7 @@ class PdfStreamParser {
             } else {
                 pdfImage.bufferedImage
             }
-            PdfImageInfo(bufferedImage, pdfImage.identifyImageFileExtension())
+            PdfImageInfo(bufferedImage, imageType = pdfImage.identifyImageFileExtension())
         }
     }
 
