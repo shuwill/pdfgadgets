@@ -1,16 +1,86 @@
 package org.spreadme.pdfgadgets.ui.common
 
 import androidx.compose.animation.*
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.RowScope
-import androidx.compose.foundation.layout.wrapContentSize
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.Icon
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Text
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Error
+import androidx.compose.material.icons.filled.Info
+import androidx.compose.material.icons.filled.SelectAll
+import androidx.compose.material.icons.filled.Warning
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import org.spreadme.pdfgadgets.ui.theme.LocalExtraColors
+
+
+@Composable
+fun Toast(
+    message: String,
+    type: ToastType,
+    timeout: Long = 2000,
+    onFinished: () -> Unit = {}
+) {
+    val toastUI = when (type) {
+        ToastType.SUCCESS -> ToastUI(
+            LocalExtraColors.current.successBackground,
+            LocalExtraColors.current.successBorder,
+            LocalExtraColors.current.onSuccess,
+            Icons.Default.SelectAll
+        )
+        ToastType.WARNING -> ToastUI(
+            LocalExtraColors.current.warningBackground,
+            LocalExtraColors.current.warningBorder,
+            LocalExtraColors.current.onWarning,
+            Icons.Default.Warning
+        )
+        ToastType.ERROR -> ToastUI(
+            LocalExtraColors.current.errorBackground,
+            LocalExtraColors.current.errorBorder,
+            LocalExtraColors.current.onError,
+            Icons.Default.Error
+        )
+        ToastType.INFO -> ToastUI(
+            MaterialTheme.colors.primary,
+            MaterialTheme.colors.primaryVariant,
+            MaterialTheme.colors.onPrimary,
+            Icons.Default.Info
+        )
+    }
+    Toast(
+        modifier = Modifier.clip(RoundedCornerShape(8.dp))
+            .background(toastUI.background)
+            .border(1.dp, toastUI.border, RoundedCornerShape(8.dp))
+            .padding(16.dp),
+        mutableStateOf(true),
+        timeout,
+        onFinished = onFinished
+    ) {
+        Icon(
+            toastUI.icon,
+            contentDescription = "warning",
+            tint = toastUI.onBackground,
+            modifier = Modifier.padding(end = 8.dp).size(16.dp)
+        )
+        Text(
+            message,
+            color = toastUI.onBackground,
+            style = MaterialTheme.typography.caption
+        )
+    }
+}
 
 @Composable
 fun Toast(
@@ -35,10 +105,25 @@ fun Toast(
         }
     }
 
-    MainScope().launch {
-        delay(timeout)
-        enabled = false
-        onFinished()
+    if(timeout > 0) {
+        MainScope().launch {
+            delay(timeout)
+            enabled = false
+            onFinished()
+        }
     }
-
 }
+
+enum class ToastType {
+    INFO,
+    SUCCESS,
+    WARNING,
+    ERROR
+}
+
+data class ToastUI(
+    val background: Color,
+    val border: Color,
+    val onBackground: Color,
+    val icon: ImageVector
+)

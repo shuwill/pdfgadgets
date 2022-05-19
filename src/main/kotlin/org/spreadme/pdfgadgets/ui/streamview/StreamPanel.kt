@@ -3,13 +3,12 @@ package org.spreadme.pdfgadgets.ui.streamview
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import org.spreadme.pdfgadgets.ui.theme.LocalExtraColors
+import org.spreadme.pdfgadgets.ui.common.Toast
+import org.spreadme.pdfgadgets.ui.common.ToastType
 
 @Composable
 fun StreamPanel(
@@ -40,15 +39,15 @@ fun StreamPanel(
             }
 
             streamPanelViewModel.message?.let {
+
                 Box(
                     Modifier.fillMaxSize(),
                     contentAlignment = Alignment.Center
                 ) {
-                    println(streamPanelViewModel.message)
-                    Text(
+                    Toast(
                         it,
-                        style = MaterialTheme.typography.body2,
-                        color = LocalExtraColors.current.warning
+                        ToastType.ERROR,
+                        -1L
                     )
                 }
             }

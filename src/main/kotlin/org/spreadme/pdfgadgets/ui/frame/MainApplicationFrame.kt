@@ -1,23 +1,19 @@
 package org.spreadme.pdfgadgets.ui.frame
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.*
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Warning
+import androidx.compose.material.Divider
+import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import org.spreadme.pdfgadgets.ui.common.LoadProgressIndicator
 import org.spreadme.pdfgadgets.ui.common.Toast
+import org.spreadme.pdfgadgets.ui.common.ToastType
 import org.spreadme.pdfgadgets.ui.common.clickable
 import org.spreadme.pdfgadgets.ui.theme.LocalExtraColors
 import org.spreadme.pdfgadgets.ui.toolbars.ActionBar
@@ -57,7 +53,7 @@ fun MainApplicationFrame(
                             toolbarsViewModel = toolbarsViewModel
                         )
                         Divider(color = LocalExtraColors.current.border)
-                        Row(Modifier.fillMaxSize()){
+                        Row(Modifier.fillMaxSize()) {
                             content()
                         }
                     }
@@ -83,29 +79,13 @@ fun LoadingModal() {
 @Composable
 fun FailureToast(message: String, onFinished: () -> Unit) {
     Box(
-        Modifier.fillMaxSize().zIndex(999f).padding(top = 24.dp),
+        Modifier.fillMaxSize().zIndex(999f).padding(top = 56.dp),
         contentAlignment = Alignment.TopCenter
     ) {
         Toast(
-            modifier = Modifier.clip(RoundedCornerShape(8.dp))
-                .background(LocalExtraColors.current.warningBackground)
-                .border(1.dp, LocalExtraColors.current.warningBorder, RoundedCornerShape(8.dp))
-                .padding(16.dp),
-            mutableStateOf(true),
-            2000,
+            message,
+            ToastType.WARNING,
             onFinished = onFinished
-        ) {
-            Icon(
-                Icons.Default.Warning,
-                contentDescription = "warning",
-                tint = LocalExtraColors.current.warning,
-                modifier = Modifier.padding(end = 8.dp).size(16.dp)
-            )
-            Text(
-                message,
-                color = LocalExtraColors.current.warning,
-                style = MaterialTheme.typography.caption
-            )
-        }
+        )
     }
 }

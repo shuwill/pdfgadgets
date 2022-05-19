@@ -48,6 +48,8 @@ public class Context
 				if(libLoader != null) {
 					final String libPath = libLoader.load();
 					System.load(libPath);
+				} else {
+					System.loadLibrary("libmupdf");
 				}
 			} catch (UnsatisfiedLinkError e) {
 				System.loadLibrary("libmupdf");
