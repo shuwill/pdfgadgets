@@ -69,7 +69,6 @@ private fun StructureNodeView(
             }
         }
     }
-
 }
 
 @Composable

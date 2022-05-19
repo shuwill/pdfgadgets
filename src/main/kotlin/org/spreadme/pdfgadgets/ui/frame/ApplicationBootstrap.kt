@@ -19,8 +19,6 @@ import androidx.compose.ui.zIndex
 import kotlinx.coroutines.flow.MutableStateFlow
 import mu.KotlinLogging
 import org.koin.core.component.KoinComponent
-import org.koin.core.component.inject
-import org.spreadme.pdfgadgets.repository.AppConfigRepository
 import org.spreadme.pdfgadgets.resources.R
 import org.spreadme.pdfgadgets.ui.common.LoadProgressIndicator
 import org.spreadme.pdfgadgets.ui.common.LoadText
@@ -31,18 +29,14 @@ class ApplicationBootstrap(
 
     private val logger = KotlinLogging.logger {}
 
-    private val appConfigRepository by inject<AppConfigRepository>()
-
     @OptIn(ExperimentalAnimationApi::class)
     @Composable
     fun bootstrap(
         onFinished: @Composable () -> Unit
     ) {
 
-        LaunchedEffect(applicationViewModel) {
-            appConfigRepository.load(applicationViewModel.loadMessage)
-            applicationViewModel.newBlankTab()
-            applicationViewModel.finished = true
+        LaunchedEffect(Unit) {
+            applicationViewModel.loadConfig()
         }
 
         if (!applicationViewModel.finished) {

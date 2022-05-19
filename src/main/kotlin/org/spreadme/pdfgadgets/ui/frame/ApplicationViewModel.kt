@@ -7,7 +7,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.awt.ComposeWindow
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.window.WindowState
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 import mu.KotlinLogging
@@ -132,6 +131,14 @@ class ApplicationViewModel(
     fun config(configKey: String, configValue: String) {
         viewModelScope.launch {
             appConfigRepository.config(configKey, configValue)
+        }
+    }
+
+    fun loadConfig() {
+        viewModelScope.launch {
+            appConfigRepository.load(this@ApplicationViewModel.loadMessage)
+            newBlankTab()
+            this@ApplicationViewModel.finished = true
         }
     }
 

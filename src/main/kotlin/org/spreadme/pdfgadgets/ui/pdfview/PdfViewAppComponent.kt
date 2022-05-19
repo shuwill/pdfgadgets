@@ -96,7 +96,9 @@ class PdfViewAppComponent(
         AnimatedVisibility(pdfViewModel.hasSideView(SidePanelMode.STRUCTURE)) {
             SidePanel(pdfViewModel.sideViewModel(SidePanelMode.STRUCTURE)) { sidePanelUIState ->
                 StructureTree(pdfViewModel.pdfMetadata.structureRoot, sidePanelUIState) { node ->
-                    streamPanelViewModel.swicth(node)
+                    if (node.isParseable()) {
+                        streamPanelViewModel.swicth(node)
+                    }
                 }
             }
         }

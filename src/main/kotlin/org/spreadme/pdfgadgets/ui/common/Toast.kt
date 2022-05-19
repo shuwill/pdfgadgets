@@ -9,10 +9,7 @@ import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Error
-import androidx.compose.material.icons.filled.Info
-import androidx.compose.material.icons.filled.SelectAll
-import androidx.compose.material.icons.filled.Warning
+import androidx.compose.material.icons.filled.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -38,7 +35,7 @@ fun Toast(
             LocalExtraColors.current.successBackground,
             LocalExtraColors.current.successBorder,
             LocalExtraColors.current.onSuccess,
-            Icons.Default.SelectAll
+            Icons.Default.Check
         )
         ToastType.WARNING -> ToastUI(
             LocalExtraColors.current.warningBackground,
