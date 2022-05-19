@@ -40,7 +40,6 @@ class ApplicationViewModel(
     //UI State
     var windowState = WindowState()
     var isDark by AppConfig.isDark
-    var tabWidth by mutableStateOf(168)
 
     var isCustomWindowDecoration = false
     var tabbarPaddingStart = 0
@@ -80,17 +79,21 @@ class ApplicationViewModel(
         currentComponent = homeComponent
     }
 
-    fun openCurrentTab(component: AppComponent) {
+    private fun openCurrentTab(component: AppComponent) {
         components.add(component)
-        components.remove(currentComponent)
+        if (currentComponent is HomeComponent) {
+            components.remove(currentComponent)
+        }
         currentComponent = component
     }
 
-    fun calculateTabWidth() {
+    fun calculateTabWidth(): Float {
+        var tabWidth = 168f
         val windowWidth = windowState.size.width.value - (tabbarPaddingStart + tabbarPaddingEnd + addIconSize)
         if ((components.size + 1) * tabWidth > windowWidth) {
-            tabWidth = (windowWidth / (components.size + 1)).toInt()
+            tabWidth = (windowWidth / (components.size + 1))
         }
+        return tabWidth
     }
 
     /**
@@ -104,6 +107,7 @@ class ApplicationViewModel(
     ) {
         progressViewModel.onSuccess = {
             openCurrentTab(component)
+            progressViewModel.status = LoadProgressStatus.NONE
         }
         progressViewModel.start()
         viewModelScope.launch {

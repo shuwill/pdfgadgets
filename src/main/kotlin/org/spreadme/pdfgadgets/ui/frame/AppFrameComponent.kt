@@ -59,7 +59,7 @@ fun CustomDecorationTabBars(
         Tabbars(
             applicationViewModel.components,
             applicationViewModel.currentComponent,
-            width = applicationViewModel.tabWidth,
+            tabWidthProvider = applicationViewModel::calculateTabWidth,
             addIconSize = applicationViewModel.addIconSize,
             onSelected = applicationViewModel::onSelectTab,
             onClose = applicationViewModel::onCloseTab,
@@ -82,7 +82,7 @@ fun DefaultTabBars(
                 start = applicationViewModel.tabbarPaddingStart.dp,
                 end = applicationViewModel.tabbarPaddingEnd.dp
             ),
-        width = applicationViewModel.tabWidth,
+        applicationViewModel::calculateTabWidth,
         addIconSize = applicationViewModel.addIconSize,
         onSelected = applicationViewModel::onSelectTab,
         onClose = applicationViewModel::onCloseTab,

@@ -13,6 +13,7 @@ import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 import org.spreadme.pdfgadgets.model.OperatorName
 import org.spreadme.pdfgadgets.model.PdfImageInfo
+import org.spreadme.pdfgadgets.ui.theme.StreamKeywordColors
 import org.spreadme.pdfgadgets.utils.applyMask
 import org.spreadme.pdfgadgets.utils.getArray
 import org.spreadme.pdfgadgets.utils.getBoolean
@@ -22,17 +23,9 @@ class PdfStreamParser : KoinComponent {
 
     private val customPdfCanvasProcessor by inject<CustomPdfCanvasProcessor>()
 
-    companion object {
-        val OPERATOR_STYLE = Color(25, 55, 156)
-        val NUMBER_STYLE = Color(51, 86, 18)
-        val STRING_STYLE = Color(128, 35, 32)
-        val ESCAPE_STYLE = Color(179, 49, 36)
-        val NAME_STYLE = Color(140, 38, 145)
-    }
-
-    suspend fun parse(pdfStream: PdfStream): List<AnnotatedString> {
+    suspend fun parse(pdfStream: PdfStream, colotPalette: StreamKeywordColors): List<AnnotatedString> {
         return withContext(Dispatchers.IO) {
-            contentStream(pdfStream)
+            contentStream(pdfStream, colotPalette)
         }
     }
 
@@ -71,9 +64,9 @@ class PdfStreamParser : KoinComponent {
         }
     }
 
-    private fun contentStream(pdfStream: PdfStream): List<AnnotatedString> {
+    private fun contentStream(pdfStream: PdfStream, colotPalette: StreamKeywordColors): List<AnnotatedString> {
         val annotatedStrings = arrayListOf<AnnotatedString>()
-        val indentRule = IndentRule()
+        val indentRule = IndentRule(colotPalette = colotPalette)
         if (pdfStream[PdfName.Length1] != null) {
             val bytes = pdfStream.getBytes(false)
             val annotatedString = buildAnnotatedString {
@@ -90,7 +83,8 @@ class PdfStreamParser : KoinComponent {
                 } else {
                     addOperand(it, tokenbuilder, indentRule)
                 }
-                if(tokenbuilder.toAnnotatedString().endsWith("\n")){
+
+                if (tokenbuilder.toAnnotatedString().endsWith("\n")) {
                     annotatedStrings.add(tokenbuilder.toAnnotatedString())
                     tokenbuilder = AnnotatedString.Builder()
                 }
@@ -109,7 +103,7 @@ class PdfStreamParser : KoinComponent {
         }
         addIndent(operators, indentRule)
 
-        operators.append(buildAnnotatedString(operator + "\n", OPERATOR_STYLE))
+        operators.append(buildAnnotatedString(operator + "\n", indentRule.colotPalette.operator))
         // nested opening operators
         if (operator == OperatorName.BEGIN_TEXT ||
             operator == OperatorName.SAVE ||
@@ -125,7 +119,7 @@ class PdfStreamParser : KoinComponent {
         addIndent(operands, indentRule)
         when (pdfObject) {
             is PdfName -> {
-                operands.append(buildAnnotatedString("$pdfObject ", NAME_STYLE))
+                operands.append(buildAnnotatedString("$pdfObject ", indentRule.colotPalette.name))
             }
             is PdfBoolean -> {
                 operands.append(buildAnnotatedString("$pdfObject "))
@@ -142,22 +136,22 @@ class PdfStreamParser : KoinComponent {
                     if (chr == '('.code || chr == ')'.code || chr == '\\'.code) {
                         // PDF reserved characters must be escaped
                         val str = "\\" + chr.toChar()
-                        operands.append(buildAnnotatedString(str, ESCAPE_STYLE))
+                        operands.append(buildAnnotatedString(str, indentRule.colotPalette.escape))
 
                     } else if (chr < 0x20 || chr > 0x7e) {
                         // non-printable ASCII is shown as an octal escape
                         val str = String.format("\\%03o", chr)
-                        operands.append(buildAnnotatedString(str, ESCAPE_STYLE))
+                        operands.append(buildAnnotatedString(str, indentRule.colotPalette.escape))
 
                     } else {
                         val str = chr.toChar().toString()
-                        operands.append(buildAnnotatedString(str, STRING_STYLE))
+                        operands.append(buildAnnotatedString(str, indentRule.colotPalette.escape))
 
                     }
                 }
             }
             is PdfNumber -> {
-                operands.append(buildAnnotatedString("$pdfObject ", NUMBER_STYLE))
+                operands.append(buildAnnotatedString("$pdfObject ", indentRule.colotPalette.number))
             }
             is PdfDictionary -> {
                 pdfObject.entrySet().forEach {
@@ -204,5 +198,6 @@ class PdfStreamParser : KoinComponent {
 
 data class IndentRule(
     var indent: Int = 0,
-    var needIndent: Boolean = false
+    var needIndent: Boolean = false,
+    val colotPalette: StreamKeywordColors,
 )

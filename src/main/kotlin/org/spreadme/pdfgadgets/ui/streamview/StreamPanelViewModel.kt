@@ -17,6 +17,7 @@ import org.spreadme.pdfgadgets.model.StructureNode
 import org.spreadme.pdfgadgets.repository.ASN1Parser
 import org.spreadme.pdfgadgets.repository.PdfStreamParser
 import org.spreadme.pdfgadgets.ui.sidepanel.SidePanelUIState
+import org.spreadme.pdfgadgets.ui.theme.defaultKeywordColor
 import java.util.*
 
 class StreamPanelViewModel(
@@ -68,7 +69,9 @@ class StreamPanelViewModel(
 }
 
 abstract class StreamUIState(
-    val uid: String, val structureNode: StructureNode, val streamPanelViewType: StreamPanelViewType
+    val uid: String,
+    val structureNode: StructureNode,
+    val streamPanelViewType: StreamPanelViewType
 ) {
 
     abstract suspend fun parse()
@@ -90,7 +93,9 @@ abstract class StreamUIState(
 }
 
 class StreamImageUIState(
-    structureNode: StructureNode, private val streamParser: PdfStreamParser, streamPanelViewType: StreamPanelViewType
+    structureNode: StructureNode,
+    private val streamParser: PdfStreamParser,
+    streamPanelViewType: StreamPanelViewType
 ) : StreamUIState(
     UUID.randomUUID().toString(), structureNode, streamPanelViewType
 ) {
@@ -119,7 +124,7 @@ class StreamTextUIState(
         texts = if (streamPanelViewType == StreamPanelViewType.XML) {
             streamParser.parseXml(structureNode.pdfObject as PdfStream)
         } else {
-            streamParser.parse(structureNode.pdfObject as PdfStream)
+            streamParser.parse(structureNode.pdfObject as PdfStream, defaultKeywordColor())
         }
     }
 }

@@ -157,3 +157,37 @@ fun darkExtraColors(
 )
 
 val LocalExtraColors = compositionLocalOf { lightExtraColors() }
+
+
+class StreamKeywordColors(
+    operator: Color,
+    number: Color,
+    string: Color,
+    escape: Color,
+    name: Color
+) {
+    var operator by mutableStateOf(operator, structuralEqualityPolicy())
+        internal set
+    var number by mutableStateOf(number, structuralEqualityPolicy())
+        internal set
+    var string by mutableStateOf(string, structuralEqualityPolicy())
+        internal set
+    var escape by mutableStateOf(escape, structuralEqualityPolicy())
+        internal set
+    var name by mutableStateOf(name, structuralEqualityPolicy())
+        internal set
+}
+
+fun defaultKeywordColor(
+    operator: Color = Color(0xffCC7832),
+    number: Color = Color(0xff6897BB),
+    string: Color = Color(0xff8EA765),
+    escape: Color = Color(0xffCC7832),
+    name: Color = Color(140, 38, 145),
+) = StreamKeywordColors(
+    operator,
+    number,
+    string,
+    escape,
+    name
+)

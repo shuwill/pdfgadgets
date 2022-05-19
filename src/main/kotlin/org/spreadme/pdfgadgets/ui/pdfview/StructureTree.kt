@@ -1,7 +1,12 @@
 package org.spreadme.pdfgadgets.ui.pdfview
 
 import androidx.compose.animation.*
+import androidx.compose.foundation.VerticalScrollbar
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.rememberScrollbarAdapter
 import androidx.compose.foundation.selection.selectable
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
@@ -19,24 +24,33 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import org.spreadme.pdfgadgets.model.StructureNode
 import org.spreadme.pdfgadgets.resources.R
-import org.spreadme.pdfgadgets.ui.common.VerticalScrollable
 import org.spreadme.pdfgadgets.ui.common.clickable
 import org.spreadme.pdfgadgets.ui.sidepanel.SidePanelUIState
 import org.spreadme.pdfgadgets.utils.choose
 
 @Composable
-fun StructureTree(
+fun BoxScope.StructureTree(
     structureRoot: StructureNode,
     sidePanelUIState: SidePanelUIState,
     onClick: (StructureNode) -> Unit
 ) {
-    VerticalScrollable(sidePanelUIState) {
-        Column(
-            modifier = Modifier.fillMaxSize()
-        ) {
-            structureRoot.childs().forEach { StructureNodeView(it, onClick) }
+    val lazyListState = rememberLazyListState(
+        sidePanelUIState.verticalScroll,
+        sidePanelUIState.verticalScrollOffset
+    )
+    LazyColumn(
+        modifier = Modifier.fillMaxSize(),
+        state = lazyListState
+    ) {
+        items(structureRoot.childs()) { child ->
+            StructureNodeView(child, onClick)
         }
     }
+
+    VerticalScrollbar(
+        modifier = Modifier.align(Alignment.CenterEnd).fillMaxHeight(),
+        adapter = rememberScrollbarAdapter(lazyListState)
+    )
 }
 
 @Composable

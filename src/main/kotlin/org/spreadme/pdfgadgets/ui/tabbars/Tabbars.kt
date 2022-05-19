@@ -25,7 +25,7 @@ fun Tabbars(
     components: List<AppComponent>,
     currentComponent: AppComponent?,
     modifier: Modifier = Modifier,
-    width: Int,
+    tabWidthProvider: () -> Float,
     addIconSize: Int,
     onSelected: (AppComponent) -> Unit,
     onClose: (AppComponent) -> Unit,
@@ -37,7 +37,7 @@ fun Tabbars(
     ) {
         itemsIndexed(components) { index, item ->
             TabItem(
-                width,
+                tabWidthProvider,
                 title = item.name,
                 active = currentComponent == item,
                 onSelected = {
@@ -65,14 +65,14 @@ fun Tabbars(
 
 @Composable
 fun TabItem(
-    width: Int,
+    tabWidthProvider: () -> Float,
     title: String,
     active: Boolean,
     onSelected: () -> Unit,
     onClose: () -> Unit
 ) {
     Row(
-        Modifier.fillMaxHeight().width(width.dp).background(
+        Modifier.fillMaxHeight().width(tabWidthProvider().dp).background(
             active.choose(
                 MaterialTheme.colors.background,
                 MaterialTheme.colors.primaryVariant
@@ -116,7 +116,9 @@ fun TabItem(
 @Preview
 fun TabItemPreview() {
     TabItem(
-        168,
+        tabWidthProvider = {
+            168f
+        },
         title = "测试Tab页",
         active = false,
         onSelected = {

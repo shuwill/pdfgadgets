@@ -19,7 +19,7 @@ class PageViewModel(
     var pageRenderInfo by mutableStateOf<PageRenderInfo?>(null)
     val searchPosition = mutableStateListOf<Position>()
 
-    suspend fun onRender(scale: Float) {
+    fun onRender(scale: Float) {
         viewModelScope.launch {
             pageRenderInfo = page.render(2f * scale)
         }

@@ -58,10 +58,7 @@ fun DraggableVerticalSplitter(
         SidePanelVerticalSplitter(
             sideViewState,
             reverseDirection,
-            onResize = {
-                sideViewState.expandedSize = (sideViewState.expandedSize + it)
-                    .coerceAtLeast(sideViewState.expandedMinSize)
-            }
+            onResize = sideViewState::calculateExpandSize
         )
     }
 }
