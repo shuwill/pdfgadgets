@@ -1,5 +1,7 @@
 package org.spreadme.pdfgadgets.resources
 
+import androidx.compose.ui.graphics.vector.ImageVector
+
 object R {
 
     object Drawables {
