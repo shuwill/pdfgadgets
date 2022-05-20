@@ -18,6 +18,7 @@ import androidx.compose.ui.input.pointer.pointerHoverIcon
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.toSize
@@ -31,6 +32,7 @@ fun TextInputField(
     singleLine: Boolean = false,
     enabled: Boolean = true,
     readOnly: Boolean = false,
+    visualTransformation: VisualTransformation = VisualTransformation.None,
     leadingIcon: (@Composable () -> Unit)? = null,
     trailingIcon: (@Composable () -> Unit)? = null,
     onValueChange: (String) -> Unit,
@@ -44,6 +46,7 @@ fun TextInputField(
         enabled = enabled,
         readOnly = readOnly,
         cursorBrush = SolidColor(MaterialTheme.colors.primary),
+        visualTransformation = visualTransformation,
         decorationBox = @Composable { innerTextField ->
             Row(
                 verticalAlignment = Alignment.CenterVertically

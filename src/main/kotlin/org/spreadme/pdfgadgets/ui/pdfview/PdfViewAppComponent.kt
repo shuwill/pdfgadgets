@@ -18,8 +18,11 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import kotlinx.coroutines.launch
 import org.koin.core.component.inject
-import org.spreadme.pdfgadgets.common.LoadableAppComponent
-import org.spreadme.pdfgadgets.repository.*
+import org.spreadme.pdfgadgets.common.AppComponent
+import org.spreadme.pdfgadgets.model.PdfMetadata
+import org.spreadme.pdfgadgets.repository.ASN1Parser
+import org.spreadme.pdfgadgets.repository.PdfStreamParser
+import org.spreadme.pdfgadgets.repository.PdfTextSearcher
 import org.spreadme.pdfgadgets.ui.frame.ApplicationViewModel
 import org.spreadme.pdfgadgets.ui.frame.LoadProgressViewModel
 import org.spreadme.pdfgadgets.ui.frame.MainApplicationFrame
@@ -28,16 +31,12 @@ import org.spreadme.pdfgadgets.ui.sidepanel.SidePanelMode
 import org.spreadme.pdfgadgets.ui.streamview.StreamPanel
 import org.spreadme.pdfgadgets.ui.streamview.StreamPanelViewModel
 import org.spreadme.pdfgadgets.ui.toolbars.ToolbarsViewModel
-import java.nio.file.Path
 
 class PdfViewAppComponent(
-    val path: Path,
+    pdfMetadata: PdfMetadata,
     private val applicationViewModel: ApplicationViewModel
-) : LoadableAppComponent<Path>() {
+) : AppComponent(pdfMetadata.fileMetadata.name) {
 
-    private val fileMetadataRepository by inject<FileMetadataRepository>()
-    private val fileMetadataParser by inject<FileMetadataParser>()
-    private val pdfMetadataParser by inject<PdfMetadataParser>()
     private val pdfStreamParser by inject<PdfStreamParser>()
     private val asN1Parser by inject<ASN1Parser>()
     private val pdfTextSearcher by inject<PdfTextSearcher>()
@@ -45,7 +44,13 @@ class PdfViewAppComponent(
     private val toolbarsViewModel = getViewModel<ToolbarsViewModel>(true)
     private val loadProgressViewModel = getViewModel<LoadProgressViewModel>()
     private val streamPanelViewModel = getViewModel<StreamPanelViewModel>(pdfStreamParser, asN1Parser)
-    private lateinit var pdfViewModel: PdfViewModel
+
+    private val pdfViewModel: PdfViewModel
+
+    init {
+        val pageViewModels = pdfMetadata.pages.map { getViewModel<PageViewModel>(it, single = false) }.toList()
+        pdfViewModel = getViewModel(pdfMetadata, pageViewModels, pdfTextSearcher)
+    }
 
     @Composable
     override fun onRender() {
@@ -183,16 +188,5 @@ class PdfViewAppComponent(
             }
         }
     }
-
-    override suspend fun load() {
-        val fileMetadata = fileMetadataParser.parse(path)
-        name = fileMetadata.name
-        val pdfMetadata = pdfMetadataParser.parse(fileMetadata)
-        fileMetadataRepository.save(fileMetadata)
-        val pageViewModels = pdfMetadata.pages.map { getViewModel<PageViewModel>(it, single = false) }.toList()
-        pdfViewModel = getViewModel(pdfMetadata, pageViewModels, pdfTextSearcher)
-    }
-
-    override fun content(): Path = path
 
 }

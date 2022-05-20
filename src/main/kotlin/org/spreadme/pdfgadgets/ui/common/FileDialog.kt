@@ -1,11 +1,12 @@
 package org.spreadme.pdfgadgets.ui.common
 
 import java.awt.FileDialog
+import java.io.File
+import java.io.FilenameFilter
 import java.nio.file.Files
 import java.nio.file.Path
-import javax.swing.JFileChooser
+import java.nio.file.Paths
 import javax.swing.JFrame
-import javax.swing.filechooser.FileNameExtensionFilter
 
 fun FileDialog(
     parent: JFrame,
@@ -15,30 +16,17 @@ fun FileDialog(
     onFileOpen: (Path) -> Unit = {},
     onFileSave: (Path) -> Unit = {}
 ) {
-
-    val chooser = JFileChooser()
-    chooser.fileSelectionMode = JFileChooser.FILES_ONLY
-    chooser.dialogTitle = title
-    chooser.fileFilter = FileNameExtensionFilter(null, *exts.toTypedArray())
-    val showDialog = chooser.showDialog(
-        parent, if (mode == FileDialogMode.LOAD) {
-            "选择"
-        } else {
-            "保存"
-        }
-    )
-    if (showDialog == JFileChooser.APPROVE_OPTION) {
-        val selectedFile = chooser.selectedFile
-        if (selectedFile != null) {
-            val path = selectedFile.toPath()
-            println(path)
-            if (mode == FileDialogMode.LOAD) {
-                if (Files.exists(path)) {
-                    onFileOpen(path)
-                }
-            } else if(mode == FileDialogMode.SAVE){
-                onFileSave(path)
-            }
+    val fileDialog = FileDialog(parent, title, mode.value())
+    fileDialog.isVisible = true
+    if (mode == FileDialogMode.LOAD) {
+        fileDialog.filenameFilter = ApplicationFilenameFilter(exts)
+    }
+    if (fileDialog.directory != null && fileDialog.file != null) {
+        val path = Paths.get(fileDialog.directory, fileDialog.file)
+        if (Files.exists(path) && mode == FileDialogMode.LOAD) {
+            onFileOpen(path)
+        } else if (mode == FileDialogMode.SAVE) {
+            onFileSave(path)
         }
     }
 }
@@ -49,5 +37,18 @@ enum class FileDialogMode(private val mode: Int) {
 
     fun value(): Int {
         return mode
+    }
+}
+
+class ApplicationFilenameFilter(
+    private val exts: ArrayList<String>
+) : FilenameFilter {
+
+    override fun accept(dir: File?, name: String?): Boolean {
+        if(exts.isEmpty()) {
+            return true
+        }
+        val ext = name?.split(".")?.last() ?: ""
+        return exts.contains(ext)
     }
 }

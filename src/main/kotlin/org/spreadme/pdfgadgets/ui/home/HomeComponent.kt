@@ -38,8 +38,8 @@ class HomeComponent(
                 recentFileViewModel.load()
                 RecentFiles(recentFileViewModel) {
                     applicationViewModel.openFile(
-                        loadProgressViewModel,
-                        PdfViewAppComponent(it.path(), applicationViewModel)
+                        it.path(),
+                        loadProgressViewModel
                     )
                 }
             }

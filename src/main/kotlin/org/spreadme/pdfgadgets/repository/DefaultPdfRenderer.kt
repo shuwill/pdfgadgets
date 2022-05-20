@@ -15,6 +15,12 @@ class DefaultPdfRenderer(fileMetadata: FileMetadata) : PdfRenderer {
     private val file = fileMetadata
     private val pageImageRender = Document.openDocument(fileMetadata.path) as PDFDocument
 
+    init {
+        fileMetadata.openProperties.password?.let {
+            pageImageRender.authenticatePassword(String(it))
+        }
+    }
+
     override suspend fun render(page: PageMetadata, dpi: Float): PageRenderInfo {
         val lockKey = "${file.name}-${page.index}"
         mutex.withLock(lockKey) {
@@ -65,7 +71,7 @@ class DefaultPdfRenderer(fileMetadata: FileMetadata) : PdfRenderer {
                 val bufferedImage = pixmapMetadata.toBufferedImage()
 
                 val end = System.currentTimeMillis()
-                logger.debug("end render ${file.name}: page[${page.index}], dpi[$dpi], cost ${end-start} ms")
+                logger.debug("end render ${file.name}: page[${page.index}], dpi[$dpi], cost ${end - start} ms")
 
                 return PageRenderInfo(bufferedImage, textBlocks)
             } finally {

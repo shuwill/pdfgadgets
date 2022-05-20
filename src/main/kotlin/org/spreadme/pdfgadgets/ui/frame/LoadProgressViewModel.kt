@@ -4,37 +4,38 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import org.spreadme.pdfgadgets.common.ViewModel
+import org.spreadme.pdfgadgets.model.FileMetadata
+import java.nio.file.Path
 
 class LoadProgressViewModel : ViewModel() {
 
-    var status by mutableStateOf(LoadProgressStatus.NONE)
+    var status by mutableStateOf(LoadProgressStatus.FINISHED)
+    var loadPath by mutableStateOf<Path?>(null)
     var message by mutableStateOf("")
-    var onSuccess: () -> Unit = {}
+
     var onFail: () -> Unit = {}
 
     fun start() {
         status = LoadProgressStatus.LOADING
     }
 
-    fun success() {
-        status = LoadProgressStatus.SUCCESSFUL
-    }
-
     fun fail(message: String) {
         status = LoadProgressStatus.FAILURE
         this.message = message
+        onFail()
     }
 
-    fun needPassword() {
+    fun needPassword(path: Path, message: String) {
+        this.loadPath = path
+        this.message = message
         status = LoadProgressStatus.NEED_PASSWORD
     }
 
 }
 
 enum class LoadProgressStatus {
-    NONE,
+    FINISHED,
     LOADING,
-    SUCCESSFUL,
     NEED_PASSWORD,
     FAILURE
 }

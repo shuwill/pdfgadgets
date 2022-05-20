@@ -12,7 +12,11 @@ class DefaultPdfMetadataParser : PdfMetadataParser, KoinComponent {
     private val signatureParser by inject<SignatureParser>()
 
     override suspend fun parse(fileMetadata: FileMetadata): PdfMetadata {
-        val document = PdfDocument(PdfReader(fileMetadata.file()))
+        val readerProperties = ReaderProperties()
+        fileMetadata.openProperties.password?.let {
+            readerProperties.setPassword(it)
+        }
+        val document = PdfDocument(PdfReader(fileMetadata.file().absolutePath, readerProperties))
         val numberOfPages = document.numberOfPages
         val documentInfo = DocumentInfo(document.pdfVersion.toString(), document.documentInfo)
 

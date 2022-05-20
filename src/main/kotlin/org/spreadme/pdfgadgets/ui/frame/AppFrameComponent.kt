@@ -10,7 +10,9 @@ import androidx.compose.ui.unit.dp
 import org.koin.core.component.inject
 import org.spreadme.pdfgadgets.common.AppComponent
 import org.spreadme.pdfgadgets.repository.AppConfigRepository
+import org.spreadme.pdfgadgets.repository.FileMetadataParser
 import org.spreadme.pdfgadgets.repository.FileMetadataRepository
+import org.spreadme.pdfgadgets.repository.PdfMetadataParser
 import org.spreadme.pdfgadgets.ui.common.CustomWindowDecoration
 import org.spreadme.pdfgadgets.ui.tabbars.Tabbars
 import org.spreadme.pdfgadgets.ui.theme.LocalExtraColors
@@ -19,7 +21,13 @@ class AppFrameComponent : AppComponent("Application Frame") {
 
     private val appConfigRepository by inject<AppConfigRepository>()
     private val fileMetadataRepository by inject<FileMetadataRepository>()
-    private val applicationViewModel = getViewModel<ApplicationViewModel>(appConfigRepository, fileMetadataRepository)
+    private val fileMetadataParser by inject<FileMetadataParser>()
+    private val pdfMetadataParser by inject<PdfMetadataParser>()
+
+    private val applicationViewModel = getViewModel<ApplicationViewModel>(
+        appConfigRepository, fileMetadataRepository,
+        fileMetadataParser, pdfMetadataParser
+    )
 
     @Composable
     override fun onRender() {

@@ -12,19 +12,25 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 import mu.KotlinLogging
 import org.spreadme.pdfgadgets.common.AppComponent
-import org.spreadme.pdfgadgets.common.LoadableAppComponent
 import org.spreadme.pdfgadgets.common.ViewModel
 import org.spreadme.pdfgadgets.common.viewModelScope
 import org.spreadme.pdfgadgets.config.AppConfig
+import org.spreadme.pdfgadgets.model.OpenProperties
+import org.spreadme.pdfgadgets.model.PdfMetadata
 import org.spreadme.pdfgadgets.repository.AppConfigRepository
+import org.spreadme.pdfgadgets.repository.FileMetadataParser
 import org.spreadme.pdfgadgets.repository.FileMetadataRepository
+import org.spreadme.pdfgadgets.repository.PdfMetadataParser
 import org.spreadme.pdfgadgets.ui.home.HomeComponent
+import org.spreadme.pdfgadgets.ui.pdfview.PdfViewAppComponent
 import java.nio.file.Path
 import kotlin.system.exitProcess
 
 class ApplicationViewModel(
     private val appConfigRepository: AppConfigRepository,
-    private val fileMetadataRepository: FileMetadataRepository
+    private val fileMetadataRepository: FileMetadataRepository,
+    private val fileMetadataParser: FileMetadataParser,
+    private val pdfMetadataParser: PdfMetadataParser
 ) : ViewModel() {
 
     private val logger = KotlinLogging.logger {}
@@ -98,34 +104,42 @@ class ApplicationViewModel(
     }
 
     /**
+     * @param path the file path
      * @param progressViewModel progrss view model
-     * @param component a need load component, the loading operations in a concurrent process,
-     * render the [LoadableAppComponent] first, when load finished then render the [LoadableAppComponent]
+     * @param openProperties open properties,
+     * first parse [PdfMetadata] by [PdfMetadataParser], when load finished then render the [PdfViewAppComponent]
      */
     fun openFile(
+        path: Path,
         progressViewModel: LoadProgressViewModel,
-        component: LoadableAppComponent<Path>,
+        openProperties: OpenProperties = OpenProperties()
     ) {
-        progressViewModel.onSuccess = {
-            openCurrentTab(component)
-            progressViewModel.status = LoadProgressStatus.NONE
-        }
         progressViewModel.start()
         viewModelScope.launch {
             try {
-                component.load()
-                progressViewModel.success()
-            } catch (bpe: BadPasswordException){
-                progressViewModel.needPassword()
+                val fileMetadata = fileMetadataParser.parse(path)
+                fileMetadata.openProperties = openProperties
+                val pdfMetadata = pdfMetadataParser.parse(fileMetadata)
+                fileMetadataRepository.save(fileMetadata)
+                val appComponent = PdfViewAppComponent(pdfMetadata, this@ApplicationViewModel)
+                openCurrentTab(appComponent)
+                progressViewModel.status = LoadProgressStatus.FINISHED
+
+            } catch (bpe: BadPasswordException) {
+                val message = if (openProperties.password == null) {
+                    "文档已被保护，请输入文档保护口令"
+                } else {
+                    "文档保护口令不正确"
+                }
+                progressViewModel.needPassword(path, message)
             } catch (e: Exception) {
                 logger.error(e.message, e)
-                fileMetadataRepository.deleteByPath(component.content())
+                fileMetadataRepository.deleteByPath(path)
                 val message = when (e) {
                     is java.nio.file.NoSuchFileException -> "文件已被删除或被转移"
                     else -> e.message ?: "Pdf文件解析失败"
                 }
                 progressViewModel.fail(message)
-                progressViewModel.onFail()
             }
         }
     }

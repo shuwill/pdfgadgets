@@ -17,7 +17,6 @@ import org.spreadme.pdfgadgets.resources.R
 import org.spreadme.pdfgadgets.ui.common.FileDialog
 import org.spreadme.pdfgadgets.ui.frame.ApplicationViewModel
 import org.spreadme.pdfgadgets.ui.frame.LoadProgressViewModel
-import org.spreadme.pdfgadgets.ui.pdfview.PdfViewAppComponent
 
 @Composable
 fun ActionBar(
@@ -36,8 +35,8 @@ fun ActionBar(
                 exts = arrayListOf("pdf"),
                 onFileOpen = {
                     applicationViewModel.openFile(
-                        progressViewModel,
-                        PdfViewAppComponent(it, applicationViewModel)
+                        it,
+                        progressViewModel
                     )
                 }
             )
