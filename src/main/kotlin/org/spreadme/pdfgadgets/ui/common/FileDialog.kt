@@ -3,8 +3,9 @@ package org.spreadme.pdfgadgets.ui.common
 import java.awt.FileDialog
 import java.nio.file.Files
 import java.nio.file.Path
-import java.nio.file.Paths
+import javax.swing.JFileChooser
 import javax.swing.JFrame
+import javax.swing.filechooser.FileNameExtensionFilter
 
 fun FileDialog(
     parent: JFrame,
@@ -14,20 +15,30 @@ fun FileDialog(
     onFileOpen: (Path) -> Unit = {},
     onFileSave: (Path) -> Unit = {}
 ) {
-    val fileDialog = FileDialog(parent, title, mode.value()).apply {
-        isVisible = true
-        setFilenameFilter { _, name ->
-            exts.any {
-                name.endsWith(it)
-            }
+
+    val chooser = JFileChooser()
+    chooser.fileSelectionMode = JFileChooser.FILES_ONLY
+    chooser.dialogTitle = title
+    chooser.fileFilter = FileNameExtensionFilter(null, *exts.toTypedArray())
+    val showDialog = chooser.showDialog(
+        parent, if (mode == FileDialogMode.LOAD) {
+            "选择"
+        } else {
+            "保存"
         }
-    }
-    if (fileDialog.directory != null && fileDialog.file != null) {
-        val path = Paths.get(fileDialog.directory, fileDialog.file)
-        if (Files.exists(path) && mode == FileDialogMode.LOAD) {
-            onFileOpen(path)
-        } else if (mode == FileDialogMode.SAVE) {
-            onFileSave(path)
+    )
+    if (showDialog == JFileChooser.APPROVE_OPTION) {
+        val selectedFile = chooser.selectedFile
+        if (selectedFile != null) {
+            val path = selectedFile.toPath()
+            println(path)
+            if (mode == FileDialogMode.LOAD) {
+                if (Files.exists(path)) {
+                    onFileOpen(path)
+                }
+            } else if(mode == FileDialogMode.SAVE){
+                onFileSave(path)
+            }
         }
     }
 }

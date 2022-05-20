@@ -25,11 +25,16 @@ class LoadProgressViewModel : ViewModel() {
         this.message = message
     }
 
+    fun needPassword() {
+        status = LoadProgressStatus.NEED_PASSWORD
+    }
+
 }
 
 enum class LoadProgressStatus {
     NONE,
     LOADING,
     SUCCESSFUL,
+    NEED_PASSWORD,
     FAILURE
 }

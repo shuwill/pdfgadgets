@@ -1,5 +1,6 @@
 package org.spreadme.pdfgadgets.model
 
+import com.itextpdf.kernel.pdf.ReaderProperties
 import org.jetbrains.exposed.sql.Table
 import org.jetbrains.exposed.sql.javatime.datetime
 import java.io.File
@@ -14,6 +15,8 @@ data class FileMetadata(
     val length: Long,
     val openTime: Date
 ) {
+
+    val readProperties: ReaderProperties = ReaderProperties()
 
     fun path(): Path = Paths.get(path)
     fun file(): File = Paths.get(path).toFile()

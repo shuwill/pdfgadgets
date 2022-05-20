@@ -164,7 +164,7 @@ fun TextBlock(
                 clipboard.setContents(StringSelection(textBlock.toString()), null)
                 contextMenuEnabled = false
             }) {
-                Text("Copy", style = MaterialTheme.typography.caption)
+                Text(String(textBlock.chars.toCharArray()), style = MaterialTheme.typography.caption)
             }
         }
     }

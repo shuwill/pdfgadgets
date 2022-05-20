@@ -7,6 +7,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.awt.ComposeWindow
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.window.WindowState
+import com.itextpdf.kernel.exceptions.BadPasswordException
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 import mu.KotlinLogging
@@ -52,7 +53,7 @@ class ApplicationViewModel(
     }
 
     fun onWindowStateChange(size: DpSize) {
-        //TODO re calculate the tab width
+        // TODO re calculate the tab width
     }
 
     fun onSelectTab(selectedComponent: AppComponent) {
@@ -114,6 +115,8 @@ class ApplicationViewModel(
             try {
                 component.load()
                 progressViewModel.success()
+            } catch (bpe: BadPasswordException){
+                progressViewModel.needPassword()
             } catch (e: Exception) {
                 logger.error(e.message, e)
                 fileMetadataRepository.deleteByPath(component.content())
@@ -128,7 +131,7 @@ class ApplicationViewModel(
     }
 
     fun createFile() {
-        //TODO create pdf file from support file type
+        // TODO create pdf file from support file type
     }
 
 

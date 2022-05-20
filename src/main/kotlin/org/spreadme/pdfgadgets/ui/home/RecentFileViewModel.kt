@@ -8,14 +8,21 @@ import org.spreadme.pdfgadgets.model.FileMetadata
 import org.spreadme.pdfgadgets.repository.FileMetadataRepository
 
 class RecentFileViewModel(
-    val fileMetadataRepository: FileMetadataRepository
+    private val fileMetadataRepository: FileMetadataRepository
 ) : ViewModel() {
 
     val fileMetadatas = mutableStateListOf<FileMetadata>()
 
-    init {
+    fun load(){
         viewModelScope.launch {
             fileMetadatas.addAll(fileMetadataRepository.query())
+        }
+    }
+
+    fun delete(fileMetadata: FileMetadata) {
+        fileMetadatas.remove(fileMetadata)
+        viewModelScope.launch {
+            fileMetadataRepository.deleteByPath(fileMetadata.path())
         }
     }
 
