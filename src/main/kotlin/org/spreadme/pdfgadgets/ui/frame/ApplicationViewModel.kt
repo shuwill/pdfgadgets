@@ -41,8 +41,8 @@ class ApplicationViewModel(
     var currentComponent by mutableStateOf<AppComponent?>(null)
 
     //application load status
-    var finished by mutableStateOf(false)
-    var loadMessage = MutableStateFlow("")
+    var bootFinished by mutableStateOf(false)
+    var bootMessage = MutableStateFlow("")
 
     //UI State
     var windowState = WindowState()
@@ -155,11 +155,11 @@ class ApplicationViewModel(
         }
     }
 
-    fun loadConfig() {
+    fun bootstrap() {
         viewModelScope.launch {
-            appConfigRepository.load(this@ApplicationViewModel.loadMessage)
+            appConfigRepository.load(this@ApplicationViewModel.bootMessage)
             newBlankTab()
-            this@ApplicationViewModel.finished = true
+            this@ApplicationViewModel.bootFinished = true
         }
     }
 

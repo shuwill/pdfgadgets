@@ -12,10 +12,10 @@ import java.util.*
 data class SignatureResult(
     val verifySignature: Boolean,
     val verifyTimestamp: Boolean,
-    val signName: String,
-    val signDate: Calendar,
-    val reason: String,
-    val location: String,
+    val signName: String?,
+    val signDate: Calendar?,
+    val reason: String?,
+    val location: String?,
     val signingCertificate: X509Certificate,
     val timeStampToken: TimeStampToken?
 ) {

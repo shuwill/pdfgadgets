@@ -5,7 +5,13 @@ import com.itextpdf.kernel.geom.Rectangle
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import mu.KotlinLogging
+import org.spreadme.pdfgadgets.config.AppConfig
 import org.spreadme.pdfgadgets.model.*
+import org.spreadme.pdfgadgets.utils.createFile
+import java.io.ByteArrayInputStream
+import java.nio.file.Files
+import java.nio.file.Paths
+import javax.imageio.ImageIO
 
 class DefaultPdfRenderer(fileMetadata: FileMetadata) : PdfRenderer {
 
@@ -61,14 +67,25 @@ class DefaultPdfRenderer(fileMetadata: FileMetadata) : PdfRenderer {
                     textBlocks
                 }
 
-                val scale = Matrix().scale(dpi)
-                pixmap = loadPage.toPixmap(scale, ColorSpace.DeviceBGR, true, true)
-                pixmap.clear(255)
+                // create cache index
+                val cacheIndex = "${page.index}-$dpi"
+                val cachePath = Paths.get(AppConfig.indexPath.toString(), file.uid, cacheIndex)
+                val bufferedImage = if (Files.exists(cachePath)) {
+                    val bytes = Files.readAllBytes(cachePath)
+                    ImageIO.read(ByteArrayInputStream(bytes))
+                } else {
+                    createFile(cachePath, true)
+                    val scale = Matrix().scale(dpi)
+                    pixmap = loadPage.toPixmap(scale, ColorSpace.DeviceBGR, true, true)
+                    pixmap.clear(255)
 
-                drawDevice = DrawDevice(pixmap)
-                loadPage.run(drawDevice, scale)
-                val pixmapMetadata = PixmapMetadata(pixmap.width, pixmap.height, pixmap.pixels)
-                val bufferedImage = pixmapMetadata.toBufferedImage()
+                    drawDevice = DrawDevice(pixmap)
+                    loadPage.run(drawDevice, scale)
+                    val pixmapMetadata = PixmapMetadata(pixmap.width, pixmap.height, pixmap.pixels)
+                    val bufferedImage = pixmapMetadata.toBufferedImage()
+                    ImageIO.write(bufferedImage, "PNG", cachePath.toFile())
+                    bufferedImage
+                }
 
                 val end = System.currentTimeMillis()
                 logger.debug("end render ${file.name}: page[${page.index}], dpi[$dpi], cost ${end - start} ms")

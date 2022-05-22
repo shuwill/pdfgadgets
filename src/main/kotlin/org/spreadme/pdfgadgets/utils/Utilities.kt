@@ -5,7 +5,9 @@ import com.itextpdf.kernel.pdf.PdfName
 import com.itextpdf.kernel.pdf.xobject.PdfImageXObject
 import java.awt.RenderingHints
 import java.awt.geom.AffineTransform
-import java.awt.image.*
+import java.awt.image.AffineTransformOp
+import java.awt.image.BufferedImage
+import java.awt.image.ImagingOpException
 import java.io.File
 import java.io.IOException
 import java.io.InputStream
@@ -21,11 +23,16 @@ import java.util.*
 import kotlin.math.roundToInt
 
 /**
+ * generate uuid
+ */
+fun uuid() = UUID.randomUUID().toString()
+
+/**
  * boolean chooser
  * @param trueValue
  * @param falseValue
  */
-inline fun <T> Boolean.choose(trueValue: T, falseValue: T): T {
+fun <T> Boolean.choose(trueValue: T, falseValue: T): T {
     return if (this) {
         trueValue
     } else {
@@ -47,7 +54,7 @@ fun String.pdfDate(): Date? {
  * format date
  * @param format
  */
-inline fun Date.format(format: String): String {
+fun Date.format(format: String): String {
     val dateFormat = SimpleDateFormat(format)
     return dateFormat.format(this)
 }
@@ -55,7 +62,7 @@ inline fun Date.format(format: String): String {
 /**
  * defualt date format
  */
-inline fun Date.format(): String {
+fun Date.format(): String {
     return this.format("yyyy-MM-dd HH:mm:ss")
 }
 

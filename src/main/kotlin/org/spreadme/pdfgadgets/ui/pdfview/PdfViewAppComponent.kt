@@ -17,6 +17,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import kotlinx.coroutines.launch
+import mu.KotlinLogging
 import org.koin.core.component.inject
 import org.spreadme.pdfgadgets.common.AppComponent
 import org.spreadme.pdfgadgets.model.PdfMetadata
@@ -36,6 +37,8 @@ class PdfViewAppComponent(
     pdfMetadata: PdfMetadata,
     private val applicationViewModel: ApplicationViewModel
 ) : AppComponent(pdfMetadata.fileMetadata.name) {
+
+    private val logger = KotlinLogging.logger {  }
 
     private val pdfStreamParser by inject<PdfStreamParser>()
     private val asN1Parser by inject<ASN1Parser>()
@@ -59,7 +62,7 @@ class PdfViewAppComponent(
             applicationViewModel,
             loadProgressViewModel
         ) {
-            println("pdf view component【${name}】rendered")
+            logger.debug("pdf view component【${name}】rendered")
             val pdfpdfViewModel = remember { pdfViewModel }
             toolbarsViewModel.onChangeSideViewMode = pdfpdfViewModel::onChangeSideViewMode
             toolbarsViewModel.onChangeScale = pdfpdfViewModel::onChangeScalue

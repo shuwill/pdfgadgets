@@ -1,14 +1,12 @@
 package org.spreadme.pdfgadgets
 
-import org.apache.commons.imaging.Imaging
 import org.junit.Test
 import org.koin.core.context.startKoin
 import org.koin.test.KoinTest
 import org.koin.test.get
 import org.spreadme.pdfgadgets.di.asn1ParserMoudle
 import org.spreadme.pdfgadgets.repository.ASN1Parser
-import java.awt.color.ColorSpace
-import java.util.Base64
+import java.util.*
 import kotlin.test.assertNotNull
 
 class ASN1ParserTest  : KoinTest {

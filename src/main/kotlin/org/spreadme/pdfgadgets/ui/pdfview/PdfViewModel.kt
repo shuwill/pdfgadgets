@@ -2,11 +2,15 @@ package org.spreadme.pdfgadgets.ui.pdfview
 
 import androidx.compose.runtime.*
 import org.spreadme.pdfgadgets.common.ViewModel
+import org.spreadme.pdfgadgets.config.AppConfig
 import org.spreadme.pdfgadgets.model.PdfMetadata
 import org.spreadme.pdfgadgets.model.Position
 import org.spreadme.pdfgadgets.repository.PdfTextSearcher
 import org.spreadme.pdfgadgets.ui.sidepanel.SidePanelMode
 import org.spreadme.pdfgadgets.ui.sidepanel.SidePanelUIState
+import java.nio.file.Files
+import java.nio.file.Paths
+import kotlin.io.path.listDirectoryEntries
 
 class PdfViewModel(
     val pdfMetadata: PdfMetadata,
@@ -93,6 +97,16 @@ class PdfViewModel(
     fun onCleanSeach() {
         pageViewModels.forEach { pageViewModel ->
             pageViewModel.searchPosition.clear()
+        }
+    }
+
+    override fun onCleared() {
+        val fileMetadata = pdfMetadata.fileMetadata
+        val cachePath = Paths.get(AppConfig.indexPath.toString(), fileMetadata.uid)
+        if(Files.exists(cachePath)) {
+           cachePath.listDirectoryEntries().forEach {
+               Files.deleteIfExists(it)
+           }
         }
     }
 }

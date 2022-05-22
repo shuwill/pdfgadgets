@@ -2,10 +2,7 @@ package org.spreadme.pdfgadgets
 
 import org.koin.core.context.startKoin
 import org.spreadme.pdfgadgets.common.Application
-import org.spreadme.pdfgadgets.di.appConfigLoadModule
-import org.spreadme.pdfgadgets.di.asn1ParserMoudle
-import org.spreadme.pdfgadgets.di.fileMetadataModule
-import org.spreadme.pdfgadgets.di.pdfParseModule
+import org.spreadme.pdfgadgets.di.*
 
 class PDFGadgetsApp : Application() {
 
@@ -19,6 +16,7 @@ class PDFGadgetsApp : Application() {
         startKoin {
             modules(
                 appConfigLoadModule,
+                appUpgradeModule,
                 fileMetadataModule,
                 pdfParseModule,
                 asn1ParserMoudle

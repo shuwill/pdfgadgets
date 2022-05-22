@@ -11,11 +11,13 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material.icons.filled.ArrowDropUp
 import androidx.compose.material.icons.filled.Close
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.input.key.*
+import androidx.compose.ui.input.key.Key
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import org.spreadme.pdfgadgets.model.Position
@@ -23,6 +25,7 @@ import org.spreadme.pdfgadgets.resources.R
 import org.spreadme.pdfgadgets.ui.common.DropdownTextInputField
 import org.spreadme.pdfgadgets.ui.common.TextSearchInputField
 import org.spreadme.pdfgadgets.ui.common.clickable
+import org.spreadme.pdfgadgets.ui.common.onBindKeyEvent
 import org.spreadme.pdfgadgets.ui.pdfview.PdfViewType
 import org.spreadme.pdfgadgets.ui.sidepanel.SidePanelMode
 import org.spreadme.pdfgadgets.ui.theme.LocalExtraColors
@@ -207,7 +210,7 @@ fun PdfViewTypeSwitchBar(
                 } else {
                     LocalExtraColors.current.iconDisable
                 },
-                modifier = Modifier.padding(start = 8.dp).size(16.dp).clickable{
+                modifier = Modifier.padding(start = 8.dp).size(16.dp).clickable {
                     onViewTypeChange(type)
                 }
             )
@@ -239,14 +242,9 @@ fun TextSearchBar(
                 .fillMaxHeight().widthIn(240.dp, 272.dp)
                 .clip(RoundedCornerShape(8.dp))
                 .background(MaterialTheme.colors.surface)
-                .onPreviewKeyEvent {
-                    if (it.key == Key.Enter && it.type == KeyEventType.KeyDown) {
-                        onSeach()
-                        true
-                    } else {
-                        false
-                    }
-                },
+                .onBindKeyEvent(Key.Enter, onKeyDown = {
+                    onSeach()
+                }),
             textStyle = MaterialTheme.typography.caption.copy(
                 color = if (enabled) {
                     MaterialTheme.colors.onSurface

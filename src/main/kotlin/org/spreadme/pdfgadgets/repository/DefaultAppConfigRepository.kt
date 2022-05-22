@@ -67,6 +67,7 @@ class DefaultAppConfigRepository : AppConfigRepository {
         DBHelper.help("${AppConfig.appPath}/${AppConfig.appName}.db")
             .createTable(FileMetadatas)
             .createTable(AppConfigs)
+            .upgrade()
 
         // load some config from db
         message.value = "load application config"
@@ -93,6 +94,19 @@ class DefaultAppConfigRepository : AppConfigRepository {
                     it[key] = configKey
                     it[value] = configValue
                 }
+            }
+        }
+    }
+
+    override suspend fun getConfig(configKey: String): String {
+        return transaction {
+            val values = AppConfigs.select { AppConfigs.key.eq(configKey) }
+                .map { it[AppConfigs.value] }
+                .toList()
+            if (values.isNotEmpty()) {
+                values.first()
+            } else {
+                ""
             }
         }
     }

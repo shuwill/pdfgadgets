@@ -36,16 +36,16 @@ class ApplicationBootstrap(
     ) {
 
         LaunchedEffect(Unit) {
-            applicationViewModel.loadConfig()
+            applicationViewModel.bootstrap()
         }
 
-        if (!applicationViewModel.finished) {
+        if (!applicationViewModel.bootFinished) {
             logger.info("the application bootstrap!!!!")
-            AppLoadProgressIndicator(applicationViewModel.loadMessage)
+            AppLoadProgressIndicator(applicationViewModel.bootMessage)
         }
 
         AnimatedVisibility(
-            applicationViewModel.finished,
+            applicationViewModel.bootFinished,
             enter = fadeIn() + scaleIn(),
             exit = fadeOut() + scaleOut(),
         ) {

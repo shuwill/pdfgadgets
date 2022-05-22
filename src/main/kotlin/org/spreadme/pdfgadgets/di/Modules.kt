@@ -1,11 +1,18 @@
 package org.spreadme.pdfgadgets.di
 
 import org.koin.dsl.module
+import org.spreadme.pdfgadgets.config.upgrade.AppUpgradeRepository
 import org.spreadme.pdfgadgets.repository.*
 
 val appConfigLoadModule = module {
     single<AppConfigRepository> {
         DefaultAppConfigRepository()
+    }
+}
+
+val appUpgradeModule = module {
+    single {
+        AppUpgradeRepository()
     }
 }
 

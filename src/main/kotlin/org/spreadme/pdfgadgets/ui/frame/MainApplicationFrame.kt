@@ -9,13 +9,13 @@ import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.CheckCircle
-import androidx.compose.material.icons.filled.Warning
+import androidx.compose.material.icons.filled.ArrowForward
+import androidx.compose.material.icons.outlined.Lock
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.input.key.*
+import androidx.compose.ui.input.key.Key
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
@@ -50,7 +50,7 @@ fun MainApplicationFrame(
                     }
                 }
                 LoadProgressStatus.NEED_PASSWORD -> {
-                    EnterPasswordDialog(progressState.message) { password ->
+                    EnterPasswordDialog("", progressState.message) { password ->
                         if (password.isNotBlank()) {
                             progressState.loadPath?.let {
                                 val openProperties = OpenProperties()
@@ -111,6 +111,7 @@ fun FailureToast(message: String, onFinished: () -> Unit) {
 
 @Composable
 fun EnterPasswordDialog(
+    title: String,
     message: String,
     onConfirm: (String) -> Unit
 ) {
@@ -121,21 +122,27 @@ fun EnterPasswordDialog(
                 enabled = false
                 onConfirm("")
             },
-            title = "口令",
+            title = title,
             resizable = false,
-            state = rememberDialogState(width = 360.dp, height = 128.dp)
+            state = rememberDialogState(width = 360.dp, height = 240.dp)
         ) {
+            Row(
+                Modifier.fillMaxWidth().padding(16.dp),
+                horizontalArrangement = Arrangement.Center,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Icon(
+                    Icons.Outlined.Lock,
+                    contentDescription = "",
+                    tint = LocalExtraColors.current.iconDisable,
+                    modifier = Modifier.size(80.dp)
+                )
+            }
             Row(
                 Modifier.fillMaxWidth().height(32.dp),
                 horizontalArrangement = Arrangement.Center,
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                Icon(
-                    Icons.Default.Warning,
-                    contentDescription = "",
-                    tint = LocalExtraColors.current.onWarning,
-                    modifier = Modifier.padding(end = 8.dp).size(16.dp)
-                )
                 Text(
                     message,
                     style = MaterialTheme.typography.caption,
@@ -143,7 +150,8 @@ fun EnterPasswordDialog(
                 )
             }
             Row(
-                Modifier.padding(horizontal = 8.dp).fillMaxWidth().height(64.dp),
+                Modifier.fillMaxWidth().height(42.dp).padding(8.dp),
+                horizontalArrangement = Arrangement.Center,
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 var text by remember { mutableStateOf("") }
@@ -153,14 +161,12 @@ fun EnterPasswordDialog(
                         .clip(RoundedCornerShape(4.dp))
                         .background(MaterialTheme.colors.surface)
                         .padding(start = 8.dp)
-                        .onPreviewKeyEvent {
-                            if (it.key == Key.Enter && it.type == KeyEventType.KeyDown) {
-                                onConfirm(text)
-                                true
-                            } else {
-                                false
-                            }
-                        },
+                        .onBindKeyEvent(Key.Enter, onKeyDown = {
+                            onConfirm(text)
+                        })
+                        .onBindKeyEvent(Key.Escape, onKeyDown = {
+                            enabled = false
+                        }),
                     singleLine = true,
                     textStyle = MaterialTheme.typography.caption.copy(color = MaterialTheme.colors.onSurface),
                     visualTransformation = PasswordVisualTransformation(),
@@ -168,7 +174,7 @@ fun EnterPasswordDialog(
                     trailingIcon = {
                         AnimatedVisibility(text.isNotBlank()) {
                             Icon(
-                                Icons.Default.CheckCircle,
+                                Icons.Default.ArrowForward,
                                 contentDescription = "",
                                 tint = MaterialTheme.colors.primary,
                                 modifier = Modifier.padding(horizontal = 8.dp).size(16.dp).clickable {

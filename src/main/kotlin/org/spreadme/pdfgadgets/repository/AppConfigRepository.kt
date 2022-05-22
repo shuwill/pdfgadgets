@@ -7,4 +7,6 @@ interface AppConfigRepository {
     suspend fun load(message: MutableStateFlow<String>)
 
     suspend fun config(configKey: String, configValue: String)
+
+    suspend fun getConfig(configKey: String): String
 }

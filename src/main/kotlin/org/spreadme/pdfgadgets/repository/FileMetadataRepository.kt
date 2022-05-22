@@ -22,6 +22,7 @@ class FileMetadataRepository {
                     FileMetadatas.deleteWhere { (FileMetadatas.id.inList(ids)) }
                 }
                 FileMetadatas.insert {
+                    it[uid] = fileMetadata.uid
                     it[path] = fileMetadata.path
                     it[name] = fileMetadata.name
                     it[thumbnail] = fileMetadata.thumbnail
@@ -39,6 +40,7 @@ class FileMetadataRepository {
                 .orderBy(FileMetadatas.openTime to SortOrder.DESC)
                 .map {
                     FileMetadata(
+                        it[FileMetadatas.uid],
                         it[FileMetadatas.path],
                         it[FileMetadatas.name],
                         it[FileMetadatas.thumbnail],
