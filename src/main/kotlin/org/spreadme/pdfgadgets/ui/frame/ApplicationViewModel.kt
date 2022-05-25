@@ -23,6 +23,7 @@ import org.spreadme.pdfgadgets.repository.FileMetadataRepository
 import org.spreadme.pdfgadgets.repository.PdfMetadataParser
 import org.spreadme.pdfgadgets.ui.home.HomeComponent
 import org.spreadme.pdfgadgets.ui.pdfview.PdfViewAppComponent
+import org.spreadme.pdfgadgets.ui.tool.ASN1ParseViewComponent
 import java.nio.file.Path
 import kotlin.system.exitProcess
 
@@ -144,8 +145,9 @@ class ApplicationViewModel(
         }
     }
 
-    fun createFile() {
-        // TODO create pdf file from support file type
+    fun openASN1Parser() {
+        val asn1ParseViewComponent = ASN1ParseViewComponent(this)
+        openCurrentTab(asn1ParseViewComponent)
     }
 
 

@@ -14,6 +14,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -24,7 +25,6 @@ import org.spreadme.pdfgadgets.resources.R
 import org.spreadme.pdfgadgets.ui.common.Dialog
 import org.spreadme.pdfgadgets.ui.common.Tipable
 import org.spreadme.pdfgadgets.ui.theme.LocalExtraColors
-import org.spreadme.pdfgadgets.utils.choose
 import org.spreadme.pdfgadgets.utils.format
 import java.security.cert.X509Certificate
 
@@ -42,7 +42,7 @@ fun SignatureDetail(
             state = rememberDialogState(width = 560.dp, height = 420.dp)
         ) {
             //Verify Info
-            VerifyDetail(signature.signatureResult.verifySignature && signature.lastSignatureCoversWholeDocument)
+            VerifyDetail(signature)
             //Certificate Info
             CertificateDetail(signature.signatureResult.signingCertificate)
             //Timestamp info
@@ -54,23 +54,26 @@ fun SignatureDetail(
 }
 
 @Composable
-fun VerifyDetail(verify: Boolean) {
+fun VerifyDetail(signature: Signature) {
+    val signatureVerifyUIState = if (signature.signatureResult.verifySignature) {
+        if (signature.lastSignatureCoversWholeDocument) {
+            SignatureVerifyUIState("签名有效", verifySuccess())
+        } else {
+            SignatureVerifyUIState("签名未覆盖全文", verifyWarning())
+        }
+    } else {
+        SignatureVerifyUIState("签名无效", verifyError())
+    }
+
+    val signatureVerifyUIColor = signatureVerifyUIState.uiColor
     Row(
         modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
             .fillMaxWidth().height(42.dp)
             .clip(RoundedCornerShape(8.dp))
-            .background(
-                verify.choose(
-                    LocalExtraColors.current.successBackground,
-                    LocalExtraColors.current.errorBackground
-                )
-            )
+            .background(signatureVerifyUIColor.backgound)
             .border(
                 1.dp,
-                verify.choose(
-                    LocalExtraColors.current.successBorder,
-                    LocalExtraColors.current.errorBorder
-                ),
+                signatureVerifyUIColor.border,
                 RoundedCornerShape(8.dp)
             ),
         verticalAlignment = Alignment.CenterVertically
@@ -78,14 +81,14 @@ fun VerifyDetail(verify: Boolean) {
         Icon(
             painter = painterResource(R.Icons.signature_verify),
             contentDescription = "verify result",
-            tint = verify.choose(LocalExtraColors.current.success, LocalExtraColors.current.error),
+            tint = signatureVerifyUIColor.iconColor,
             modifier = Modifier.padding(start = 16.dp).size(16.dp)
         )
         Text(
-            verify.choose("签名有效", "签名无效"),
+            signatureVerifyUIState.message,
             modifier = Modifier.padding(8.dp),
             style = MaterialTheme.typography.subtitle2,
-            color = verify.choose(LocalExtraColors.current.onSuccess, LocalExtraColors.current.onError),
+            color = signatureVerifyUIColor.textColor,
         )
     }
 }
@@ -179,3 +182,39 @@ fun TimeStampDetail(timeStampToken: TimeStampToken) {
         }
     }
 }
+
+data class SignatureVerifyUIState(
+    val message: String,
+    val uiColor: SignatureVerifyUIColor
+)
+
+data class SignatureVerifyUIColor(
+    val backgound: Color,
+    val border: Color,
+    val iconColor: Color,
+    val textColor: Color
+)
+
+@Composable
+fun verifySuccess(): SignatureVerifyUIColor = SignatureVerifyUIColor(
+    LocalExtraColors.current.successBackground,
+    LocalExtraColors.current.successBorder,
+    LocalExtraColors.current.success,
+    LocalExtraColors.current.onSuccess
+)
+
+@Composable
+fun verifyWarning(): SignatureVerifyUIColor = SignatureVerifyUIColor(
+    LocalExtraColors.current.warningBackground,
+    LocalExtraColors.current.warningBorder,
+    LocalExtraColors.current.warning,
+    LocalExtraColors.current.onWarning
+)
+
+@Composable
+fun verifyError(): SignatureVerifyUIColor = SignatureVerifyUIColor(
+    LocalExtraColors.current.errorBackground,
+    LocalExtraColors.current.errorBorder,
+    LocalExtraColors.current.error,
+    LocalExtraColors.current.onError
+)

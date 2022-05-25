@@ -3,22 +3,20 @@ package org.spreadme.pdfgadgets.ui.streamview
 import androidx.compose.animation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.selection.selectable
-import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowDropDown
-import androidx.compose.material.icons.filled.ArrowRight
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import org.spreadme.pdfgadgets.model.ASN1Node
+import org.spreadme.pdfgadgets.ui.common.TreeNodeIcon
 import org.spreadme.pdfgadgets.ui.common.VerticalScrollable
-import org.spreadme.pdfgadgets.ui.common.clickable
-import org.spreadme.pdfgadgets.utils.choose
 
 @Composable
 fun StreamASN1View(
@@ -28,13 +26,20 @@ fun StreamASN1View(
         Column(
             modifier = Modifier.fillMaxSize()
         ) {
-            streamASN1UIState.root.childs().forEach { ASN1NodeView(it) }
+            val childs = streamASN1UIState.root.childs()
+            if (childs.isNotEmpty()) {
+                childs.forEach {
+                    ASN1NodeView(it)
+                }
+            } else {
+                ASN1NodeView(streamASN1UIState.root)
+            }
         }
     }
 }
 
 @Composable
-private fun ASN1NodeView(node: ASN1Node) {
+fun ASN1NodeView(node: ASN1Node) {
     var expanded by remember { node.expanded }
     Row(
         modifier = Modifier
@@ -45,7 +50,7 @@ private fun ASN1NodeView(node: ASN1Node) {
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.Start
     ) {
-        ASN1NodePrefix(node.type.hasChild, node.expanded)
+        TreeNodeIcon(node.type.hasChild, node.expanded)
         ASN1NodeName(node)
     }
 
@@ -63,27 +68,9 @@ private fun ASN1NodeView(node: ASN1Node) {
 
 }
 
-@Composable
-private fun ASN1NodePrefix(
-    hasChild: Boolean,
-    expanded: MutableState<Boolean>
-) {
-    if (hasChild) {
-        Icon(
-            expanded.value.choose(Icons.Default.ArrowDropDown, Icons.Default.ArrowRight),
-            contentDescription = "",
-            tint = MaterialTheme.colors.onBackground,
-            modifier = Modifier.size(16.dp).clickable {
-                expanded.value = !expanded.value
-            }
-        )
-    } else {
-        Box(modifier = Modifier.padding(start = 16.dp))
-    }
-}
 
 @Composable
-private fun ASN1NodeName(node: ASN1Node) {
+fun ASN1NodeName(node: ASN1Node) {
     Text(
         text = node.toString(),
         style = MaterialTheme.typography.caption,

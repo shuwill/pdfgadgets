@@ -230,7 +230,7 @@ public class PdfGadgetsPKCS7 {
             ASN1InputStream in = new ASN1InputStream(new ByteArrayInputStream(contentsKey));
             digest = ((ASN1OctetString) in.readObject()).getOctets();
 
-            sig = SignUtils.getSignatureHelper("SHA1withRSA", provider);
+            sig = SignUtils.getSignatureHelper(signCert.getSigAlgName(), provider);
             sig.initVerify(signCert.getPublicKey());
 
             // setting the oid to SHA1withRSA

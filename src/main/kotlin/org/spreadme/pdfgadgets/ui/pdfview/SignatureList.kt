@@ -36,6 +36,7 @@ import org.spreadme.pdfgadgets.utils.choose
 fun SignatureList(
     signatures: List<Signature>,
     sidePanelUIState: SidePanelUIState,
+    onParseSignatureContent: (ByteArray) -> Unit,
     onScroll: (postion: Position, scrollFinish: () -> Unit) -> Unit,
 ) {
     if (signatures.isEmpty()) {
@@ -57,7 +58,7 @@ fun SignatureList(
             sidePanelUIState.verticalScroll = lazyListState.firstVisibleItemIndex
             sidePanelUIState.verticalScrollOffset = lazyListState.firstVisibleItemScrollOffset
             items(signatures) { signature ->
-                SignatureListDetail(signature, onScroll)
+                SignatureListDetail(signature, onParseSignatureContent, onScroll)
             }
         }
     }
@@ -66,6 +67,7 @@ fun SignatureList(
 @Composable
 fun SignatureListDetail(
     signature: Signature,
+    onParseSignatureContent: (ByteArray) -> Unit,
     onScroll: (postion: Position, scrollFinish: () -> Unit) -> Unit,
 ) {
     Column(
@@ -73,7 +75,7 @@ fun SignatureListDetail(
     ) {
         val expanded by remember { signature.expand }
         SignatureBrief(signature.expand, signature.signatureResult, signature.lastSignatureCoversWholeDocument)
-        SignatureExpandDetail(expanded, signature, onScroll)
+        SignatureExpandDetail(expanded, signature, onParseSignatureContent, onScroll)
     }
 }
 
@@ -99,11 +101,19 @@ private fun SignatureBrief(
             }
         )
 
-        val verify = signatureResult.verifySignature && lastSignatureCoversWholeDocument
+        val tint = if (signatureResult.verifySignature) {
+            if (!lastSignatureCoversWholeDocument) {
+                LocalExtraColors.current.warning
+            } else {
+                LocalExtraColors.current.success
+            }
+        } else {
+            LocalExtraColors.current.error
+        }
         Icon(
             painter = painterResource(R.Icons.signature_verify),
             contentDescription = "",
-            tint = verify.choose(LocalExtraColors.current.success, LocalExtraColors.current.error),
+            tint = tint,
             modifier = Modifier.padding(start = 8.dp).size(16.dp)
         )
 
@@ -123,6 +133,7 @@ private fun SignatureBrief(
 private fun SignatureExpandDetail(
     expanded: Boolean,
     signature: Signature,
+    onParseSignatureContent: (ByteArray) -> Unit,
     onScroll: (postion: Position, scrollFinish: () -> Unit) -> Unit,
 ) {
     AnimatedVisibility(
@@ -152,6 +163,18 @@ private fun SignatureExpandDetail(
                         overflow = TextOverflow.Clip
                     )
                 }
+            }
+            Row(
+                modifier = Modifier.fillMaxWidth().height(24.dp).padding(horizontal = 32.dp).clickable {
+                    onParseSignatureContent(signature.content)
+                },
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text(
+                    "解析签名结构体...",
+                    style = MaterialTheme.typography.overline,
+                    color = MaterialTheme.colors.onBackground,
+                )
             }
             Row(
                 modifier = Modifier.fillMaxWidth().height(24.dp).padding(horizontal = 32.dp).clickable {

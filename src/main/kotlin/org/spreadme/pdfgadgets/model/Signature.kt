@@ -6,6 +6,7 @@ import androidx.compose.runtime.mutableStateOf
 data class Signature(
     val fieldName: String,
     val signedLength: Long,
+    val content: ByteArray,
     val signatureResult: SignatureResult,
     val signatureCoversWholeDocument: Boolean,
     var lastSignatureCoversWholeDocument: Boolean = false,

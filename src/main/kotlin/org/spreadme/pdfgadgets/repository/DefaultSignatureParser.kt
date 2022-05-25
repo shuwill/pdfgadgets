@@ -54,33 +54,35 @@ class DefaultSignatureParser : SignatureParser {
         }
         val signedLength = byteRange.getAsNumber(rangeSize - 1).intValue() + byteRange.getAsNumber(rangeSize - 2).intValue()
         try {
-            val pkcS7 = parsePdfPKCS7(PdfSignature(v), document)
+            val signature = PdfSignature(v)
+            val content = PdfEncodings.convertToBytes(signature.contents.value, null)
+            val pkcS7 = parsePdfPKCS7(signature, content, document)
 
             // checko signatureCoversWholeDocument
             val contentsChecker = ContentsChecker(document.reader.safeFile.createSourceView())
             val signatureCoversWholeDocument = contentsChecker.checkWhetherSignatureCoversWholeDocument(field)
 
-            return Signature(fieldName, signedLength.toLong(), SignatureResult(pkcS7), signatureCoversWholeDocument)
+            return Signature(fieldName, signedLength.toLong(), content, SignatureResult(pkcS7), signatureCoversWholeDocument)
         } catch (e: Exception) {
             e.printStackTrace()
         }
         return null
     }
 
-    private fun parsePdfPKCS7(signature: PdfSignature, document: PdfDocument): PdfGadgetsPKCS7 {
+    private fun parsePdfPKCS7(signature: PdfSignature, content: ByteArray, document: PdfDocument): PdfGadgetsPKCS7 {
         val pkcs7 = if (PdfName.Adbe_x509_rsa_sha1.equals(signature.subFilter)) {
             var cert = signature.pdfObject.getAsString(PdfName.Cert)
             if (cert == null) {
                 cert = signature.pdfObject.getAsArray(PdfName.Cert).getAsString(0)
             }
             PdfGadgetsPKCS7(
-                PdfEncodings.convertToBytes(signature.contents.value, null),
+                content,
                 cert.valueBytes,
                 BouncyCastleProvider.PROVIDER_NAME
             )
         } else {
             PdfGadgetsPKCS7(
-                PdfEncodings.convertToBytes(signature.contents.value, null),
+                content,
                 signature.subFilter,
                 BouncyCastleProvider.PROVIDER_NAME
             )

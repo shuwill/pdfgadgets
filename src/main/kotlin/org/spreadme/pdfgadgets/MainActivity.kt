@@ -25,7 +25,7 @@ class MainActivity : Activity() {
     companion object {
         fun getStartIntent(): ActivityIntent {
             return ActivityIntent(MainActivity::class).apply {
-
+                System.setProperty("pdfgadgets.logdir", AppConfig.appPath.toString())
             }
         }
     }

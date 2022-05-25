@@ -11,10 +11,10 @@ import androidx.compose.foundation.selection.selectable
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowDropDown
-import androidx.compose.material.icons.filled.ArrowRight
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -24,9 +24,9 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import org.spreadme.pdfgadgets.model.StructureNode
 import org.spreadme.pdfgadgets.resources.R
+import org.spreadme.pdfgadgets.ui.common.TreeNodeIcon
 import org.spreadme.pdfgadgets.ui.common.clickable
 import org.spreadme.pdfgadgets.ui.sidepanel.SidePanelUIState
-import org.spreadme.pdfgadgets.utils.choose
 
 @Composable
 fun BoxScope.StructureTree(
@@ -68,7 +68,7 @@ private fun StructureNodeView(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.Start
     ) {
-        StructureNodePrefix(node.hasChild(), node.expanded)
+        TreeNodeIcon(node.hasChild(), node.expanded)
         StructureNodeName(node, onClick)
     }
 
@@ -82,25 +82,6 @@ private fun StructureNodeView(
                 StructureNodeView(it, onClick)
             }
         }
-    }
-}
-
-@Composable
-private fun StructureNodePrefix(
-    hasChild: Boolean,
-    expanded: MutableState<Boolean>
-) {
-    if (hasChild) {
-        Icon(
-            expanded.value.choose(Icons.Default.ArrowDropDown, Icons.Default.ArrowRight),
-            contentDescription = "",
-            tint = MaterialTheme.colors.onBackground,
-            modifier = Modifier.size(16.dp).clickable {
-                expanded.value = !expanded.value
-            }
-        )
-    } else {
-        Box(modifier = Modifier.padding(start = 16.dp))
     }
 }
 

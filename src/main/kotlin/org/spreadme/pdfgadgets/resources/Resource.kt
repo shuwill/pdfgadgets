@@ -10,7 +10,6 @@ object R {
         const val outlines_empty = "drawables/outlines_empty.svg"
         const val signature_empty = "drawables/signature_empty.svg"
         const val indicate = "drawables/indicate.svg"
-        const val page_background = "drawables/page_background.svg"
     }
 
     object Icons {

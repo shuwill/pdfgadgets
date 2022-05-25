@@ -5,24 +5,20 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.unit.sp
-import com.itextpdf.kernel.pdf.PdfName
+import com.itextpdf.kernel.pdf.PdfObject
 import com.itextpdf.kernel.pdf.PdfStream
-import com.itextpdf.kernel.pdf.PdfString
 import kotlinx.coroutines.launch
 import org.spreadme.pdfgadgets.common.ViewModel
 import org.spreadme.pdfgadgets.common.viewModelScope
 import org.spreadme.pdfgadgets.model.ASN1Node
 import org.spreadme.pdfgadgets.model.PdfImageInfo
-import org.spreadme.pdfgadgets.model.StructureNode
 import org.spreadme.pdfgadgets.repository.ASN1Parser
 import org.spreadme.pdfgadgets.repository.PdfStreamParser
 import org.spreadme.pdfgadgets.ui.sidepanel.SidePanelUIState
 import org.spreadme.pdfgadgets.ui.theme.defaultKeywordColor
-import java.util.*
+import org.spreadme.pdfgadgets.utils.uuid
 
-class StreamPanelViewModel(
-    private val streamParser: PdfStreamParser, private val asN1Parser: ASN1Parser
-) : ViewModel() {
+class StreamPanelViewModel : ViewModel() {
 
     var enabled by mutableStateOf(false)
     var finished by mutableStateOf(false)
@@ -45,32 +41,16 @@ class StreamPanelViewModel(
         }
     }
 
-    fun swicth(node: StructureNode) {
+    fun swicth(uiState: StreamUIState?) {
         enabled = true
         finished = false
         message = null
-        setStreamViewUIState(node)
-    }
-
-    private fun setStreamViewUIState(node: StructureNode) {
-        if (node.isPdfStream()) {
-            val pdfStream = node.pdfObject as PdfStream
-            streamUIState = if (pdfStream[PdfName.Subtype] == PdfName.Image) {
-                StreamImageUIState(node, streamParser, StreamPanelViewType.IMAGE)
-            } else if (pdfStream[PdfName.Subtype] == PdfName.XML) {
-                StreamTextUIState(node, streamParser, StreamPanelViewType.XML)
-            } else {
-                StreamTextUIState(node, streamParser, StreamPanelViewType.DEFAULT)
-            }
-        } else if (node.isSignatureContent()) {
-            streamUIState = StreamASN1UIState(node, asN1Parser, StreamPanelViewType.SIGCONTENT)
-        }
+        streamUIState = uiState
     }
 }
 
 abstract class StreamUIState(
     val uid: String,
-    val structureNode: StructureNode,
     val streamPanelViewType: StreamPanelViewType
 ) {
 
@@ -93,54 +73,53 @@ abstract class StreamUIState(
 }
 
 class StreamImageUIState(
-    structureNode: StructureNode,
+
     private val streamParser: PdfStreamParser,
+    private val pdfObject: PdfObject,
     streamPanelViewType: StreamPanelViewType
-) : StreamUIState(
-    UUID.randomUUID().toString(), structureNode, streamPanelViewType
-) {
+
+) : StreamUIState(uuid(), streamPanelViewType) {
 
     var pdfImageInfo by mutableStateOf<PdfImageInfo?>(null)
 
     override suspend fun parse() {
-        pdfImageInfo = streamParser.parseImage(structureNode.pdfObject as PdfStream)
+        pdfImageInfo = streamParser.parseImage(pdfObject as PdfStream)
     }
 }
 
 class StreamTextUIState(
-    structureNode: StructureNode,
+
     private val streamParser: PdfStreamParser,
+    private val pdfObject: PdfObject,
     streamPanelViewType: StreamPanelViewType
-) : StreamUIState(
-    UUID.randomUUID().toString(),
-    structureNode,
-    streamPanelViewType
-) {
+
+) : StreamUIState(uuid(), streamPanelViewType) {
 
     val fontSize by mutableStateOf(13.sp)
     var texts = listOf<AnnotatedString>()
 
     override suspend fun parse() {
         texts = if (streamPanelViewType == StreamPanelViewType.XML) {
-            streamParser.parseXml(structureNode.pdfObject as PdfStream)
+            streamParser.parseXml(pdfObject as PdfStream)
         } else {
-            streamParser.parse(structureNode.pdfObject as PdfStream, defaultKeywordColor())
+            streamParser.parse(pdfObject as PdfStream, defaultKeywordColor())
         }
     }
 }
 
 class StreamASN1UIState(
-    structureNode: StructureNode, private val asN1Parser: ASN1Parser, streamPanelViewType: StreamPanelViewType
-) : StreamUIState(
-    UUID.randomUUID().toString(), structureNode, streamPanelViewType
-) {
+
+    private val asN1Parser: ASN1Parser,
+    private val content: ByteArray,
+    streamPanelViewType: StreamPanelViewType
+
+) : StreamUIState(uuid(), streamPanelViewType) {
 
     lateinit var root: ASN1Node
     val sidePanelUIState = SidePanelUIState()
 
     override suspend fun parse() {
-        val pdfString = structureNode.pdfObject as PdfString
-        root = asN1Parser.parse(pdfString.valueBytes)
+        root = asN1Parser.parse(content)
     }
 
 }

@@ -16,11 +16,15 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
+import com.itextpdf.kernel.pdf.PdfName
+import com.itextpdf.kernel.pdf.PdfStream
+import com.itextpdf.kernel.pdf.PdfString
 import kotlinx.coroutines.launch
 import mu.KotlinLogging
 import org.koin.core.component.inject
 import org.spreadme.pdfgadgets.common.AppComponent
 import org.spreadme.pdfgadgets.model.PdfMetadata
+import org.spreadme.pdfgadgets.model.StructureNode
 import org.spreadme.pdfgadgets.repository.ASN1Parser
 import org.spreadme.pdfgadgets.repository.PdfStreamParser
 import org.spreadme.pdfgadgets.repository.PdfTextSearcher
@@ -29,8 +33,7 @@ import org.spreadme.pdfgadgets.ui.frame.LoadProgressViewModel
 import org.spreadme.pdfgadgets.ui.frame.MainApplicationFrame
 import org.spreadme.pdfgadgets.ui.sidepanel.SidePanel
 import org.spreadme.pdfgadgets.ui.sidepanel.SidePanelMode
-import org.spreadme.pdfgadgets.ui.streamview.StreamPanel
-import org.spreadme.pdfgadgets.ui.streamview.StreamPanelViewModel
+import org.spreadme.pdfgadgets.ui.streamview.*
 import org.spreadme.pdfgadgets.ui.toolbars.ToolbarsViewModel
 
 class PdfViewAppComponent(
@@ -38,15 +41,15 @@ class PdfViewAppComponent(
     private val applicationViewModel: ApplicationViewModel
 ) : AppComponent(pdfMetadata.fileMetadata.name) {
 
-    private val logger = KotlinLogging.logger {  }
+    private val logger = KotlinLogging.logger { }
 
-    private val pdfStreamParser by inject<PdfStreamParser>()
+    private val streamParser by inject<PdfStreamParser>()
     private val asN1Parser by inject<ASN1Parser>()
     private val pdfTextSearcher by inject<PdfTextSearcher>()
 
     private val toolbarsViewModel = getViewModel<ToolbarsViewModel>(true)
     private val loadProgressViewModel = getViewModel<LoadProgressViewModel>()
-    private val streamPanelViewModel = getViewModel<StreamPanelViewModel>(pdfStreamParser, asN1Parser)
+    private val streamPanelViewModel = getViewModel<StreamPanelViewModel>()
 
     private val pdfViewModel: PdfViewModel
 
@@ -105,7 +108,8 @@ class PdfViewAppComponent(
             SidePanel(pdfViewModel.sideViewModel(SidePanelMode.STRUCTURE)) { sidePanelUIState ->
                 StructureTree(pdfViewModel.pdfMetadata.structureRoot, sidePanelUIState) { node ->
                     if (node.isParseable()) {
-                        streamPanelViewModel.swicth(node)
+                        val streamUIState = this@PdfViewAppComponent.getStreamViewUIState(node)
+                        streamPanelViewModel.swicth(streamUIState)
                     }
                 }
             }
@@ -117,6 +121,9 @@ class PdfViewAppComponent(
                 SignatureList(
                     pdfViewModel.pdfMetadata.signatures,
                     it,
+                    { signatureContent ->
+                        streamPanelViewModel.swicth(StreamASN1UIState(asN1Parser, signatureContent, StreamPanelViewType.SIGCONTENT))
+                    },
                     pdfViewModel::onScroll
                 )
             }
@@ -192,4 +199,20 @@ class PdfViewAppComponent(
         }
     }
 
+    private fun getStreamViewUIState(node: StructureNode): StreamUIState? {
+        return if (node.isPdfStream()) {
+            val pdfStream = node.pdfObject as PdfStream
+            if (pdfStream[PdfName.Subtype] == PdfName.Image) {
+                StreamImageUIState(streamParser, node.pdfObject, StreamPanelViewType.IMAGE)
+            } else if (pdfStream[PdfName.Subtype] == PdfName.XML) {
+                StreamTextUIState(streamParser, node.pdfObject, StreamPanelViewType.XML)
+            } else {
+                StreamTextUIState(streamParser, node.pdfObject, StreamPanelViewType.DEFAULT)
+            }
+        } else if (node.isSignatureContent()) {
+            StreamASN1UIState(asN1Parser, (node.pdfObject as PdfString).valueBytes, StreamPanelViewType.SIGCONTENT)
+        } else {
+            null
+        }
+    }
 }

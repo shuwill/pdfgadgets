@@ -21,14 +21,14 @@ import org.spreadme.pdfgadgets.ui.frame.LoadProgressViewModel
 @Composable
 fun ActionBar(
     applicationViewModel: ApplicationViewModel,
-    progressViewModel: LoadProgressViewModel
+    progressViewModel: LoadProgressViewModel,
 ) {
     Column(
         Modifier.fillMaxHeight().width(56.dp)
             .background(MaterialTheme.colors.background),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        ActionIcon(Modifier.padding(top = 16.dp), R.Icons.open) {
+        ActionIcon(Modifier.padding(top = 16.dp), R.Icons.pdf) {
             FileDialog(
                 parent = applicationViewModel.composeWindow,
                 title = "打开文件",
@@ -41,16 +41,9 @@ fun ActionBar(
                 }
             )
         }
-        ActionIcon(Modifier.padding(top = 16.dp), R.Icons.newfile) {
-            FileDialog(
-                parent = applicationViewModel.composeWindow,
-                title = "打开文件",
-                onFileOpen = {
-                    applicationViewModel.createFile(
 
-                    )
-                }
-            )
+        ActionIcon(Modifier.padding(top = 16.dp), R.Icons.view) {
+            applicationViewModel.openASN1Parser()
         }
 
         Column(

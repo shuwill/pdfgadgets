@@ -103,10 +103,13 @@ class PdfViewModel(
     override fun onCleared() {
         val fileMetadata = pdfMetadata.fileMetadata
         val cachePath = Paths.get(AppConfig.indexPath.toString(), fileMetadata.uid)
-        if(Files.exists(cachePath)) {
-           cachePath.listDirectoryEntries().forEach {
-               Files.deleteIfExists(it)
-           }
+        if (Files.exists(cachePath)) {
+            cachePath.listDirectoryEntries().forEach {
+                Files.deleteIfExists(it)
+            }
+            if (cachePath.listDirectoryEntries().isNotEmpty()) {
+                Files.deleteIfExists(cachePath)
+            }
         }
     }
 }
