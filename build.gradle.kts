@@ -68,11 +68,22 @@ tasks.jar {
 compose.desktop {
     application {
         mainClass = "org.spreadme.pdfgadgets.AppKt"
+        jvmArgs += listOf(
+            "-Xms500m",
+            "-Xmx1g",
+            "-XX:ReservedCodeCacheSize=512m",
+            "-XX:+UseG1GC",
+            "-Xverify:none",
+            "-XX:SoftRefLRUPolicyMSPerMB=50",
+            "-XX:CICompilerCount=2",
+            "-XX:+HeapDumpOnOutOfMemoryError",
+            "-XX:-OmitStackTraceInFastThrow"
+        )
         nativeDistributions {
             packageName = "PDFGadgets"
             packageVersion = project.version as String
             description = "pdf tools"
-            copyright = "© 2021 wangshuwei6@gmail.com. All rights reserved."
+            copyright = "© 2022 wangshuwei6@gmail.com. All rights reserved."
             vendor = "shuwill"
             appResourcesRootDir.set(project.layout.projectDirectory.dir("resources"))
 

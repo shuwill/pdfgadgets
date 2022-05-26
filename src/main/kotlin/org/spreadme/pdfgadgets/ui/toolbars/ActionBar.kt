@@ -17,6 +17,7 @@ import org.spreadme.pdfgadgets.resources.R
 import org.spreadme.pdfgadgets.ui.common.FileDialog
 import org.spreadme.pdfgadgets.ui.frame.ApplicationViewModel
 import org.spreadme.pdfgadgets.ui.frame.LoadProgressViewModel
+import org.spreadme.pdfgadgets.utils.choose
 
 @Composable
 fun ActionBar(
@@ -28,7 +29,7 @@ fun ActionBar(
             .background(MaterialTheme.colors.background),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        ActionIcon(Modifier.padding(top = 16.dp), R.Icons.pdf) {
+        ActionIcon(Modifier.padding(top = 16.dp), R.Icons.open) {
             FileDialog(
                 parent = applicationViewModel.composeWindow,
                 title = "打开文件",
@@ -42,7 +43,7 @@ fun ActionBar(
             )
         }
 
-        ActionIcon(Modifier.padding(top = 16.dp), R.Icons.view) {
+        ActionIcon(Modifier.padding(top = 16.dp), R.Icons.decode) {
             applicationViewModel.openASN1Parser()
         }
 
@@ -51,7 +52,7 @@ fun ActionBar(
             verticalArrangement = Arrangement.Bottom,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            ActionIcon(Modifier.padding(bottom = 16.dp), R.Icons.lignt) {
+            ActionIcon(Modifier.padding(bottom = 16.dp), applicationViewModel.isDark.choose(R.Icons.dark, R.Icons.lignt)) {
                 applicationViewModel.isDark = !applicationViewModel.isDark
                 applicationViewModel.config(AppConfigs.DARK_CONFIG, applicationViewModel.isDark.toString())
             }

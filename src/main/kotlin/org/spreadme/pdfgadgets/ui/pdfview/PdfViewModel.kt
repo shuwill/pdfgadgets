@@ -107,7 +107,7 @@ class PdfViewModel(
             cachePath.listDirectoryEntries().forEach {
                 Files.deleteIfExists(it)
             }
-            if (cachePath.listDirectoryEntries().isNotEmpty()) {
+            if (cachePath.listDirectoryEntries().isEmpty()) {
                 Files.deleteIfExists(cachePath)
             }
         }

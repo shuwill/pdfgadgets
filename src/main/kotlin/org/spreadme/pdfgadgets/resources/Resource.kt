@@ -1,7 +1,5 @@
 package org.spreadme.pdfgadgets.resources
 
-import androidx.compose.ui.graphics.vector.ImageVector
-
 object R {
 
     object Drawables {
@@ -45,12 +43,11 @@ object R {
 
         const val signature = "icons/signature.svg"
         const val signature_verify = "icons/signature-verify.svg"
-        const val ds = "icons/ds.svg"
 
         const val pdffile = "icons/pdffile.svg"
         const val newfile = "icons/newfile.svg"
         const val open = "icons/open.svg"
-        const val view = "icons/view.svg"
+        const val decode = "icons/decode.svg"
 
         const val lignt = "icons/light.svg"
         const val dark = "icons/dark.svg"

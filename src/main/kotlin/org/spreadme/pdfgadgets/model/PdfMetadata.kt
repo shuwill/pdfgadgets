@@ -17,7 +17,9 @@ class PdfMetadata(
 ) : Closeable {
 
     override fun close() {
+        println("document close")
         document.close()
+        pages.forEach { it.renderer.close() }
     }
 
 }

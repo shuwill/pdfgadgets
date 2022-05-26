@@ -11,6 +11,7 @@ class PageMetadata(
     var mediabox: Rectangle,
     var renderer: PdfRenderer,
     val signatures: List<Signature> = listOf(),
+    var pixmapMetadata: PixmapMetadata? = null,
     var textBlocks: List<TextBlock> = listOf(),
     var enabled: MutableState<Boolean> = mutableStateOf(true),
 ) {

@@ -7,11 +7,9 @@ import kotlinx.coroutines.sync.withLock
 import mu.KotlinLogging
 import org.spreadme.pdfgadgets.config.AppConfig
 import org.spreadme.pdfgadgets.model.*
-import org.spreadme.pdfgadgets.utils.createFile
-import java.io.ByteArrayInputStream
+import org.spreadme.pdfgadgets.utils.*
 import java.nio.file.Files
 import java.nio.file.Paths
-import javax.imageio.ImageIO
 
 class DefaultPdfRenderer(fileMetadata: FileMetadata) : PdfRenderer {
 
@@ -70,9 +68,8 @@ class DefaultPdfRenderer(fileMetadata: FileMetadata) : PdfRenderer {
                 // create cache index
                 val cacheIndex = "${page.index}-$dpi"
                 val cachePath = Paths.get(AppConfig.indexPath.toString(), file.uid, cacheIndex)
-                val bufferedImage = if (Files.exists(cachePath)) {
-                    val bytes = Files.readAllBytes(cachePath)
-                    ImageIO.read(ByteArrayInputStream(bytes))
+                val pixels = if (Files.exists(cachePath) && page.pixmapMetadata != null) {
+                    toMappedByteBuffer(cachePath).asIntBuffer().toIntArray()
                 } else {
                     createFile(cachePath, true)
                     val scale = Matrix().scale(dpi)
@@ -81,11 +78,13 @@ class DefaultPdfRenderer(fileMetadata: FileMetadata) : PdfRenderer {
 
                     drawDevice = DrawDevice(pixmap)
                     loadPage.run(drawDevice, scale)
-                    val pixmapMetadata = PixmapMetadata(pixmap.width, pixmap.height, pixmap.pixels)
-                    val bufferedImage = pixmapMetadata.toBufferedImage()
-                    ImageIO.write(bufferedImage, "PNG", cachePath.toFile())
-                    bufferedImage
+                    page.pixmapMetadata = PixmapMetadata(pixmap.width, pixmap.height)
+                    val pixels = pixmap.pixels
+                    toFile(cachePath, toByteBuffer(pixels))
+                    pixels
                 }
+
+                val bufferedImage = page.pixmapMetadata!!.toBufferedImage(pixels)
 
                 val end = System.currentTimeMillis()
                 logger.debug("end render ${file.name}: page[${page.index}], dpi[$dpi], cost ${end - start} ms")

@@ -71,7 +71,7 @@ fun mediabox(
 ) {
     // mediabox size
     Rectangle(
-        modifier = Modifier.background(MaterialTheme.colors.background.copy(0.65f))
+        modifier = Modifier.background(MaterialTheme.colors.primary.copy(0.45f))
             .border(1.dp, color = LocalExtraColors.current.border),
         page.mediabox,
         page.mediabox.height,
