@@ -3,7 +3,6 @@ package org.spreadme.pdfgadgets.ui.streamview
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.unit.sp
 import com.itextpdf.kernel.pdf.PdfObject
 import com.itextpdf.kernel.pdf.PdfStream
@@ -12,10 +11,10 @@ import org.spreadme.pdfgadgets.common.ViewModel
 import org.spreadme.pdfgadgets.common.viewModelScope
 import org.spreadme.pdfgadgets.model.ASN1Node
 import org.spreadme.pdfgadgets.model.PdfImageInfo
+import org.spreadme.pdfgadgets.model.PdfStreamTokenSequence
 import org.spreadme.pdfgadgets.repository.ASN1Parser
 import org.spreadme.pdfgadgets.repository.PdfStreamParser
 import org.spreadme.pdfgadgets.ui.sidepanel.SidePanelUIState
-import org.spreadme.pdfgadgets.ui.theme.defaultKeywordColor
 import org.spreadme.pdfgadgets.utils.uuid
 
 class StreamPanelViewModel : ViewModel() {
@@ -96,13 +95,13 @@ class StreamTextUIState(
 ) : StreamUIState(uuid(), streamPanelViewType) {
 
     val fontSize by mutableStateOf(13.sp)
-    var texts = listOf<AnnotatedString>()
+    var streamTokenSequences = listOf<PdfStreamTokenSequence>()
 
     override suspend fun parse() {
-        texts = if (streamPanelViewType == StreamPanelViewType.XML) {
+        streamTokenSequences = if (streamPanelViewType == StreamPanelViewType.XML) {
             streamParser.parseXml(pdfObject as PdfStream)
         } else {
-            streamParser.parse(pdfObject as PdfStream, defaultKeywordColor())
+            streamParser.parse(pdfObject as PdfStream)
         }
     }
 }

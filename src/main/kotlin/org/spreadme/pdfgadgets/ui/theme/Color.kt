@@ -191,3 +191,5 @@ fun defaultKeywordColor(
     escape,
     name
 )
+
+val LocalStreamKeywordColors = compositionLocalOf { defaultKeywordColor() }

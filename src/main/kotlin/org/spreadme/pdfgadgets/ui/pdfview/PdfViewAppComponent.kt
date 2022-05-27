@@ -10,6 +10,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
@@ -194,7 +195,7 @@ class PdfViewAppComponent(
     fun RowScope.StructureDetailPanel() {
         AnimatedVisibility(streamPanelViewModel.enabled) {
             SidePanel(streamPanelViewModel.sidePanelUIState, true) {
-                StreamPanel(streamPanelViewModel)
+                StreamPanel(streamPanelViewModel, mutableStateOf(applicationViewModel.isDark))
             }
         }
     }

@@ -7,7 +7,9 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -16,10 +18,14 @@ import org.spreadme.pdfgadgets.ui.common.Toast
 import org.spreadme.pdfgadgets.ui.common.ToastType
 import org.spreadme.pdfgadgets.ui.common.clickable
 import org.spreadme.pdfgadgets.ui.theme.LocalExtraColors
+import org.spreadme.pdfgadgets.ui.theme.LocalStreamKeywordColors
+import org.spreadme.pdfgadgets.ui.theme.defaultKeywordColor
+import org.spreadme.pdfgadgets.utils.choose
 
 @Composable
 fun StreamPanel(
-    streamPanelViewModel: StreamPanelViewModel
+    streamPanelViewModel: StreamPanelViewModel,
+    isDark: MutableState<Boolean>
 ) {
     Column(Modifier.fillMaxSize()) {
         Divider(color = LocalExtraColors.current.border, thickness = 1.dp)
@@ -43,7 +49,13 @@ fun StreamPanel(
                             StreamImageView(it as StreamImageUIState)
                         }
                         else -> {
-                            StreamTextView(it as StreamTextUIState)
+                            val keywordColor = isDark.value.choose(defaultKeywordColor(), defaultKeywordColor())
+                            CompositionLocalProvider(
+                                LocalStreamKeywordColors provides keywordColor,
+                            ) {
+                                StreamTextView(it as StreamTextUIState)
+                            }
+
                         }
                     }
                 }

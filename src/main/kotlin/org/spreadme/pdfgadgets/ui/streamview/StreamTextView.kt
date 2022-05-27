@@ -10,11 +10,18 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.AnnotatedString
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
+import org.spreadme.pdfgadgets.model.PdfStreamTokenSequence
+import org.spreadme.pdfgadgets.model.PdfStreamTokenType
 import org.spreadme.pdfgadgets.ui.theme.FiraCode
+import org.spreadme.pdfgadgets.ui.theme.LocalStreamKeywordColors
 
 @Composable
 fun StreamTextView(
@@ -28,11 +35,12 @@ fun StreamTextView(
             Modifier.fillMaxSize().horizontalScroll(horizontalScollState),
             state = lazyListState
         ) {
-            items(textViewState.texts) { item ->
+            items(textViewState.streamTokenSequences) { item ->
+                val annotatedString = annotatedString(item)
                 Box(Modifier.height(
                     with(LocalDensity.current) { textViewState.fontSize.toDp() } * 1.6f)
                 ) {
-                    Line(item, textViewState, Modifier.align(Alignment.CenterStart))
+                    Line(annotatedString, textViewState, Modifier.align(Alignment.CenterStart))
                 }
             }
         }
@@ -47,6 +55,29 @@ fun StreamTextView(
         )
     }
 }
+
+@Composable
+private fun annotatedString(pdfStreamTokenSequence: PdfStreamTokenSequence): AnnotatedString =
+    buildAnnotatedString {
+        pdfStreamTokenSequence.tokens.forEach {
+            append(
+                buildAnnotatedString {
+                    val color = when (it.tokenType) {
+                        PdfStreamTokenType.operator -> LocalStreamKeywordColors.current.operator
+                        PdfStreamTokenType.number -> LocalStreamKeywordColors.current.number
+                        PdfStreamTokenType.string -> LocalStreamKeywordColors.current.string
+                        PdfStreamTokenType.escape -> LocalStreamKeywordColors.current.escape
+                        PdfStreamTokenType.tname -> LocalStreamKeywordColors.current.name
+                        PdfStreamTokenType.indent -> Color.Transparent
+
+                    }
+                    withStyle(style = SpanStyle(color)) {
+                        append(it.token)
+                    }
+                }
+            )
+        }
+    }
 
 @Composable
 private fun Line(content: AnnotatedString, textViewState: StreamTextUIState, modifier: Modifier = Modifier) {
