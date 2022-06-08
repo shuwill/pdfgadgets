@@ -178,7 +178,7 @@ class StreamKeywordColors(
         internal set
 }
 
-fun defaultKeywordColor(
+fun lightKeywordColor(
     operator: Color = Color(0xffCC7832),
     number: Color = Color(0xff6897BB),
     string: Color = Color(0xff8EA765),
@@ -192,4 +192,18 @@ fun defaultKeywordColor(
     name
 )
 
-val LocalStreamKeywordColors = compositionLocalOf { defaultKeywordColor() }
+fun darkKeywordColor(
+    operator: Color = Color(0xffCC7832),
+    number: Color = Color(0xff6897BB),
+    string: Color = Color(0xff8EA765),
+    escape: Color = Color(0xffCC7832),
+    name: Color = Color(0xffCE7832),
+) = StreamKeywordColors(
+    operator,
+    number,
+    string,
+    escape,
+    name
+)
+
+val LocalStreamKeywordColors = compositionLocalOf { lightKeywordColor() }

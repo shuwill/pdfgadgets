@@ -4,17 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="fd4a568c-9515-436d-b67e-95b0dca3c528" name="Changes" comment="fix some bugs">
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/spreadme/pdfgadgets/signatures/SignExceptionMessageConstant.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/kotlin/org/spreadme/pdfgadgets/model/PageRenderInfo.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/org/spreadme/pdfgadgets/model/PageRenderInfo.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/kotlin/org/spreadme/pdfgadgets/model/PdfImageInfo.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/org/spreadme/pdfgadgets/model/PdfImageInfo.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/kotlin/org/spreadme/pdfgadgets/repository/DefaultPdfRenderer.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/org/spreadme/pdfgadgets/repository/DefaultPdfRenderer.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/kotlin/org/spreadme/pdfgadgets/repository/PdfStreamParser.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/org/spreadme/pdfgadgets/repository/PdfStreamParser.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/kotlin/org/spreadme/pdfgadgets/ui/common/AsyncImage.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/org/spreadme/pdfgadgets/ui/common/AsyncImage.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/kotlin/org/spreadme/pdfgadgets/ui/pdfview/PageDetail.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/org/spreadme/pdfgadgets/ui/pdfview/PageDetail.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/kotlin/org/spreadme/pdfgadgets/ui/pdfview/PageViewModel.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/org/spreadme/pdfgadgets/ui/pdfview/PageViewModel.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/kotlin/org/spreadme/pdfgadgets/ui/pdfview/PdfObjectPanel.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/org/spreadme/pdfgadgets/ui/pdfview/PdfObjectPanel.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/kotlin/org/spreadme/pdfgadgets/ui/pdfview/PdfObjectViewModel.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/org/spreadme/pdfgadgets/ui/pdfview/PdfObjectViewModel.kt" afterDir="false" />
+    <list default="true" id="fd4a568c-9515-436d-b67e-95b0dca3c528" name="Changes" comment="add some features">
+      <change beforePath="$PROJECT_DIR$/src/main/kotlin/org/spreadme/pdfgadgets/ui/streamview/StreamPanel.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/org/spreadme/pdfgadgets/ui/streamview/StreamPanel.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/kotlin/org/spreadme/pdfgadgets/ui/theme/Color.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/org/spreadme/pdfgadgets/ui/theme/Color.kt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -32,12 +24,35 @@
   <component name="ExternalProjectsManager">
     <system id="GRADLE">
       <state>
+        <task path="$PROJECT_DIR$">
+          <activation />
+        </task>
+        <task path="$PROJECT_DIR$/mupdf">
+          <activation />
+        </task>
         <projects_view>
           <tree_state>
             <expand>
               <path>
                 <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
                 <item name="pdfgadgets" type="f1a62948:ProjectNode" />
+              </path>
+              <path>
+                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
+                <item name="pdfgadgets" type="f1a62948:ProjectNode" />
+                <item name="Tasks" type="e4a08cd1:TasksNode" />
+              </path>
+              <path>
+                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
+                <item name="pdfgadgets" type="f1a62948:ProjectNode" />
+                <item name="Tasks" type="e4a08cd1:TasksNode" />
+                <item name="build" type="c8890929:TasksNode$1" />
+              </path>
+              <path>
+                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
+                <item name="pdfgadgets" type="f1a62948:ProjectNode" />
+                <item name="Tasks" type="e4a08cd1:TasksNode" />
+                <item name="compose desktop" type="c8890929:TasksNode$1" />
               </path>
             </expand>
             <select />
@@ -50,16 +65,27 @@
     <option name="RECENT_TEMPLATES">
       <list>
         <option value="Class" />
-        <option value="Kotlin File" />
-        <option value="Kotlin Interface" />
         <option value="Kotlin Enum" />
+        <option value="Kotlin Interface" />
         <option value="Kotlin Class" />
+        <option value="Kotlin File" />
         <option value="Kotlin Data Class" />
       </list>
     </option>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="HighlightingSettingsPerFile">
+    <setting file="file://$PROJECT_DIR$/src/main/kotlin/org/spreadme/pdfgadgets/repository/DefaultPdfRenderer.kt" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/src/main/kotlin/org/spreadme/pdfgadgets/ui/common/Toast.kt" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/src/main/kotlin/org/spreadme/pdfgadgets/ui/streamview/StreamPanel.kt" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/src/main/kotlin/org/spreadme/pdfgadgets/ui/streamview/StreamTextView.kt" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/src/main/kotlin/org/spreadme/pdfgadgets/ui/theme/Color.kt" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/src/main/kotlin/org/spreadme/pdfgadgets/utils/IOUtilities.kt" root0="FORCE_HIGHLIGHTING" />
+  </component>
+  <component name="MacroExpansionManager">
+    <option name="directoryName" value="9wngmfxn" />
   </component>
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
@@ -79,7 +105,6 @@
     <ConfirmationsSetting value="2" id="Add" />
   </component>
   <component name="ProjectViewState">
-    <option name="autoscrollFromSource" value="true" />
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
@@ -87,11 +112,13 @@
   &quot;keyToString&quot;: {
     &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;/Users/wangshuwei/Documents/dev/opensource/jmupdf&quot;,
-    &quot;project.structure.last.edited&quot;: &quot;Libraries&quot;,
-    &quot;project.structure.proportion&quot;: &quot;0.0&quot;,
-    &quot;project.structure.side.proportion&quot;: &quot;0.0&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;
+    &quot;last_opened_file_path&quot;: &quot;/Users/wangshuwei/Documents/dev/project/pdfgadgets/src/main/resources/drawables/launcher_icons&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;Project&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.38275862&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.lookFeel&quot;
   },
   &quot;keyToStringList&quot;: {
     &quot;DatabaseDriversLRU&quot;: [
@@ -101,13 +128,14 @@
 }</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
-      <recent name="$PROJECT_DIR$/src/test/resources" />
-      <recent name="$PROJECT_DIR$/screenshot" />
-      <recent name="$PROJECT_DIR$/src/main/resources/icons" />
+      <recent name="$PROJECT_DIR$/src/main/resources/drawables/launcher_icons" />
       <recent name="$PROJECT_DIR$/src/main/resources/drawables" />
-      <recent name="$PROJECT_DIR$/src/main/resources" />
+      <recent name="$PROJECT_DIR$/src/main/resources/icons" />
+      <recent name="$PROJECT_DIR$/mupdf/src/main/java/com/artifex/mupdf/example" />
+      <recent name="$PROJECT_DIR$/src/test/resources" />
     </key>
     <key name="MoveKotlinTopLevelDeclarationsDialog.RECENTS_KEY">
+      <recent name="org.spreadme.pdfgadgets.ui.streamview" />
       <recent name="org.spreadme.pdfgadgets.config" />
       <recent name="org.spreadme.pdfgadgets.ui.frame" />
       <recent name="org.spreadme.pdfgadgets.model" />
@@ -120,12 +148,13 @@
       <recent name="org.spreadme.pdfgadgets.model" />
     </key>
     <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="org.spreadme.pdfgadgets.model" />
       <recent name="org.spreadme.pdfgadgets.signatures" />
       <recent name="com.itextpdf.kernel.pdf.xobject" />
     </key>
   </component>
-  <component name="RunManager" selected="Kotlin.AppKt">
-    <configuration name="ASN1ParserTest.parse" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+  <component name="RunManager" selected="Gradle.pdfgadgets [packageDmg]">
+    <configuration name="MindCaseTest.mindCase" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
         <option name="externalProjectPath" value="$PROJECT_DIR$" />
@@ -138,7 +167,7 @@
           <list>
             <option value=":test" />
             <option value="--tests" />
-            <option value="&quot;org.spreadme.pdfgadgets.ASN1ParserTest.parse&quot;" />
+            <option value="&quot;org.spreadme.pdfgadgets.MindCaseTest.mindCase&quot;" />
           </list>
         </option>
         <option name="vmOptions" />
@@ -148,71 +177,65 @@
       <DebugAllEnabled>false</DebugAllEnabled>
       <method v="2" />
     </configuration>
-    <configuration name="ApplicationConfigLoaderTest.testConfigLoad" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+    <configuration name="pdfgadgets [clean]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
         <option name="externalProjectPath" value="$PROJECT_DIR$" />
         <option name="externalSystemIdString" value="GRADLE" />
-        <option name="scriptParameters" value="" />
+        <option name="scriptParameters" />
         <option name="taskDescriptions">
           <list />
         </option>
         <option name="taskNames">
           <list>
-            <option value=":test" />
-            <option value="--tests" />
-            <option value="&quot;org.spreadme.pdfgadgets.ApplicationConfigLoaderTest.testConfigLoad&quot;" />
+            <option value="clean" />
           </list>
         </option>
         <option name="vmOptions" />
       </ExternalSystemSettings>
-      <ExternalSystemDebugServerProcess>false</ExternalSystemDebugServerProcess>
+      <ExternalSystemDebugServerProcess>true</ExternalSystemDebugServerProcess>
       <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
       <DebugAllEnabled>false</DebugAllEnabled>
       <method v="2" />
     </configuration>
-    <configuration name="SqlLiteDatabaseTest" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+    <configuration name="pdfgadgets [packageDmg]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
         <option name="externalProjectPath" value="$PROJECT_DIR$" />
         <option name="externalSystemIdString" value="GRADLE" />
-        <option name="scriptParameters" value="" />
+        <option name="scriptParameters" />
         <option name="taskDescriptions">
           <list />
         </option>
         <option name="taskNames">
           <list>
-            <option value=":test" />
-            <option value="--tests" />
-            <option value="&quot;org.spreadme.pdfgadgets.SqlLiteDatabaseTest&quot;" />
+            <option value="packageDmg" />
           </list>
         </option>
         <option name="vmOptions" />
       </ExternalSystemSettings>
-      <ExternalSystemDebugServerProcess>false</ExternalSystemDebugServerProcess>
+      <ExternalSystemDebugServerProcess>true</ExternalSystemDebugServerProcess>
       <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
       <DebugAllEnabled>false</DebugAllEnabled>
       <method v="2" />
     </configuration>
-    <configuration name="SqlLiteDatabaseTest.createDb" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+    <configuration name="pdfgadgets [packageUberJarForCurrentOS]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
         <option name="externalProjectPath" value="$PROJECT_DIR$" />
         <option name="externalSystemIdString" value="GRADLE" />
-        <option name="scriptParameters" value="" />
+        <option name="scriptParameters" />
         <option name="taskDescriptions">
           <list />
         </option>
         <option name="taskNames">
           <list>
-            <option value=":test" />
-            <option value="--tests" />
-            <option value="&quot;org.spreadme.pdfgadgets.SqlLiteDatabaseTest.createDb&quot;" />
+            <option value="packageUberJarForCurrentOS" />
           </list>
         </option>
         <option name="vmOptions" />
       </ExternalSystemSettings>
-      <ExternalSystemDebugServerProcess>false</ExternalSystemDebugServerProcess>
+      <ExternalSystemDebugServerProcess>true</ExternalSystemDebugServerProcess>
       <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
       <DebugAllEnabled>false</DebugAllEnabled>
       <method v="2" />
@@ -221,25 +244,25 @@
       <option name="MAIN_CLASS_NAME" value="org.spreadme.pdfgadgets.AppKt" />
       <module name="pdfgadgets.main" />
       <shortenClasspath name="NONE" />
-      <option name="VM_PARAMETERS" value="-Xmx500M -XX:+HeapDumpOnOutOfMemoryError" />
+      <option name="VM_PARAMETERS" value="-Xmx1G -Xms500m -XX:ReservedCodeCacheSize=512m -XX:+UseG1GC -Xverify:none -XX:SoftRefLRUPolicyMSPerMB=50 -XX:CICompilerCount=2 -XX:+HeapDumpOnOutOfMemoryError -XX:-OmitStackTraceInFastThrow" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
     </configuration>
     <list>
-      <item itemvalue="Gradle.ASN1ParserTest.parse" />
-      <item itemvalue="Gradle.ApplicationConfigLoaderTest.testConfigLoad" />
-      <item itemvalue="Gradle.SqlLiteDatabaseTest" />
-      <item itemvalue="Gradle.SqlLiteDatabaseTest.createDb" />
+      <item itemvalue="Gradle.MindCaseTest.mindCase" />
+      <item itemvalue="Gradle.pdfgadgets [clean]" />
+      <item itemvalue="Gradle.pdfgadgets [packageDmg]" />
+      <item itemvalue="Gradle.pdfgadgets [packageUberJarForCurrentOS]" />
       <item itemvalue="Kotlin.AppKt" />
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Gradle.pdfgadgets [packageDmg]" />
         <item itemvalue="Kotlin.AppKt" />
-        <item itemvalue="Gradle.ASN1ParserTest.parse" />
-        <item itemvalue="Gradle.ApplicationConfigLoaderTest.testConfigLoad" />
-        <item itemvalue="Gradle.SqlLiteDatabaseTest.createDb" />
-        <item itemvalue="Gradle.SqlLiteDatabaseTest" />
+        <item itemvalue="Gradle.pdfgadgets [clean]" />
+        <item itemvalue="Gradle.MindCaseTest.mindCase" />
+        <item itemvalue="Gradle.pdfgadgets [packageUberJarForCurrentOS]" />
       </list>
     </recent_temporary>
   </component>
@@ -289,6 +312,56 @@
       <workItem from="1652752710085" duration="57000" />
       <workItem from="1652758498820" duration="19470000" />
       <workItem from="1652835032932" duration="7701000" />
+      <workItem from="1652872332942" duration="13332000" />
+      <workItem from="1652914630645" duration="34087000" />
+      <workItem from="1653011219097" duration="39257000" />
+      <workItem from="1653093338111" duration="1774000" />
+      <workItem from="1653113285107" duration="18174000" />
+      <workItem from="1653198070023" duration="4609000" />
+      <workItem from="1653222877978" duration="773000" />
+      <workItem from="1653227591975" duration="886000" />
+      <workItem from="1653311556038" duration="3561000" />
+      <workItem from="1653315160951" duration="1565000" />
+      <workItem from="1653395322794" duration="7775000" />
+      <workItem from="1653441506743" duration="6033000" />
+      <workItem from="1653468502723" duration="14589000" />
+      <workItem from="1653528956546" duration="21813000" />
+      <workItem from="1653614333926" duration="11775000" />
+      <workItem from="1653649168485" duration="3819000" />
+      <workItem from="1653662563731" duration="287000" />
+      <workItem from="1653663004689" duration="801000" />
+      <workItem from="1653723959772" duration="1133000" />
+      <workItem from="1653729816012" duration="42000" />
+      <workItem from="1653730118945" duration="109000" />
+      <workItem from="1653730454987" duration="45000" />
+      <workItem from="1653730643823" duration="67000" />
+      <workItem from="1653730906227" duration="141000" />
+      <workItem from="1653731198248" duration="54000" />
+      <workItem from="1653731370538" duration="98000" />
+      <workItem from="1653731546076" duration="278000" />
+      <workItem from="1653731839071" duration="829000" />
+      <workItem from="1653732681797" duration="2097000" />
+      <workItem from="1653736385645" duration="1117000" />
+      <workItem from="1653738653555" duration="657000" />
+      <workItem from="1653742064028" duration="657000" />
+      <workItem from="1653797317921" duration="6515000" />
+      <workItem from="1653886094877" duration="2989000" />
+      <workItem from="1653920204174" duration="39000" />
+      <workItem from="1654056479266" duration="795000" />
+      <workItem from="1654079122530" duration="27000" />
+      <workItem from="1654096971599" duration="280000" />
+      <workItem from="1654133774182" duration="44000" />
+      <workItem from="1654133842903" duration="29000" />
+      <workItem from="1654133882761" duration="26000" />
+      <workItem from="1654133920331" duration="123000" />
+      <workItem from="1654134062099" duration="86000" />
+      <workItem from="1654239934632" duration="418000" />
+      <workItem from="1654333938367" duration="1431000" />
+      <workItem from="1654339843682" duration="831000" />
+      <workItem from="1654436229490" duration="1223000" />
+      <workItem from="1654437464551" duration="1527000" />
+      <workItem from="1654569247171" duration="620000" />
+      <workItem from="1654580083098" duration="673000" />
     </task>
     <task id="LOCAL-00001" summary="init application frame">
       <created>1651413815981</created>
@@ -451,7 +524,84 @@
       <option name="project" value="LOCAL" />
       <updated>1652717397710</updated>
     </task>
-    <option name="localTasksCounter" value="24" />
+    <task id="LOCAL-00024" summary="pdf stream view">
+      <created>1652885696035</created>
+      <option name="number" value="00024" />
+      <option name="presentableId" value="LOCAL-00024" />
+      <option name="project" value="LOCAL" />
+      <updated>1652885696035</updated>
+    </task>
+    <task id="LOCAL-00025" summary="pdf stream view">
+      <created>1652932109068</created>
+      <option name="number" value="00025" />
+      <option name="presentableId" value="LOCAL-00025" />
+      <option name="project" value="LOCAL" />
+      <updated>1652932109068</updated>
+    </task>
+    <task id="LOCAL-00026" summary="pdf stream view">
+      <created>1652950161061</created>
+      <option name="number" value="00026" />
+      <option name="presentableId" value="LOCAL-00026" />
+      <option name="project" value="LOCAL" />
+      <updated>1652950161061</updated>
+    </task>
+    <task id="LOCAL-00027" summary="pdf stream view">
+      <created>1652972702989</created>
+      <option name="number" value="00027" />
+      <option name="presentableId" value="LOCAL-00027" />
+      <option name="project" value="LOCAL" />
+      <updated>1652972702989</updated>
+    </task>
+    <task id="LOCAL-00028" summary="pdf gadgets">
+      <created>1653028911252</created>
+      <option name="number" value="00028" />
+      <option name="presentableId" value="LOCAL-00028" />
+      <option name="project" value="LOCAL" />
+      <updated>1653028911252</updated>
+    </task>
+    <task id="LOCAL-00029" summary="pdf gadgets">
+      <created>1653057379021</created>
+      <option name="number" value="00029" />
+      <option name="presentableId" value="LOCAL-00029" />
+      <option name="project" value="LOCAL" />
+      <updated>1653057379021</updated>
+    </task>
+    <task id="LOCAL-00030" summary="pdf gadgets">
+      <created>1653063154707</created>
+      <option name="number" value="00030" />
+      <option name="presentableId" value="LOCAL-00030" />
+      <option name="project" value="LOCAL" />
+      <updated>1653063154707</updated>
+    </task>
+    <task id="LOCAL-00031" summary="pdf gadgets">
+      <created>1653208086373</created>
+      <option name="number" value="00031" />
+      <option name="presentableId" value="LOCAL-00031" />
+      <option name="project" value="LOCAL" />
+      <updated>1653208086373</updated>
+    </task>
+    <task id="LOCAL-00032" summary="add some features">
+      <created>1653488852642</created>
+      <option name="number" value="00032" />
+      <option name="presentableId" value="LOCAL-00032" />
+      <option name="project" value="LOCAL" />
+      <updated>1653488852642</updated>
+    </task>
+    <task id="LOCAL-00033" summary="add some features">
+      <created>1653563693952</created>
+      <option name="number" value="00033" />
+      <option name="presentableId" value="LOCAL-00033" />
+      <option name="project" value="LOCAL" />
+      <updated>1653563693952</updated>
+    </task>
+    <task id="LOCAL-00034" summary="add some features">
+      <created>1653663037211</created>
+      <option name="number" value="00034" />
+      <option name="presentableId" value="LOCAL-00034" />
+      <option name="project" value="LOCAL" />
+      <updated>1653663037211</updated>
+    </task>
+    <option name="localTasksCounter" value="35" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -485,43 +635,20 @@
     <MESSAGE value="pdf gadgets application" />
     <MESSAGE value="component and view model" />
     <MESSAGE value="text search" />
-    <MESSAGE value="pdf gadgets" />
     <MESSAGE value="cache page image and text blocks" />
     <MESSAGE value="fix some bugs" />
-    <option name="LAST_COMMIT_MESSAGE" value="fix some bugs" />
+    <MESSAGE value="pdf stream view" />
+    <MESSAGE value="pdf gadgets" />
+    <MESSAGE value="add some features" />
+    <option name="LAST_COMMIT_MESSAGE" value="add some features" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
       <breakpoints>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/com/itextpdf/kernel/pdf/xobject/ImagePdfBytesInfo.java</url>
-          <line>94</line>
-          <option name="timeStamp" value="2" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.itextpdf/kernel/7.2.1/b9eff262f2ea0a3a6f2d4a9866c3f41112d73faf/kernel-7.2.1-sources.jar!/com/itextpdf/kernel/pdf/filters/DctDecodeFilter.java</url>
-          <line>63</line>
-          <option name="timeStamp" value="29" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.itextpdf/kernel/7.2.1/b9eff262f2ea0a3a6f2d4a9866c3f41112d73faf/kernel-7.2.1-sources.jar!/com/itextpdf/kernel/pdf/xobject/PdfImageXObject.java</url>
-          <line>187</line>
-          <option name="timeStamp" value="30" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.itextpdf/kernel/7.2.1/b9eff262f2ea0a3a6f2d4a9866c3f41112d73faf/kernel-7.2.1-sources.jar!/com/itextpdf/kernel/pdf/xobject/ImagePdfBytesInfo.java</url>
-          <line>95</line>
-          <option name="timeStamp" value="31" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.itextpdf/kernel/7.2.1/b9eff262f2ea0a3a6f2d4a9866c3f41112d73faf/kernel-7.2.1-sources.jar!/com/itextpdf/kernel/pdf/xobject/PdfImageXObject.java</url>
-          <line>210</line>
-          <option name="timeStamp" value="32" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.itextpdf/kernel/7.2.1/b9eff262f2ea0a3a6f2d4a9866c3f41112d73faf/kernel-7.2.1-sources.jar!/com/itextpdf/kernel/pdf/xobject/PdfImageXObject.java</url>
-          <line>216</line>
-          <option name="timeStamp" value="35" />
+        <line-breakpoint enabled="true" type="kotlin-line">
+          <url>file://$PROJECT_DIR$/src/main/kotlin/org/spreadme/pdfgadgets/repository/PdfStreamParser.kt</url>
+          <line>29</line>
+          <option name="timeStamp" value="1" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

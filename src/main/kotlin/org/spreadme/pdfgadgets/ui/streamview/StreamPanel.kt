@@ -17,9 +17,7 @@ import org.spreadme.pdfgadgets.ui.common.LoadProgressIndicator
 import org.spreadme.pdfgadgets.ui.common.Toast
 import org.spreadme.pdfgadgets.ui.common.ToastType
 import org.spreadme.pdfgadgets.ui.common.clickable
-import org.spreadme.pdfgadgets.ui.theme.LocalExtraColors
-import org.spreadme.pdfgadgets.ui.theme.LocalStreamKeywordColors
-import org.spreadme.pdfgadgets.ui.theme.defaultKeywordColor
+import org.spreadme.pdfgadgets.ui.theme.*
 import org.spreadme.pdfgadgets.utils.choose
 
 @Composable
@@ -49,7 +47,7 @@ fun StreamPanel(
                             StreamImageView(it as StreamImageUIState)
                         }
                         else -> {
-                            val keywordColor = isDark.value.choose(defaultKeywordColor(), defaultKeywordColor())
+                            val keywordColor = isDark.value.choose(lightKeywordColor(), darkKeywordColor())
                             CompositionLocalProvider(
                                 LocalStreamKeywordColors provides keywordColor,
                             ) {
