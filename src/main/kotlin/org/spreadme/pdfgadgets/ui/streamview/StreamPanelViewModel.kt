@@ -110,7 +110,8 @@ class StreamASN1UIState(
 
     private val asN1Parser: ASN1Parser,
     private val content: ByteArray,
-    streamPanelViewType: StreamPanelViewType
+    streamPanelViewType: StreamPanelViewType,
+    private var finished: Boolean = false
 
 ) : StreamUIState(uuid(), streamPanelViewType) {
 
@@ -118,7 +119,10 @@ class StreamASN1UIState(
     val sidePanelUIState = SidePanelUIState()
 
     override suspend fun parse() {
-        root = asN1Parser.parse(content)
+        if(!finished) {
+            root = asN1Parser.parse(content)
+            finished = true
+        }
     }
 
 }
