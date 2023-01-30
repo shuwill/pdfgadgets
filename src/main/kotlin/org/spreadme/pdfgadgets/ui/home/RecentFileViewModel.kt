@@ -15,6 +15,7 @@ class RecentFileViewModel(
 
     fun load(){
         viewModelScope.launch {
+            fileMetadatas.clear()
             fileMetadatas.addAll(fileMetadataRepository.query())
         }
     }

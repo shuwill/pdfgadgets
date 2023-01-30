@@ -5,6 +5,7 @@ import com.itextpdf.kernel.geom.Rectangle
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import mu.KotlinLogging
+import net.coobird.thumbnailator.Thumbnails
 import org.spreadme.pdfgadgets.config.AppConfig
 import org.spreadme.pdfgadgets.model.*
 import org.spreadme.pdfgadgets.utils.*
@@ -25,7 +26,7 @@ class DefaultPdfRenderer(fileMetadata: FileMetadata) : PdfRenderer {
         }
     }
 
-    override suspend fun render(page: PageMetadata, dpi: Float): PageRenderInfo {
+    override suspend fun render(page: PageMetadata, rotation: Int, dpi: Float): PageRenderInfo {
         val lockKey = "${file.name}-${page.index}"
         mutex.withLock(lockKey) {
             var loadPage: Page? = null
@@ -84,7 +85,13 @@ class DefaultPdfRenderer(fileMetadata: FileMetadata) : PdfRenderer {
                     pixels
                 }
 
-                val bufferedImage = page.pixmapMetadata!!.toBufferedImage(pixels)
+                var bufferedImage = page.pixmapMetadata!!.toBufferedImage(pixels)
+                rotation.let {
+                    bufferedImage = Thumbnails.of(bufferedImage)
+                        .scale(1.0)
+                        .rotate(-it.toDouble())
+                        .asBufferedImage()
+                }
 
                 val end = System.currentTimeMillis()
                 logger.debug("end render ${file.name}: page[${page.index}], dpi[$dpi], cost ${end - start} ms")

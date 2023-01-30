@@ -5,8 +5,15 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="fd4a568c-9515-436d-b67e-95b0dca3c528" name="Changes" comment="add some features">
-      <change beforePath="$PROJECT_DIR$/src/main/kotlin/org/spreadme/pdfgadgets/ui/streamview/StreamPanel.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/org/spreadme/pdfgadgets/ui/streamview/StreamPanel.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/kotlin/org/spreadme/pdfgadgets/ui/theme/Color.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/org/spreadme/pdfgadgets/ui/theme/Color.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build.gradle.kts" beforeDir="false" afterPath="$PROJECT_DIR$/build.gradle.kts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/kotlin/org/spreadme/pdfgadgets/model/PageMetadata.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/org/spreadme/pdfgadgets/model/PageMetadata.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/kotlin/org/spreadme/pdfgadgets/repository/DefaultPdfMetadataParser.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/org/spreadme/pdfgadgets/repository/DefaultPdfMetadataParser.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/kotlin/org/spreadme/pdfgadgets/repository/DefaultPdfRenderer.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/org/spreadme/pdfgadgets/repository/DefaultPdfRenderer.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/kotlin/org/spreadme/pdfgadgets/repository/PdfRenderer.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/org/spreadme/pdfgadgets/repository/PdfRenderer.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/kotlin/org/spreadme/pdfgadgets/ui/home/RecentFileViewModel.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/org/spreadme/pdfgadgets/ui/home/RecentFileViewModel.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/kotlin/org/spreadme/pdfgadgets/ui/pdfview/PageDetail.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/org/spreadme/pdfgadgets/ui/pdfview/PageDetail.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/kotlin/org/spreadme/pdfgadgets/ui/pdfview/Rectangle.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/org/spreadme/pdfgadgets/ui/pdfview/Rectangle.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/kotlin/org/spreadme/pdfgadgets/ui/tool/DocumentSignatureTool.kt" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -46,12 +53,6 @@
                 <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
                 <item name="pdfgadgets" type="f1a62948:ProjectNode" />
                 <item name="Tasks" type="e4a08cd1:TasksNode" />
-                <item name="build" type="c8890929:TasksNode$1" />
-              </path>
-              <path>
-                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
-                <item name="pdfgadgets" type="f1a62948:ProjectNode" />
-                <item name="Tasks" type="e4a08cd1:TasksNode" />
                 <item name="compose desktop" type="c8890929:TasksNode$1" />
               </path>
             </expand>
@@ -68,8 +69,8 @@
         <option value="Kotlin Enum" />
         <option value="Kotlin Interface" />
         <option value="Kotlin Class" />
-        <option value="Kotlin File" />
         <option value="Kotlin Data Class" />
+        <option value="Kotlin File" />
       </list>
     </option>
   </component>
@@ -112,13 +113,17 @@
   &quot;keyToString&quot;: {
     &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
     &quot;last_opened_file_path&quot;: &quot;/Users/wangshuwei/Documents/dev/project/pdfgadgets/src/main/resources/drawables/launcher_icons&quot;,
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
     &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
     &quot;project.structure.last.edited&quot;: &quot;Project&quot;,
     &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
     &quot;project.structure.side.proportion&quot;: &quot;0.38275862&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.lookFeel&quot;
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.lookFeel&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   },
   &quot;keyToStringList&quot;: {
     &quot;DatabaseDriversLRU&quot;: [
@@ -153,7 +158,7 @@
       <recent name="com.itextpdf.kernel.pdf.xobject" />
     </key>
   </component>
-  <component name="RunManager" selected="Gradle.pdfgadgets [packageDmg]">
+  <component name="RunManager" selected="Kotlin.AppKt">
     <configuration name="MindCaseTest.mindCase" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
@@ -258,11 +263,11 @@
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="Gradle.pdfgadgets [packageDmg]" />
         <item itemvalue="Kotlin.AppKt" />
+        <item itemvalue="Gradle.pdfgadgets [packageDmg]" />
+        <item itemvalue="Gradle.pdfgadgets [packageUberJarForCurrentOS]" />
         <item itemvalue="Gradle.pdfgadgets [clean]" />
         <item itemvalue="Gradle.MindCaseTest.mindCase" />
-        <item itemvalue="Gradle.pdfgadgets [packageUberJarForCurrentOS]" />
       </list>
     </recent_temporary>
   </component>
@@ -362,6 +367,65 @@
       <workItem from="1654437464551" duration="1527000" />
       <workItem from="1654569247171" duration="620000" />
       <workItem from="1654580083098" duration="673000" />
+      <workItem from="1654739139896" duration="3712000" />
+      <workItem from="1654745434513" duration="1422000" />
+      <workItem from="1654753634142" duration="1590000" />
+      <workItem from="1654764938943" duration="66000" />
+      <workItem from="1654829069426" duration="651000" />
+      <workItem from="1655100197527" duration="43000" />
+      <workItem from="1655100549776" duration="31000" />
+      <workItem from="1655100596981" duration="711000" />
+      <workItem from="1655717279014" duration="1111000" />
+      <workItem from="1655782326563" duration="384000" />
+      <workItem from="1656056768959" duration="401000" />
+      <workItem from="1656058229849" duration="6534000" />
+      <workItem from="1656142360378" duration="1103000" />
+      <workItem from="1656551138393" duration="2317000" />
+      <workItem from="1656569227434" duration="5935000" />
+      <workItem from="1656638026253" duration="7000" />
+      <workItem from="1656839643011" duration="61000" />
+      <workItem from="1657341679847" duration="612000" />
+      <workItem from="1658501896716" duration="649000" />
+      <workItem from="1659087312563" duration="756000" />
+      <workItem from="1660281097872" duration="181000" />
+      <workItem from="1661240635214" duration="791000" />
+      <workItem from="1661305516715" duration="158000" />
+      <workItem from="1661927174720" duration="59000" />
+      <workItem from="1662518626954" duration="266000" />
+      <workItem from="1662539466753" duration="44000" />
+      <workItem from="1662540540820" duration="30000" />
+      <workItem from="1662628938062" duration="379000" />
+      <workItem from="1662629363971" duration="751000" />
+      <workItem from="1662644763730" duration="1523000" />
+      <workItem from="1662692348509" duration="39000" />
+      <workItem from="1663753644877" duration="669000" />
+      <workItem from="1664269000661" duration="193000" />
+      <workItem from="1665625653958" duration="603000" />
+      <workItem from="1667029303505" duration="751000" />
+      <workItem from="1667196663624" duration="229000" />
+      <workItem from="1667462957050" duration="249000" />
+      <workItem from="1667800219883" duration="1414000" />
+      <workItem from="1668495093765" duration="95000" />
+      <workItem from="1669370593615" duration="183000" />
+      <workItem from="1669885882795" duration="376000" />
+      <workItem from="1669961837505" duration="78000" />
+      <workItem from="1670209853503" duration="1653000" />
+      <workItem from="1670221798037" duration="2104000" />
+      <workItem from="1670319056660" duration="1422000" />
+      <workItem from="1670482080775" duration="1954000" />
+      <workItem from="1670570544843" duration="220000" />
+      <workItem from="1672298578437" duration="1205000" />
+      <workItem from="1672797429869" duration="2079000" />
+      <workItem from="1673182741375" duration="796000" />
+      <workItem from="1673183555144" duration="608000" />
+      <workItem from="1673254197915" duration="1957000" />
+      <workItem from="1673861031970" duration="1803000" />
+      <workItem from="1674961801066" duration="7309000" />
+      <workItem from="1674977760709" duration="1739000" />
+      <workItem from="1675044780842" duration="354000" />
+      <workItem from="1675058562251" duration="1439000" />
+      <workItem from="1675060298653" duration="286000" />
+      <workItem from="1675062648250" duration="3795000" />
     </task>
     <task id="LOCAL-00001" summary="init application frame">
       <created>1651413815981</created>
@@ -646,11 +710,23 @@
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" type="kotlin-line">
-          <url>file://$PROJECT_DIR$/src/main/kotlin/org/spreadme/pdfgadgets/repository/PdfStreamParser.kt</url>
+          <url>file://$PROJECT_DIR$/src/main/kotlin/org/spreadme/pdfgadgets/repository/DefaultPdfRenderer.kt</url>
           <line>29</line>
           <option name="timeStamp" value="1" />
         </line-breakpoint>
       </breakpoints>
+      <breakpoints-dialog>
+        <breakpoints-dialog>
+          <selected-grouping-rules>
+            <grouping-rule id="XBreakpointGroupingByPackageRule" />
+          </selected-grouping-rules>
+        </breakpoints-dialog>
+      </breakpoints-dialog>
     </breakpoint-manager>
+    <pin-to-top-manager>
+      <pinned-members>
+        <PinnedItemInfo parentTag="org.spreadme.pdfgadgets.ui.streamview.StreamPanelViewModel" memberName="streamUIState" />
+      </pinned-members>
+    </pin-to-top-manager>
   </component>
 </project>

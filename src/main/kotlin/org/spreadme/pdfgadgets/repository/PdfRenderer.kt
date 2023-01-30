@@ -6,5 +6,5 @@ import java.io.Closeable
 
 interface PdfRenderer: Closeable {
 
-    suspend fun render(page: PageMetadata, dpi: Float): PageRenderInfo
+    suspend fun render(page: PageMetadata, rotation: Int, dpi: Float): PageRenderInfo
 }

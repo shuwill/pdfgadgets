@@ -8,6 +8,7 @@ import org.spreadme.pdfgadgets.repository.PdfRenderer
 class PageMetadata(
     val index: Int,
     val pageSize: Rectangle,
+    private val rotation: Int,
     var mediabox: Rectangle,
     var renderer: PdfRenderer,
     val signatures: List<Signature> = listOf(),
@@ -17,6 +18,6 @@ class PageMetadata(
 ) {
 
     suspend fun render(dpi: Float): PageRenderInfo {
-        return renderer.render(this, dpi)
+        return renderer.render(this, this.rotation, dpi)
     }
 }

@@ -20,7 +20,7 @@ import com.itextpdf.kernel.geom.Rectangle
 fun Rectangle(
     modifier: Modifier = Modifier,
     rectangle: Rectangle,
-    mediaBoxHeight: Float,
+    mediaBox: Rectangle,
     initColor: Color = MaterialTheme.colors.secondary.copy(alpha = 0f),
     selectable: MutableState<Boolean> = mutableStateOf(false),
     selectColor: Color = MaterialTheme.colors.secondary,
@@ -53,7 +53,7 @@ fun Rectangle(
             .size((rectangle.width * scale).dp, (rectangle.height * scale).dp)
             .offset(
                 x = (rectangle.x * scale).dp,
-                y = ((mediaBoxHeight - rectangle.y - rectangle.height) * scale).dp
+                y = ((mediaBox.height - (rectangle.y - mediaBox.y) - rectangle.height) * scale).dp
             ).background(backgoundColor.value).then(modifier)
     ) {
         content()

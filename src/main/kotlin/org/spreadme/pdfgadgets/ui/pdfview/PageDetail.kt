@@ -12,6 +12,7 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.PathEffect
@@ -21,6 +22,8 @@ import androidx.compose.ui.input.pointer.*
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
+import com.itextpdf.kernel.geom.PageSize
+import com.itextpdf.kernel.geom.Rectangle
 import org.spreadme.pdfgadgets.model.PageMetadata
 import org.spreadme.pdfgadgets.model.Position
 import org.spreadme.pdfgadgets.model.Signature
@@ -74,7 +77,7 @@ fun mediabox(
         modifier = Modifier.background(MaterialTheme.colors.primary.copy(0.45f))
             .border(1.dp, color = LocalExtraColors.current.border),
         page.mediabox,
-        page.mediabox.height,
+        page.mediabox,
         scale = scale,
         content = content
     )
@@ -93,9 +96,9 @@ fun AsyncPage(
     pageViewModel.pageRenderInfo?.let { pageRenderInfo ->
         // page size
         Rectangle(
-            modifier = Modifier,
+            modifier = Modifier.background(MaterialTheme.colors.secondary.copy(0.45f)),
             pageViewModel.page.pageSize,
-            pageViewModel.page.mediabox.height,
+            pageViewModel.page.mediabox,
             scale = scale
         ) {
             Image(
@@ -185,7 +188,7 @@ fun signature(
                     currentSignInfo.value = it
                 },
                 position.rectangle,
-                page.mediabox.height,
+                page.mediabox,
                 selectable = position.selected,
                 scale = scale
             ) {
@@ -216,7 +219,7 @@ fun searchedText(
         Rectangle(
             modifier = Modifier.zIndex(2f),
             it.rectangle,
-            page.mediabox.height,
+            page.mediabox,
             initColor = MaterialTheme.colors.primary.copy(0.2f),
             selectable = it.selected,
             selectColor = MaterialTheme.colors.secondary,

@@ -29,6 +29,7 @@ dependencies {
     implementation("io.insert-koin", "koin-core", "3.1.6")
 
     implementation("com.itextpdf", "itext7-core", "7.2.1")
+    implementation("net.coobird:thumbnailator:0.4.19")
 
     implementation("org.xerial", "sqlite-jdbc", "3.36.0.3")
     implementation("org.jetbrains.exposed", "exposed-core", "0.38.1")
@@ -73,7 +74,6 @@ compose.desktop {
             "-Xmx1g",
             "-XX:ReservedCodeCacheSize=512m",
             "-XX:+UseG1GC",
-            "-Xverify:none",
             "-XX:SoftRefLRUPolicyMSPerMB=50",
             "-XX:CICompilerCount=2",
             "-XX:+HeapDumpOnOutOfMemoryError",

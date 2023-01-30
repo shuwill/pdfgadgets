@@ -6,6 +6,9 @@ import com.itextpdf.kernel.pdf.*
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 import org.spreadme.pdfgadgets.model.*
+import kotlin.math.abs
+import kotlin.math.cos
+import kotlin.math.sin
 
 class DefaultPdfMetadataParser : PdfMetadataParser, KoinComponent {
 
@@ -46,9 +49,12 @@ class DefaultPdfMetadataParser : PdfMetadataParser, KoinComponent {
         // pages info
         val pages = IntRange(1, numberOfPages).map {
             val originPage = document.getPage(it)
+            val rotation = originPage.rotation
             val cropbox = cropbox(originPage)
             val mediabox = mediabox(originPage)
-            val pageSize = cropbox ?: mediabox
+            val pageSize = cropbox?.let {
+                if (cropbox.equalsWithEpsilon(mediabox)) mediabox else cropbox
+            } ?: mediabox
 
             // get signatures from page
             val signaturesOfPage = originPage.annotations?.mapNotNull { a ->
@@ -65,7 +71,7 @@ class DefaultPdfMetadataParser : PdfMetadataParser, KoinComponent {
                 signature
             }?.toList() ?: listOf()
 
-            PageMetadata(it, pageSize, mediabox, renderer, signaturesOfPage)
+            PageMetadata(it, pageSize, rotation, mediabox, renderer, signaturesOfPage)
 
         }.toList()
 
@@ -82,19 +88,7 @@ class DefaultPdfMetadataParser : PdfMetadataParser, KoinComponent {
         )
     }
 
-    private fun cropbox(page: PdfPage): Rectangle? {
-        val cropBox = page.cropBox
-        if (cropBox != null) {
-            var pageSize = PageSize(cropBox)
-            var rotation = page.rotation
-            while (rotation > 0) {
-                pageSize = pageSize.rotate()
-                rotation -= 90
-            }
-            return pageSize
-        }
-        return null
-    }
+    private fun cropbox(page: PdfPage): Rectangle? = page.cropBox
 
-    private fun mediabox(page: PdfPage): Rectangle = page.pageSizeWithRotation
+    private fun mediabox(page: PdfPage): Rectangle = page.mediaBox
 }
