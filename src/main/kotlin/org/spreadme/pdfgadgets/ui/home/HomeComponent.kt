@@ -4,18 +4,20 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import mu.KotlinLogging
 import org.koin.core.component.inject
 import org.spreadme.pdfgadgets.common.AppComponent
 import org.spreadme.pdfgadgets.repository.FileMetadataRepository
 import org.spreadme.pdfgadgets.ui.frame.ApplicationViewModel
 import org.spreadme.pdfgadgets.ui.frame.LoadProgressViewModel
 import org.spreadme.pdfgadgets.ui.frame.MainApplicationFrame
-import org.spreadme.pdfgadgets.ui.pdfview.PdfViewAppComponent
 import org.spreadme.pdfgadgets.ui.toolbars.ToolbarsViewModel
 
 class HomeComponent(
     private val applicationViewModel: ApplicationViewModel
 ) : AppComponent("新建标签") {
+
+    private val logger = KotlinLogging.logger {}
 
     private val fileMetadataRepository by inject<FileMetadataRepository>()
 
@@ -33,7 +35,7 @@ class HomeComponent(
             applicationViewModel,
             loadProgressViewModel
         ) {
-            println("home component【${uid}】rendered")
+            logger.info("home component【${uid}】rendered")
             Column(Modifier.fillMaxSize()) {
                 recentFileViewModel.load()
                 RecentFiles(recentFileViewModel) {

@@ -5,15 +5,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="fd4a568c-9515-436d-b67e-95b0dca3c528" name="Changes" comment="add some features">
-      <change beforePath="$PROJECT_DIR$/build.gradle.kts" beforeDir="false" afterPath="$PROJECT_DIR$/build.gradle.kts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/kotlin/org/spreadme/pdfgadgets/model/PageMetadata.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/org/spreadme/pdfgadgets/model/PageMetadata.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/kotlin/org/spreadme/pdfgadgets/repository/DefaultPdfMetadataParser.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/org/spreadme/pdfgadgets/repository/DefaultPdfMetadataParser.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/kotlin/org/spreadme/pdfgadgets/repository/DefaultPdfRenderer.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/org/spreadme/pdfgadgets/repository/DefaultPdfRenderer.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/kotlin/org/spreadme/pdfgadgets/repository/PdfRenderer.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/org/spreadme/pdfgadgets/repository/PdfRenderer.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/kotlin/org/spreadme/pdfgadgets/ui/home/RecentFileViewModel.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/org/spreadme/pdfgadgets/ui/home/RecentFileViewModel.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/kotlin/org/spreadme/pdfgadgets/ui/home/HomeComponent.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/org/spreadme/pdfgadgets/ui/home/HomeComponent.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/kotlin/org/spreadme/pdfgadgets/ui/pdfview/PageDetail.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/org/spreadme/pdfgadgets/ui/pdfview/PageDetail.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/kotlin/org/spreadme/pdfgadgets/ui/pdfview/Rectangle.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/org/spreadme/pdfgadgets/ui/pdfview/Rectangle.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/kotlin/org/spreadme/pdfgadgets/ui/tool/DocumentSignatureTool.kt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/logback.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/logback.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -249,7 +245,7 @@
       <option name="MAIN_CLASS_NAME" value="org.spreadme.pdfgadgets.AppKt" />
       <module name="pdfgadgets.main" />
       <shortenClasspath name="NONE" />
-      <option name="VM_PARAMETERS" value="-Xmx1G -Xms500m -XX:ReservedCodeCacheSize=512m -XX:+UseG1GC -Xverify:none -XX:SoftRefLRUPolicyMSPerMB=50 -XX:CICompilerCount=2 -XX:+HeapDumpOnOutOfMemoryError -XX:-OmitStackTraceInFastThrow" />
+      <option name="VM_PARAMETERS" value="-Xmx1G -Xms500m -XX:ReservedCodeCacheSize=512m -XX:+UseG1GC -XX:SoftRefLRUPolicyMSPerMB=50 -XX:CICompilerCount=2 -XX:+HeapDumpOnOutOfMemoryError -XX:-OmitStackTraceInFastThrow" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
@@ -425,7 +421,9 @@
       <workItem from="1675044780842" duration="354000" />
       <workItem from="1675058562251" duration="1439000" />
       <workItem from="1675060298653" duration="286000" />
-      <workItem from="1675062648250" duration="3795000" />
+      <workItem from="1675062648250" duration="4818000" />
+      <workItem from="1675130871956" duration="6000" />
+      <workItem from="1675131697605" duration="2240000" />
     </task>
     <task id="LOCAL-00001" summary="init application frame">
       <created>1651413815981</created>
@@ -708,13 +706,6 @@
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" type="kotlin-line">
-          <url>file://$PROJECT_DIR$/src/main/kotlin/org/spreadme/pdfgadgets/repository/DefaultPdfRenderer.kt</url>
-          <line>29</line>
-          <option name="timeStamp" value="1" />
-        </line-breakpoint>
-      </breakpoints>
       <breakpoints-dialog>
         <breakpoints-dialog>
           <selected-grouping-rules>

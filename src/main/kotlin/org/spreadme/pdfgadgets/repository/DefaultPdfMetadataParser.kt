@@ -1,14 +1,10 @@
 package org.spreadme.pdfgadgets.repository
 
-import com.itextpdf.kernel.geom.PageSize
 import com.itextpdf.kernel.geom.Rectangle
 import com.itextpdf.kernel.pdf.*
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 import org.spreadme.pdfgadgets.model.*
-import kotlin.math.abs
-import kotlin.math.cos
-import kotlin.math.sin
 
 class DefaultPdfMetadataParser : PdfMetadataParser, KoinComponent {
 
