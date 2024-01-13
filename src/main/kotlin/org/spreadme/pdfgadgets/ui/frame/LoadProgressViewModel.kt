@@ -4,7 +4,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import org.spreadme.pdfgadgets.common.ViewModel
-import org.spreadme.pdfgadgets.model.FileMetadata
 import java.nio.file.Path
 
 class LoadProgressViewModel : ViewModel() {

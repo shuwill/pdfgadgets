@@ -1,4 +1,3 @@
-import org.jetbrains.compose.compose
 import org.jetbrains.compose.desktop.application.dsl.TargetFormat
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
@@ -18,30 +17,30 @@ repositories {
 }
 
 dependencies {
-    implementation(kotlin("stdlib-jdk8"))
     implementation(compose.desktop.currentOs)
     implementation(compose.materialIconsExtended)
 
     // Module dependencies
     implementation(project(":mupdf"))
 
-    implementation("org.jetbrains.kotlinx", "kotlinx-serialization-json", "1.3.2")
-    implementation("io.insert-koin", "koin-core", "3.1.6")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-swing:$kotlin.version")
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.2")
+    implementation("io.insert-koin:koin-core:3.5.3")
 
-    implementation("com.itextpdf", "itext7-core", "7.2.1")
-    implementation("net.coobird:thumbnailator:0.4.19")
+    implementation("com.itextpdf:itext7-core:7.2.1")
+    implementation("net.coobird:thumbnailator:0.4.20")
 
-    implementation("org.xerial", "sqlite-jdbc", "3.36.0.3")
+    implementation("org.xerial:sqlite-jdbc:3.41.2.2")
     implementation("org.jetbrains.exposed", "exposed-core", "0.38.1")
     implementation("org.jetbrains.exposed", "exposed-dao", "0.38.1")
     implementation("org.jetbrains.exposed", "exposed-jdbc", "0.38.1")
     implementation("org.jetbrains.exposed", "exposed-java-time", "0.38.1")
 
-    implementation("ch.qos.logback:logback-classic:1.2.11")
-    implementation("io.github.microutils", "kotlin-logging-jvm", "2.1.21")
+    implementation("ch.qos.logback:logback-classic:1.4.12")
+    implementation("io.github.microutils:kotlin-logging-jvm:3.0.5")
 
     testImplementation(kotlin("test-junit"))
-    testImplementation("io.insert-koin", "koin-test", "3.1.6")
+    testImplementation("io.insert-koin:koin-test:3.5.3")
 }
 
 tasks.test {
@@ -49,7 +48,6 @@ tasks.test {
 }
 
 tasks.withType<KotlinCompile> {
-    kotlinOptions.jvmTarget = "11"
     kotlinOptions.freeCompilerArgs += "-opt-in=androidx.compose.foundation.ExperimentalFoundationApi"
     kotlinOptions.freeCompilerArgs += "-opt-in=androidx.compose.ui.ExperimentalComposeUiApi"
     kotlinOptions.freeCompilerArgs += "-opt-in=kotlin.io.path.ExperimentalPathApi"
@@ -66,6 +64,13 @@ tasks.jar {
     exclude("META-INF/BC2048KE.RSA", "META-INF/BC2048KE.SF", "META-INF/BC2048KE.DSA")
 }
 
+tasks.register<Copy>("copyNatives") {
+    copy {
+        from("src/main/natives")
+        into("build/libs")
+    }
+}
+
 compose.desktop {
     application {
         mainClass = "org.spreadme.pdfgadgets.AppKt"
@@ -79,6 +84,7 @@ compose.desktop {
             "-XX:+HeapDumpOnOutOfMemoryError",
             "-XX:-OmitStackTraceInFastThrow"
         )
+
         nativeDistributions {
             packageName = "PDFGadgets"
             packageVersion = project.version as String
@@ -113,14 +119,4 @@ compose.desktop {
             }
         }
     }
-}
-
-val compileKotlin: KotlinCompile by tasks
-compileKotlin.kotlinOptions {
-    jvmTarget = JavaVersion.VERSION_11.toString()
-}
-
-val compileTestKotlin: KotlinCompile by tasks
-compileTestKotlin.kotlinOptions {
-    jvmTarget = JavaVersion.VERSION_11.toString()
 }

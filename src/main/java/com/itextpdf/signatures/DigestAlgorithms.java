@@ -120,6 +120,7 @@ package com.itextpdf.signatures;
 			digestNames.put("1.2.840.113549.2.5", "MD5");
 			digestNames.put("1.2.840.113549.2.2", "MD2");
 			digestNames.put("1.2.840.10040.4.3", "SHA1");
+			digestNames.put("1.3.14.3.2.29", "SHA1");
 			digestNames.put("2.16.840.1.101.3.4.3.1", "SHA224");
 			digestNames.put("2.16.840.1.101.3.4.3.2", "SHA256");
 			digestNames.put("2.16.840.1.101.3.4.3.3", "SHA384");

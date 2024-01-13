@@ -42,6 +42,8 @@ fun BoxScope.StructureTree(
         modifier = Modifier.fillMaxSize(),
         state = lazyListState
     ) {
+        sidePanelUIState.verticalScroll = lazyListState.firstVisibleItemIndex
+        sidePanelUIState.verticalScrollOffset = lazyListState.firstVisibleItemScrollOffset
         items(structureRoot.childs()) { child ->
             StructureNodeView(child, onClick)
         }

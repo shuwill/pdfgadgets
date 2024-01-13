@@ -20,6 +20,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.rememberDialogState
 import org.bouncycastle.tsp.TimeStampToken
+import org.bouncycastle.util.encoders.Hex
 import org.spreadme.pdfgadgets.model.Signature
 import org.spreadme.pdfgadgets.resources.R
 import org.spreadme.pdfgadgets.ui.common.Dialog
@@ -102,7 +103,7 @@ fun CertificateDetail(certificate: X509Certificate) {
             .background(MaterialTheme.colors.surface),
     ) {
         CertificateRow("版本", certificate.version.toString())
-        CertificateRow("序列号", certificate.serialNumber.toString(16))
+        CertificateRow("序列号", Hex.toHexString(certificate.serialNumber.toByteArray()))
         CertificateRow("签名算法", certificate.sigAlgName)
         CertificateRow("主题", certificate.subjectX500Principal.toString())
         CertificateRow("颁发者", certificate.issuerX500Principal.toString())

@@ -9,6 +9,7 @@ import org.spreadme.pdfgadgets.common.ViewModel
 import org.spreadme.pdfgadgets.common.viewModelScope
 import org.spreadme.pdfgadgets.model.ASN1Node
 import org.spreadme.pdfgadgets.repository.ASN1Parser
+import org.spreadme.pem.Pem
 import java.util.*
 
 class ASN1ParseViewModel(
@@ -24,7 +25,11 @@ class ASN1ParseViewModel(
         viewModelScope.launch {
             if (base64.isNotBlank()) {
                 try {
-                    val bytes = Base64.getDecoder().decode(base64.trim())
+                    val bytes = if(base64.startsWith(Pem.BEGIN, true)) {
+                        Pem.read(base64.byteInputStream())
+                    } else {
+                        Base64.getDecoder().decode(base64.trim())
+                    }
                     asn1Node = asN1Parser.parse(bytes)
                 } catch (e: Exception) {
                     logger.error("解析ASN1数据失败", e)

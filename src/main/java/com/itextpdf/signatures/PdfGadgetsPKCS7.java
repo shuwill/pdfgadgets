@@ -1466,4 +1466,12 @@ public class PdfGadgetsPKCS7 {
             encryptAlgo = digestEncryptionAlgorithmOid;
         return encryptAlgo;
     }
+
+    public byte[] getRsaData() {
+        return rsaData;
+    }
+
+    public void setRsaData(byte[] rsaData) {
+        this.rsaData = rsaData;
+    }
 }

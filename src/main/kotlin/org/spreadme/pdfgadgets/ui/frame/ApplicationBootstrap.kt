@@ -29,7 +29,6 @@ class ApplicationBootstrap(
 
     private val logger = KotlinLogging.logger {}
 
-    @OptIn(ExperimentalAnimationApi::class)
     @Composable
     fun bootstrap(
         onFinished: @Composable () -> Unit

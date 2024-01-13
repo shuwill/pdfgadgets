@@ -80,6 +80,15 @@ class DefaultSignatureParser : SignatureParser {
                 cert.valueBytes,
                 BouncyCastleProvider.PROVIDER_NAME
             )
+        } else if (PdfName.Adbe_pkcs7_detached.equals(signature.subFilter)) {
+            val p7 = PdfGadgetsPKCS7(
+                content,
+                signature.subFilter,
+                BouncyCastleProvider.PROVIDER_NAME
+            )
+            p7.rsaData = null
+            p7
+
         } else {
             PdfGadgetsPKCS7(
                 content,
