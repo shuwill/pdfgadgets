@@ -89,8 +89,11 @@ fun AsyncPage(
     viewType: PdfViewType,
     scale: Float
 ) {
-    LaunchedEffect(scale) {
+    DisposableEffect(scale) {
         pageViewModel.onRender(scale)
+        onDispose {
+            pageViewModel.clearPage()
+        }
     }
 
     pageViewModel.pageRenderInfo?.let { pageRenderInfo ->

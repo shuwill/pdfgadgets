@@ -3,7 +3,7 @@ package org.spreadme.pdfgadgets.model
 import java.awt.image.BufferedImage
 
 class PageRenderInfo(
-    val bufferedImage: BufferedImage,
+    var bufferedImage: BufferedImage,
     val textBlocks: List<TextBlock>,
 )
 

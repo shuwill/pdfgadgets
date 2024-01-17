@@ -75,7 +75,6 @@ compose.desktop {
     application {
         mainClass = "org.spreadme.pdfgadgets.AppKt"
         jvmArgs += listOf(
-            "-Xms500m",
             "-Xmx1g",
             "-XX:ReservedCodeCacheSize=512m",
             "-XX:+UseG1GC",

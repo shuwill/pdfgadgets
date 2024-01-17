@@ -13,7 +13,6 @@ object AppConfig {
     val appName: String = "PDFGadgets"
     val version: AppVersion = AppVersion.toVersion("1.0.0")
     val appPath: Path = Paths.get(System.getProperty("user.home"), ".pdfgadgets")
-    val indexPath: Path = Paths.get(appPath.toString(), "index")
 
     var isDark: MutableState<Boolean> = mutableStateOf(false)
 

@@ -24,5 +24,10 @@ class PageViewModel(
             pageRenderInfo = page.render(2f * scale)
         }
     }
+
+    fun clearPage() {
+        println("clean page")
+        pageRenderInfo = null
+    }
 }
 

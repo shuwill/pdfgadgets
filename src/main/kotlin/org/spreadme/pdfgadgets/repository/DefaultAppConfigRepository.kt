@@ -32,12 +32,6 @@ class DefaultAppConfigRepository : AppConfigRepository {
                 Files.createDirectories(AppConfig.appPath)
             }
         }
-        // create index floder
-        if (!Files.exists(AppConfig.indexPath)) {
-            withContext(Dispatchers.IO) {
-                Files.createDirectory(AppConfig.indexPath)
-            }
-        }
 
         // download the mupdf lib
         message.value = "load the mupdf lib"
