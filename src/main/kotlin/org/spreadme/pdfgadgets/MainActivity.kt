@@ -68,12 +68,6 @@ class MainActivity : Activity() {
                     appFrameViewModel.customWindowDecoration(true)
                 }
 
-                MenuBar {
-                    Menu("File", 'F') {
-
-                    }
-                }
-
                 // load the window state
                 appFrameViewModel.composeWindow = window
                 appFrameViewModel.windowState = windowState

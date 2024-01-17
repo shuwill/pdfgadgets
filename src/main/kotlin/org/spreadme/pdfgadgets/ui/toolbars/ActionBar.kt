@@ -26,10 +26,10 @@ fun ActionBar(
 ) {
     Column(
         Modifier.fillMaxHeight().width(56.dp)
-            .background(MaterialTheme.colors.background),
+            .background(MaterialTheme.colors.primaryVariant),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        ActionIcon(Modifier.padding(top = 16.dp), R.Icons.open) {
+        ActionIcon(Modifier.padding(top = 16.dp), R.Icons.pdf) {
             FileDialog(
                 parent = applicationViewModel.composeWindow,
                 title = "打开文件",
@@ -68,7 +68,7 @@ fun ActionIcon(
 ) {
     Box(
         modifier.size(32.dp).clip(RoundedCornerShape(4.dp))
-            .background(MaterialTheme.colors.primary)
+            .background(MaterialTheme.colors.background)
             .selectable(true) {
                 onAction()
             }
@@ -78,7 +78,7 @@ fun ActionIcon(
         Icon(
             painter = painterResource(resource),
             contentDescription = "",
-            tint = MaterialTheme.colors.onPrimary
+            tint = MaterialTheme.colors.onBackground
         )
     }
 }

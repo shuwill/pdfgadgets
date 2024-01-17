@@ -27,6 +27,7 @@ dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.2")
     implementation("io.insert-koin:koin-core:3.5.3")
 
+    implementation("com.bybutter.compose:compose-jetbrains-expui-theme:2.0.0")
     implementation("com.itextpdf:itext7-core:7.2.1")
     implementation("net.coobird:thumbnailator:0.4.20")
 

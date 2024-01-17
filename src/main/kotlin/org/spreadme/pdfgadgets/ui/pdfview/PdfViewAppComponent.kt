@@ -30,11 +30,11 @@ import org.spreadme.pdfgadgets.repository.ASN1Parser
 import org.spreadme.pdfgadgets.repository.PdfStreamParser
 import org.spreadme.pdfgadgets.repository.PdfTextSearcher
 import org.spreadme.pdfgadgets.ui.frame.ApplicationViewModel
-import org.spreadme.pdfgadgets.ui.frame.LoadProgressViewModel
 import org.spreadme.pdfgadgets.ui.frame.MainApplicationFrame
 import org.spreadme.pdfgadgets.ui.sidepanel.SidePanel
 import org.spreadme.pdfgadgets.ui.sidepanel.SidePanelMode
 import org.spreadme.pdfgadgets.ui.streamview.*
+import org.spreadme.pdfgadgets.ui.toolbars.Toolbars
 import org.spreadme.pdfgadgets.ui.toolbars.ToolbarsViewModel
 
 class PdfViewAppComponent(
@@ -49,7 +49,6 @@ class PdfViewAppComponent(
     private val pdfTextSearcher by inject<PdfTextSearcher>()
 
     private val toolbarsViewModel = getViewModel<ToolbarsViewModel>(true)
-    private val loadProgressViewModel = getViewModel<LoadProgressViewModel>()
     private val streamPanelViewModel = getViewModel<StreamPanelViewModel>()
 
     private val pdfViewModel: PdfViewModel
@@ -61,22 +60,26 @@ class PdfViewAppComponent(
 
     @Composable
     override fun onRender() {
-        MainApplicationFrame(
-            toolbarsViewModel,
-            applicationViewModel,
-            loadProgressViewModel
-        ) {
+        MainApplicationFrame(applicationViewModel) {
             logger.debug("pdf view component【${name}】rendered")
-            val pdfpdfViewModel = remember { pdfViewModel }
-            toolbarsViewModel.onChangeSideViewMode = pdfpdfViewModel::onChangeSideViewMode
-            toolbarsViewModel.onChangeScale = pdfpdfViewModel::onChangeScalue
-            toolbarsViewModel.onViewTypeChange = pdfpdfViewModel::onViewTypeChange
-            toolbarsViewModel.onSearch = pdfpdfViewModel::onSearch
-            toolbarsViewModel.onCleanSearch = pdfpdfViewModel::onCleanSeach
-            toolbarsViewModel.onScroll = pdfpdfViewModel::onScroll
-            SidePanelGroup(pdfpdfViewModel)
-            PageDetailGroup(pdfpdfViewModel)
-            StructureDetailPanel()
+            Column {
+                Toolbars(
+                    modifier = Modifier.fillMaxWidth().height(48.dp).background(MaterialTheme.colors.background),
+                    toolbarsViewModel = toolbarsViewModel
+                )
+                Row {
+                    val pdfpdfViewModel = remember { pdfViewModel }
+                    toolbarsViewModel.onChangeSideViewMode = pdfpdfViewModel::onChangeSideViewMode
+                    toolbarsViewModel.onChangeScale = pdfpdfViewModel::onChangeScalue
+                    toolbarsViewModel.onViewTypeChange = pdfpdfViewModel::onViewTypeChange
+                    toolbarsViewModel.onSearch = pdfpdfViewModel::onSearch
+                    toolbarsViewModel.onCleanSearch = pdfpdfViewModel::onCleanSeach
+                    toolbarsViewModel.onScroll = pdfpdfViewModel::onScroll
+                    SidePanelGroup(pdfpdfViewModel)
+                    PageDetailGroup(pdfpdfViewModel)
+                    StructureDetailPanel()
+                }
+            }
         }
     }
 

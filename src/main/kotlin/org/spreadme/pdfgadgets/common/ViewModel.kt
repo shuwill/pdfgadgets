@@ -84,7 +84,7 @@ internal class CloseableCoroutineScope(context: CoroutineContext) : Closeable, C
     override val coroutineContext: CoroutineContext = context
 
     override fun close() {
-        logger.debug("${coroutineContext[CoroutineName]} canceled!!!")
+        logger.debug("{} canceled!!!", coroutineContext[CoroutineName])
         coroutineContext.cancel()
     }
 

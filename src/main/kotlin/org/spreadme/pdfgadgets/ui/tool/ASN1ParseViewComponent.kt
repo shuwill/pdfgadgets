@@ -19,11 +19,9 @@ import org.spreadme.pdfgadgets.ui.common.Toast
 import org.spreadme.pdfgadgets.ui.common.ToastType
 import org.spreadme.pdfgadgets.ui.common.VerticalScrollable
 import org.spreadme.pdfgadgets.ui.frame.ApplicationViewModel
-import org.spreadme.pdfgadgets.ui.frame.LoadProgressViewModel
 import org.spreadme.pdfgadgets.ui.frame.MainApplicationFrame
 import org.spreadme.pdfgadgets.ui.sidepanel.SidePanelUIState
 import org.spreadme.pdfgadgets.ui.streamview.ASN1NodeView
-import org.spreadme.pdfgadgets.ui.toolbars.ToolbarsViewModel
 
 class ASN1ParseViewComponent(
     private val applicationViewModel: ApplicationViewModel
@@ -31,8 +29,6 @@ class ASN1ParseViewComponent(
 
     private val asn1Parser by inject<ASN1Parser>()
 
-    private val toolbarsViewModel = getViewModel<ToolbarsViewModel>(false)
-    private val loadProgressViewModel = getViewModel<LoadProgressViewModel>()
     private val asn1ParseViewModel = getViewModel<ASN1ParseViewModel>(asn1Parser)
     private val sidePanelUIState = SidePanelUIState()
 
@@ -40,11 +36,7 @@ class ASN1ParseViewComponent(
 
     @Composable
     override fun onRender() {
-        MainApplicationFrame(
-            toolbarsViewModel,
-            applicationViewModel,
-            loadProgressViewModel
-        ) {
+        MainApplicationFrame(applicationViewModel) {
             Box(Modifier.fillMaxSize()) {
                 Row(Modifier.padding(8.dp).fillMaxSize()) {
                     Column(Modifier.fillMaxHeight().weight(0.5f).padding(8.dp)) {

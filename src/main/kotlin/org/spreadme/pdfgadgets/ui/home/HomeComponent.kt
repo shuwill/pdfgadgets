@@ -21,7 +21,6 @@ class HomeComponent(
 
     private val fileMetadataRepository by inject<FileMetadataRepository>()
 
-    private val toolbarsViewModel = getViewModel<ToolbarsViewModel>(false)
     private val loadProgressViewModel = getViewModel<LoadProgressViewModel>()
     private val recentFileViewModel = getViewModel<RecentFileViewModel>(fileMetadataRepository)
 
@@ -31,9 +30,7 @@ class HomeComponent(
             recentFileViewModel.reacquire()
         }
         MainApplicationFrame(
-            toolbarsViewModel,
             applicationViewModel,
-            loadProgressViewModel
         ) {
             logger.info("home component【${uid}】rendered")
             Column(Modifier.fillMaxSize()) {
