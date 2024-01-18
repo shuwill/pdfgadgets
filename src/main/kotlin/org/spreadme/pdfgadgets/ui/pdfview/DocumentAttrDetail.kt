@@ -12,7 +12,6 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.window.rememberDialogState
 import org.spreadme.pdfgadgets.model.DocumentInfo
 import org.spreadme.pdfgadgets.ui.common.Dialog
 import org.spreadme.pdfgadgets.ui.common.TextInputField
@@ -33,8 +32,7 @@ fun DocumentAttrDetail(
                 onClose()
             },
             title = title,
-            resizable = false,
-            state = rememberDialogState(width = 640.dp, height = 388.dp)
+            resizable = true
         ) {
             DocumentAttrRow("标题", documentInfo.title, true)
             DocumentAttrRow("作者", documentInfo.author, true)

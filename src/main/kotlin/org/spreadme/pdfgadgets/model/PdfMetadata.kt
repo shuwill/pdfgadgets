@@ -2,6 +2,7 @@ package org.spreadme.pdfgadgets.model
 
 import com.itextpdf.kernel.pdf.PdfDictionary
 import com.itextpdf.kernel.pdf.PdfDocument
+import mu.KotlinLogging
 import java.io.Closeable
 
 class PdfMetadata(
@@ -16,8 +17,10 @@ class PdfMetadata(
     var signatures: List<Signature> = listOf(),
 ) : Closeable {
 
+    private val logger = KotlinLogging.logger { }
+
     override fun close() {
-        println("document close")
+        logger.debug("document[{}] close", fileMetadata.name)
         document.close()
         pages.forEach { it.renderer.close() }
     }

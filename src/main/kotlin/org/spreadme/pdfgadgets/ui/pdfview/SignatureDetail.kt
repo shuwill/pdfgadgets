@@ -18,7 +18,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.window.rememberDialogState
 import org.bouncycastle.tsp.TimeStampToken
 import org.bouncycastle.util.encoders.Hex
 import org.spreadme.pdfgadgets.model.Signature
@@ -39,8 +38,7 @@ fun SignatureDetail(
         Dialog(
             onClose = { enable.value = false },
             title = signature.fieldName,
-            resizable = true,
-            state = rememberDialogState(width = 560.dp, height = 420.dp)
+            resizable = true
         ) {
             //Verify Info
             VerifyDetail(signature)

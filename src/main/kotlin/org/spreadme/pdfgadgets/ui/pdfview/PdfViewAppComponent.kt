@@ -60,7 +60,7 @@ class PdfViewAppComponent(
 
     @Composable
     override fun onRender() {
-        MainApplicationFrame(applicationViewModel) {
+        MainApplicationFrame {
             logger.debug("pdf view component【${name}】rendered")
             Column {
                 Toolbars(

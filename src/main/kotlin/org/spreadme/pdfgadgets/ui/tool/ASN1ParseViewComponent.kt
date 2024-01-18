@@ -18,14 +18,11 @@ import org.spreadme.pdfgadgets.repository.ASN1Parser
 import org.spreadme.pdfgadgets.ui.common.Toast
 import org.spreadme.pdfgadgets.ui.common.ToastType
 import org.spreadme.pdfgadgets.ui.common.VerticalScrollable
-import org.spreadme.pdfgadgets.ui.frame.ApplicationViewModel
 import org.spreadme.pdfgadgets.ui.frame.MainApplicationFrame
 import org.spreadme.pdfgadgets.ui.sidepanel.SidePanelUIState
 import org.spreadme.pdfgadgets.ui.streamview.ASN1NodeView
 
-class ASN1ParseViewComponent(
-    private val applicationViewModel: ApplicationViewModel
-) : AppComponent("ASN1 Parser") {
+class ASN1ParseViewComponent : AppComponent("ASN1 Parser") {
 
     private val asn1Parser by inject<ASN1Parser>()
 
@@ -36,7 +33,7 @@ class ASN1ParseViewComponent(
 
     @Composable
     override fun onRender() {
-        MainApplicationFrame(applicationViewModel) {
+        MainApplicationFrame {
             Box(Modifier.fillMaxSize()) {
                 Row(Modifier.padding(8.dp).fillMaxSize()) {
                     Column(Modifier.fillMaxHeight().weight(0.5f).padding(8.dp)) {

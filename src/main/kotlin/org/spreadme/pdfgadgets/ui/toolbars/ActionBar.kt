@@ -10,6 +10,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import org.spreadme.pdfgadgets.config.AppConfigs
@@ -66,11 +67,13 @@ fun ActionIcon(
     resource: String,
     onAction: () -> Unit
 ) {
+    val focusManager = LocalFocusManager.current
     Box(
         modifier.size(32.dp).clip(RoundedCornerShape(4.dp))
             .background(MaterialTheme.colors.background)
             .selectable(true) {
                 onAction()
+                focusManager.clearFocus()
             }
             .padding(4.dp),
         contentAlignment = Alignment.Center

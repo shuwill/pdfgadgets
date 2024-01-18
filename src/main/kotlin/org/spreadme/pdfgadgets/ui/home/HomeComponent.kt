@@ -1,8 +1,9 @@
 package org.spreadme.pdfgadgets.ui.home
 
+import org.spreadme.pdfgadgets.ui.frame.AppFrameLoadProgress
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import mu.KotlinLogging
 import org.koin.core.component.inject
@@ -11,7 +12,6 @@ import org.spreadme.pdfgadgets.repository.FileMetadataRepository
 import org.spreadme.pdfgadgets.ui.frame.ApplicationViewModel
 import org.spreadme.pdfgadgets.ui.frame.LoadProgressViewModel
 import org.spreadme.pdfgadgets.ui.frame.MainApplicationFrame
-import org.spreadme.pdfgadgets.ui.toolbars.ToolbarsViewModel
 
 class HomeComponent(
     private val applicationViewModel: ApplicationViewModel
@@ -29,16 +29,18 @@ class HomeComponent(
         loadProgressViewModel.onFail = {
             recentFileViewModel.reacquire()
         }
-        MainApplicationFrame(
-            applicationViewModel,
-        ) {
+
+        val progressState by remember { mutableStateOf(loadProgressViewModel) }
+        AppFrameLoadProgress(progressState, applicationViewModel)
+
+        MainApplicationFrame {
             logger.info("home component【${uid}】rendered")
             Column(Modifier.fillMaxSize()) {
                 recentFileViewModel.load()
                 RecentFiles(recentFileViewModel) {
                     applicationViewModel.openFile(
                         it.path(),
-                        loadProgressViewModel
+                        progressState
                     )
                 }
             }

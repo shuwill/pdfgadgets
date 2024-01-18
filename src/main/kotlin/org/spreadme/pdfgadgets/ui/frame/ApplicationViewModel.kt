@@ -8,6 +8,7 @@ import androidx.compose.ui.awt.ComposeWindow
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.window.WindowState
 import com.itextpdf.kernel.exceptions.BadPasswordException
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 import mu.KotlinLogging
@@ -49,18 +50,12 @@ class ApplicationViewModel(
     var windowState = WindowState()
     var isDark by AppConfig.isDark
 
-    var isCustomWindowDecoration = false
     var tabbarPaddingStart = 0
     var tabbarPaddingEnd = 16
     val addIconSize = 32
 
-    fun customWindowDecoration(enabled: Boolean) {
-        isCustomWindowDecoration = enabled
-        tabbarPaddingStart = 80
-    }
-
+    // TODO re calculate the tab width
     fun onWindowStateChange(size: DpSize) {
-        // TODO re calculate the tab width
     }
 
     fun onSelectTab(selectedComponent: AppComponent) {
@@ -146,7 +141,7 @@ class ApplicationViewModel(
     }
 
     fun openASN1Parser() {
-        val asn1ParseViewComponent = ASN1ParseViewComponent(this)
+        val asn1ParseViewComponent = ASN1ParseViewComponent()
         openCurrentTab(asn1ParseViewComponent)
     }
 

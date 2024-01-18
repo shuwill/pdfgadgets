@@ -4,6 +4,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.onClick
 import androidx.compose.foundation.selection.selectable
 import androidx.compose.material.Divider
 import androidx.compose.material.Icon
@@ -14,9 +15,9 @@ import androidx.compose.material.icons.filled.DeleteForever
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.unit.dp
 import org.spreadme.pdfgadgets.model.FileMetadata
-import org.spreadme.pdfgadgets.ui.common.clickable
 import org.spreadme.pdfgadgets.ui.theme.LocalExtraColors
 import org.spreadme.pdfgadgets.utils.SizeUnit
 import org.spreadme.pdfgadgets.utils.format
@@ -76,9 +77,11 @@ fun TableLine(
     onFileOpen: (FileMetadata) -> Unit,
     onDelete: (FileMetadata) -> Unit
 ) {
+    val focusManager = LocalFocusManager.current
     Row(
         Modifier.fillMaxWidth().height(48.dp).selectable(true) {
             onFileOpen(fileMetadata)
+            focusManager.clearFocus()
         }.then(modifier),
         verticalAlignment = Alignment.CenterVertically
     ) {
@@ -96,7 +99,7 @@ fun TableLine(
                 Icons.Default.DeleteForever,
                 contentDescription = "",
                 tint = LocalExtraColors.current.error,
-                modifier = Modifier.size(16.dp).clickable {
+                modifier = Modifier.size(16.dp).onClick {
                     onDelete(fileMetadata)
                 }
             )

@@ -4,7 +4,6 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.window.MenuBar
 import androidx.compose.ui.window.Window
 import androidx.compose.ui.window.application
 import androidx.compose.ui.window.rememberWindowState
@@ -14,7 +13,6 @@ import org.spreadme.pdfgadgets.common.Activity
 import org.spreadme.pdfgadgets.common.ActivityIntent
 import org.spreadme.pdfgadgets.config.AppConfig
 import org.spreadme.pdfgadgets.resources.R
-import org.spreadme.pdfgadgets.ui.PlatformUI
 import org.spreadme.pdfgadgets.ui.frame.AppFrameComponent
 import org.spreadme.pdfgadgets.ui.frame.ApplicationBootstrap
 import org.spreadme.pdfgadgets.ui.theme.PDFGadgetsTheme
@@ -61,16 +59,9 @@ class MainActivity : Activity() {
                         }.launchIn(this)
                 }
 
-                // custom the window title
-                val platformUI = PlatformUI(window.rootPane, appFrameViewModel.isDark)
-                if (platformUI.isSupportCustomWindowDecoration()) {
-                    platformUI.customWindowDecoration()
-                    appFrameViewModel.customWindowDecoration(true)
-                }
-
-                // load the window state
-                appFrameViewModel.composeWindow = window
-                appFrameViewModel.windowState = windowState
+                    // load the window state
+                    appFrameViewModel.composeWindow = window
+                    appFrameViewModel.windowState = windowState
 
                 PDFGadgetsTheme(appFrameViewModel.isDark) {
                     applicationBootstrap.bootstrap {
