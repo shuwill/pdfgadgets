@@ -18,7 +18,6 @@ import org.spreadme.pdfgadgets.repository.FileMetadataRepository
 import org.spreadme.pdfgadgets.repository.PdfMetadataParser
 import org.spreadme.pdfgadgets.ui.tabbars.Tabbars
 import org.spreadme.pdfgadgets.ui.theme.LocalExtraColors
-import org.spreadme.pdfgadgets.ui.toolbars.ActionBar
 
 class AppFrameComponent : AppComponent("Application Frame") {
 
@@ -41,8 +40,6 @@ class AppFrameComponent : AppComponent("Application Frame") {
                 val progressState by remember { mutableStateOf(loadProgressViewModel) }
                 AppFrameLoadProgress(progressState, applicationViewModel)
 
-                ActionBar(applicationViewModel, progressState)
-
                 Column {
                     //Tabs Bar
                     DefaultTabBars(applicationViewModel)
@@ -54,8 +51,8 @@ class AppFrameComponent : AppComponent("Application Frame") {
                         TabView(applicationViewModel)
                     }
                 }
-                }
             }
+        }
     }
 
     fun viewModel(): ApplicationViewModel = applicationViewModel

@@ -1,7 +1,9 @@
 package org.spreadme.pdfgadgets.ui.toolbars
 
+import androidx.compose.animation.*
 import androidx.compose.desktop.ui.tooling.preview.Preview
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Icon
@@ -20,6 +22,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.input.key.Key
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import org.jetbrains.jewel.foundation.theme.JewelTheme
 import org.spreadme.pdfgadgets.model.Position
 import org.spreadme.pdfgadgets.resources.R
 import org.spreadme.pdfgadgets.ui.common.DropdownTextInputField
@@ -170,7 +173,7 @@ fun ScaleDropdownInput(
         modifier = Modifier
             .padding(8.dp, 8.dp)
             .fillMaxHeight().width(180.dp)
-            .clip(RoundedCornerShape(8.dp))
+            .border(width = 1.dp, color = JewelTheme.globalColors.borders.normal)
             .background(MaterialTheme.colors.surface),
         MaterialTheme.typography.caption.copy(
             color = if (enabled) {
@@ -240,7 +243,7 @@ fun TextSearchBar(
             onValueChange = onValueChange,
             modifier = Modifier.padding(16.dp, 8.dp)
                 .fillMaxHeight().widthIn(240.dp, 272.dp)
-                .clip(RoundedCornerShape(8.dp))
+                .border(width = 1.dp, color = JewelTheme.globalColors.borders.normal)
                 .background(MaterialTheme.colors.surface)
                 .onBindKeyEvent(Key.Enter, onKeyDown = {
                     onSeach()
@@ -259,10 +262,20 @@ fun TextSearchBar(
             },
             enabled = enabled
         ) {
-            if (positions.isNotEmpty()) {
+            AnimatedVisibility(
+                visible = positions.isNotEmpty(),
+                enter = fadeIn() + slideInHorizontally { it / 2 },
+                exit = fadeOut() + slideOutHorizontally { it / 2 },
+            ) {
                 SearchResultDetail(currentIndex, positions, onScroll)
+
             }
-            if (searchKeyword.isNotEmpty()) {
+
+            AnimatedVisibility(
+                visible = searchKeyword.isNotEmpty(),
+                enter = fadeIn() + slideInHorizontally { it / 2 },
+                exit = fadeOut() + slideOutHorizontally { it / 2 },
+            ) {
                 Icon(
                     Icons.Default.Close,
                     contentDescription = "",

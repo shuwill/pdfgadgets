@@ -13,6 +13,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import org.jetbrains.jewel.foundation.theme.JewelTheme
 import org.spreadme.pdfgadgets.config.AppConfigs
 import org.spreadme.pdfgadgets.resources.R
 import org.spreadme.pdfgadgets.ui.common.FileDialog
@@ -75,19 +76,17 @@ fun ActionIcon(
 ) {
     val focusManager = LocalFocusManager.current
     Box(
-        modifier.size(32.dp).clip(RoundedCornerShape(4.dp))
-            .background(MaterialTheme.colors.primary)
+        modifier.size(20.dp).clip(RoundedCornerShape(4.dp))
             .selectable(true) {
                 onAction()
                 focusManager.clearFocus()
-            }
-            .padding(4.dp),
+            },
         contentAlignment = Alignment.Center
     ) {
         Icon(
             painter = painterResource(resource),
             contentDescription = "",
-            tint = MaterialTheme.colors.onPrimary
+            tint = JewelTheme.globalColors.infoContent
         )
     }
 }

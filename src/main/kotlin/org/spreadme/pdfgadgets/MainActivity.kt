@@ -31,6 +31,7 @@ import org.spreadme.pdfgadgets.config.AppConfig
 import org.spreadme.pdfgadgets.resources.R
 import org.spreadme.pdfgadgets.ui.frame.AppFrameComponent
 import org.spreadme.pdfgadgets.ui.frame.ApplicationBootstrap
+import org.spreadme.pdfgadgets.ui.frame.TitleBarView
 import org.spreadme.pdfgadgets.ui.theme.IntUiThemes
 import org.spreadme.pdfgadgets.ui.theme.PDFGadgetsTheme
 import java.awt.Taskbar
@@ -100,7 +101,7 @@ class MainActivity : Activity() {
                             }.launchIn(this)
                     }
 
-                    TitleBar(Modifier.newFullscreenControls(), gradientStartColor = appFrameViewModel.projectColor){ }
+                    TitleBarView(appFrameViewModel)
 
                     // load the window state
                     appFrameViewModel.composeWindow = window

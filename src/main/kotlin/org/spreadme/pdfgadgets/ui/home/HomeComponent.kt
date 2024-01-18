@@ -15,7 +15,7 @@ import org.spreadme.pdfgadgets.ui.frame.MainApplicationFrame
 
 class HomeComponent(
     private val applicationViewModel: ApplicationViewModel
-) : AppComponent("新建标签") {
+) : AppComponent("PDF Structure View") {
 
     private val logger = KotlinLogging.logger {}
 

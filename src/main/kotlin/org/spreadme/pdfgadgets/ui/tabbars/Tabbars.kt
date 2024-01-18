@@ -12,8 +12,14 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.drawBehind
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.SolidColor
+import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import org.spreadme.pdfgadgets.common.AppComponent
@@ -71,15 +77,33 @@ fun TabItem(
     onSelected: () -> Unit,
     onClose: () -> Unit
 ) {
+
+    val lineColor by rememberUpdatedState(
+        when {
+            active -> MaterialTheme.colors.primary
+            else -> MaterialTheme.colors.background
+        },
+    )
+
     Row(
-        Modifier.fillMaxHeight().width(tabWidthProvider().dp).background(
-            active.choose(
-                MaterialTheme.colors.primary,
-                MaterialTheme.colors.background
-            )
-        ).clickable {
-            onSelected()
-        }.padding(horizontal = 8.dp),
+        Modifier.fillMaxHeight().width(tabWidthProvider().dp)
+            .background(MaterialTheme.colors.background)
+            .drawBehind {
+                val strokeThickness = 2.0f
+                val startY = size.height - (strokeThickness / 2f)
+                val endX = size.width
+                val capDxFix = strokeThickness / 2f
+
+                drawLine(
+                    brush = SolidColor(lineColor),
+                    start = Offset(0 + capDxFix, startY),
+                    end = Offset(endX - capDxFix, startY),
+                    strokeWidth = strokeThickness,
+                    cap = StrokeCap.Round,
+                )
+            }.clickable {
+                onSelected()
+            }.padding(horizontal = 8.dp),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.Start
     ) {
@@ -89,7 +113,7 @@ fun TabItem(
         ) {
             Text(
                 title,
-                color = active.choose(MaterialTheme.colors.onPrimary, MaterialTheme.colors.onBackground),
+                color = MaterialTheme.colors.onBackground,
                 style = MaterialTheme.typography.caption,
                 softWrap = false,
                 overflow = TextOverflow.Ellipsis
@@ -103,7 +127,7 @@ fun TabItem(
             Icon(
                 Icons.Default.Close,
                 contentDescription = "Close",
-                tint = active.choose(MaterialTheme.colors.onPrimary, MaterialTheme.colors.onBackground),
+                tint = MaterialTheme.colors.onBackground,
                 modifier = Modifier.size(16.dp).clickable {
                     onClose()
                 }
