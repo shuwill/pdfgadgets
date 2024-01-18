@@ -68,7 +68,7 @@ fun DefaultTabBars(
     Tabbars(
         applicationViewModel.components,
         applicationViewModel.currentComponent,
-        Modifier.fillMaxWidth().height(40.dp).background(MaterialTheme.colors.primaryVariant)
+        Modifier.fillMaxWidth().height(30.dp).background(MaterialTheme.colors.background)
             .padding(
                 start = applicationViewModel.tabbarPaddingStart.dp,
                 end = applicationViewModel.tabbarPaddingEnd.dp

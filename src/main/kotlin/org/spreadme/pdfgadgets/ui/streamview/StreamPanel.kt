@@ -13,11 +13,15 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import org.spreadme.pdfgadgets.ui.common.LoadProgressIndicator
+import androidx.compose.ui.zIndex
+import org.jetbrains.jewel.ui.component.CircularProgressIndicatorBig
 import org.spreadme.pdfgadgets.ui.common.Toast
 import org.spreadme.pdfgadgets.ui.common.ToastType
 import org.spreadme.pdfgadgets.ui.common.clickable
-import org.spreadme.pdfgadgets.ui.theme.*
+import org.spreadme.pdfgadgets.ui.theme.LocalExtraColors
+import org.spreadme.pdfgadgets.ui.theme.LocalStreamKeywordColors
+import org.spreadme.pdfgadgets.ui.theme.darkKeywordColor
+import org.spreadme.pdfgadgets.ui.theme.lightKeywordColor
 import org.spreadme.pdfgadgets.utils.choose
 
 @Composable
@@ -36,43 +40,46 @@ fun StreamPanel(
             streamPanelViewModel.parse()
         }
 
-        if (streamPanelViewModel.finished) {
-            streamPanelViewModel.streamUIState?.let {
-                Column(Modifier.fillMaxSize()) {
-                    when (it.streamPanelViewType) {
-                        StreamPanelViewType.SIGCONTENT -> {
-                            StreamASN1View(it as StreamASN1UIState)
-                        }
-                        StreamPanelViewType.IMAGE -> {
-                            StreamImageView(it as StreamImageUIState)
-                        }
-                        else -> {
-                            val keywordColor = isDark.value.choose(lightKeywordColor(), darkKeywordColor())
-                            CompositionLocalProvider(
-                                LocalStreamKeywordColors provides keywordColor,
-                            ) {
-                                StreamTextView(it as StreamTextUIState)
+        Box(modifier = Modifier.fillMaxSize()) {
+            if (streamPanelViewModel.finished) {
+                streamPanelViewModel.streamUIState?.let {
+                    Column(Modifier.fillMaxSize()) {
+                        when (it.streamPanelViewType) {
+                            StreamPanelViewType.SIGCONTENT -> {
+                                StreamASN1View(it as StreamASN1UIState)
                             }
+                            StreamPanelViewType.IMAGE -> {
+                                StreamImageView(it as StreamImageUIState)
+                            }
+                            else -> {
+                                val keywordColor = isDark.value.choose(lightKeywordColor(), darkKeywordColor())
+                                CompositionLocalProvider(
+                                    LocalStreamKeywordColors provides keywordColor,
+                                ) {
+                                    StreamTextView(it as StreamTextUIState)
+                                }
 
+                            }
                         }
                     }
                 }
-            }
 
-            streamPanelViewModel.message?.let {
-                Box(
-                    Modifier.fillMaxSize(),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Toast(
-                        it,
-                        ToastType.ERROR,
-                        -1L
-                    )
+                streamPanelViewModel.message?.let {
+                    Box(
+                        Modifier.fillMaxSize(),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Toast(
+                            it,
+                            ToastType.ERROR,
+                            -1L
+                        )
+                    }
                 }
+            } else {
+                CircularProgressIndicatorBig(modifier = Modifier.align(Alignment.Center).zIndex(99f))
+
             }
-        } else {
-            LoadProgressIndicator(Modifier.fillMaxSize(), color = MaterialTheme.colors.primary)
         }
     }
 }

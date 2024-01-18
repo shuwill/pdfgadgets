@@ -52,7 +52,7 @@ fun Tabbars(
                 Icon(
                     Icons.Default.Add,
                     contentDescription = "Add",
-                    tint = MaterialTheme.colors.onPrimary,
+                    tint = MaterialTheme.colors.onBackground,
                     modifier = Modifier.size(addIconSize.dp).padding(horizontal = 8.dp)
                         .clickable {
                             onAdd()
@@ -74,8 +74,8 @@ fun TabItem(
     Row(
         Modifier.fillMaxHeight().width(tabWidthProvider().dp).background(
             active.choose(
-                MaterialTheme.colors.background,
-                MaterialTheme.colors.primaryVariant
+                MaterialTheme.colors.primary,
+                MaterialTheme.colors.background
             )
         ).clickable {
             onSelected()
@@ -89,7 +89,7 @@ fun TabItem(
         ) {
             Text(
                 title,
-                color = active.choose(MaterialTheme.colors.onBackground, MaterialTheme.colors.onPrimary),
+                color = active.choose(MaterialTheme.colors.onPrimary, MaterialTheme.colors.onBackground),
                 style = MaterialTheme.typography.caption,
                 softWrap = false,
                 overflow = TextOverflow.Ellipsis
@@ -103,7 +103,7 @@ fun TabItem(
             Icon(
                 Icons.Default.Close,
                 contentDescription = "Close",
-                tint = active.choose(MaterialTheme.colors.onBackground, MaterialTheme.colors.onPrimary),
+                tint = active.choose(MaterialTheme.colors.onPrimary, MaterialTheme.colors.onBackground),
                 modifier = Modifier.size(16.dp).clickable {
                     onClose()
                 }

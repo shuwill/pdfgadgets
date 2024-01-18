@@ -7,7 +7,6 @@ import kotlinx.coroutines.withContext
 import mu.KotlinLogging
 import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.select
-import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.jetbrains.exposed.sql.update
 import org.spreadme.pdfgadgets.config.AppConfig
@@ -63,15 +62,6 @@ class DefaultAppConfigRepository : AppConfigRepository {
             .createTable(AppConfigs)
             .upgrade()
 
-        // load some config from db
-        message.value = "load application config"
-        transaction {
-            AppConfigs.selectAll().forEach {
-                if (it[AppConfigs.key] == AppConfigs.DARK_CONFIG) {
-                    AppConfig.isDark.value = it[AppConfigs.value].toBoolean()
-                }
-            }
-        }
     }
 
     override suspend fun config(configKey: String, configValue: String) {

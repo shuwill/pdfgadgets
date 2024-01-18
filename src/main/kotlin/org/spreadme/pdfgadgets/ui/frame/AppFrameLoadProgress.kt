@@ -18,6 +18,8 @@ import androidx.compose.ui.input.key.Key
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
+import org.jetbrains.jewel.foundation.theme.JewelTheme
+import org.jetbrains.jewel.ui.component.CircularProgressIndicatorBig
 import org.spreadme.pdfgadgets.model.OpenProperties
 import org.spreadme.pdfgadgets.ui.common.*
 import org.spreadme.pdfgadgets.ui.theme.LocalExtraColors
@@ -52,11 +54,11 @@ fun AppFrameLoadProgress(loadProgressViewModel: LoadProgressViewModel, applicati
 fun LoadingModal() {
     Box(
         Modifier.fillMaxSize()
-            .background(MaterialTheme.colors.background.copy(alpha = 0.8f))
+            .background(JewelTheme.globalColors.paneBackground.copy(alpha = 0.8f))
             .zIndex(999f),
         contentAlignment = Alignment.Center
     ) {
-        LoadProgressIndicator()
+        CircularProgressIndicatorBig()
     }
 }
 

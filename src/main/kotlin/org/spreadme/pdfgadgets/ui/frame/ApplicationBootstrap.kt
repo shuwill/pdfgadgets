@@ -18,9 +18,10 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import kotlinx.coroutines.flow.MutableStateFlow
 import mu.KotlinLogging
+import org.jetbrains.jewel.foundation.theme.JewelTheme
+import org.jetbrains.jewel.ui.component.CircularProgressIndicatorBig
 import org.koin.core.component.KoinComponent
 import org.spreadme.pdfgadgets.resources.R
-import org.spreadme.pdfgadgets.ui.common.LoadProgressIndicator
 import org.spreadme.pdfgadgets.ui.common.LoadText
 
 class ApplicationBootstrap(
@@ -68,9 +69,9 @@ fun AppLoadProgressIndicator(message: MutableStateFlow<String>) {
                 modifier = Modifier.fillMaxSize()
             )
         }
-        LoadProgressIndicator(Modifier.fillMaxSize().zIndex(1f), color = MaterialTheme.colors.onPrimary)
+        CircularProgressIndicatorBig(Modifier.zIndex(1f))
         Column(
-            Modifier.fillMaxSize().background(MaterialTheme.colors.primary.copy(0.95f)),
+            Modifier.fillMaxSize().background(JewelTheme.globalColors.paneBackground.copy(0.8f)),
             verticalArrangement = Arrangement.Bottom,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {

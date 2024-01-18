@@ -18,6 +18,7 @@ import org.spreadme.pdfgadgets.resources.R
 import org.spreadme.pdfgadgets.ui.common.FileDialog
 import org.spreadme.pdfgadgets.ui.frame.ApplicationViewModel
 import org.spreadme.pdfgadgets.ui.frame.LoadProgressViewModel
+import org.spreadme.pdfgadgets.ui.theme.IntUiThemes
 import org.spreadme.pdfgadgets.utils.choose
 
 @Composable
@@ -27,7 +28,7 @@ fun ActionBar(
 ) {
     Column(
         Modifier.fillMaxHeight().width(56.dp)
-            .background(MaterialTheme.colors.primaryVariant),
+            .background(MaterialTheme.colors.background),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         ActionIcon(Modifier.padding(top = 16.dp), R.Icons.pdf) {
@@ -44,7 +45,7 @@ fun ActionBar(
             )
         }
 
-        ActionIcon(Modifier.padding(top = 16.dp), R.Icons.decode) {
+        ActionIcon(Modifier.padding(top = 24.dp), R.Icons.decode) {
             applicationViewModel.openASN1Parser()
         }
 
@@ -55,6 +56,11 @@ fun ActionBar(
         ) {
             ActionIcon(Modifier.padding(bottom = 16.dp), applicationViewModel.isDark.choose(R.Icons.dark, R.Icons.lignt)) {
                 applicationViewModel.isDark = !applicationViewModel.isDark
+                if(applicationViewModel.isDark) {
+                    applicationViewModel.theme = IntUiThemes.Dark
+                } else {
+                    applicationViewModel.theme = IntUiThemes.Light
+                }
                 applicationViewModel.config(AppConfigs.DARK_CONFIG, applicationViewModel.isDark.toString())
             }
         }
@@ -70,7 +76,7 @@ fun ActionIcon(
     val focusManager = LocalFocusManager.current
     Box(
         modifier.size(32.dp).clip(RoundedCornerShape(4.dp))
-            .background(MaterialTheme.colors.background)
+            .background(MaterialTheme.colors.primary)
             .selectable(true) {
                 onAction()
                 focusManager.clearFocus()
@@ -81,7 +87,7 @@ fun ActionIcon(
         Icon(
             painter = painterResource(resource),
             contentDescription = "",
-            tint = MaterialTheme.colors.onBackground
+            tint = MaterialTheme.colors.onPrimary
         )
     }
 }

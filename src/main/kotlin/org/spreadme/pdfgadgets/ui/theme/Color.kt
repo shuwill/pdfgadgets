@@ -84,7 +84,7 @@ fun lightExtraColors(
 
     iconDisable: Color = Color(0xFFA3A3A3),
     contentDisable: Color = Color(0xFFA3A3A3),
-    border: Color = Color(0xFFE7EAED),
+    border: Color = Color(0xc6c7c8),
     sidePanelBackground: Color = Color(0xFFF1F1F1)
 
 ): ExtraColors = ExtraColors(
