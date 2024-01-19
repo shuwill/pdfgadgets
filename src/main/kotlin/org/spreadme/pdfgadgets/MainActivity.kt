@@ -3,7 +3,6 @@ package org.spreadme.pdfgadgets
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.ExperimentalTextApi
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.application
 import androidx.compose.ui.window.rememberWindowState
@@ -63,7 +62,7 @@ class MainActivity : Activity() {
                             }.launchIn(this)
                     }
 
-                    TitleBarView(appFrameViewModel)
+                    TitleBarView()
 
                     // load the window state
                     appFrameViewModel.composeWindow = window

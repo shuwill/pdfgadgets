@@ -2,6 +2,8 @@ package org.spreadme.pdfgadgets.ui.common
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.interaction.FocusInteraction
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material.*
@@ -35,14 +37,34 @@ fun TextInputField(
     enabled: Boolean = true,
     readOnly: Boolean = false,
     visualTransformation: VisualTransformation = VisualTransformation.None,
+    interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
     leadingIcon: (@Composable () -> Unit)? = null,
     trailingIcon: (@Composable () -> Unit)? = null,
     onValueChange: (String) -> Unit,
 ) {
+    var isFoucs by remember(interactionSource) { mutableStateOf(false) }
+
+    LaunchedEffect(interactionSource) {
+        interactionSource.interactions.collect { interaction ->
+            when (interaction) {
+                is FocusInteraction.Focus -> isFoucs = true
+                is FocusInteraction.Unfocus -> isFoucs = false
+            }
+        }
+    }
+
+    val focusBorderColor = MaterialTheme.colors.onSurface.copy(0.3f)
+    val unFocusBorderColor = MaterialTheme.colors.onSurface.copy(0.1f)
+    val borderColor by rememberUpdatedState(
+        if (isFoucs) {
+            focusBorderColor
+        } else unFocusBorderColor
+    )
+
     BasicTextField(
         value = value,
         modifier = modifier.background(MaterialTheme.colors.surface, MaterialTheme.shapes.small)
-            .border(1.dp, MaterialTheme.colors.onSurface.copy(0.1f), MaterialTheme.shapes.small)
+            .border(2.dp, borderColor, MaterialTheme.shapes.small)
             .padding(start = 4.dp),
         onValueChange = onValueChange,
         textStyle = textStyle,
@@ -51,6 +73,7 @@ fun TextInputField(
         readOnly = readOnly,
         cursorBrush = SolidColor(MaterialTheme.colors.primary),
         visualTransformation = visualTransformation,
+        interactionSource = interactionSource,
         decorationBox = @Composable { innerTextField ->
             Row(
                 verticalAlignment = Alignment.CenterVertically

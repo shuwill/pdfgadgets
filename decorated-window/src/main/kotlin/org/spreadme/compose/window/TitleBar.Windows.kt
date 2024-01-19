@@ -15,12 +15,17 @@ import com.jetbrains.WindowDecorations.CustomTitleBar
 import kotlinx.coroutines.currentCoroutineContext
 import kotlinx.coroutines.isActive
 import org.spreadme.compose.window.styling.TitleBarStyle
+import java.awt.Dialog
+import java.awt.Frame
+import java.awt.Window
 
 @Composable
-internal fun DecoratedWindowScope.TitleBarOnWindows(
+internal fun TitleBarOnWindows(
     modifier: Modifier = Modifier,
     gradientStartColor: Color = Color.Unspecified,
     style: TitleBarStyle = defaultTitleBarStyle,
+    window: Window,
+    state: DecoratedWindowState,
     content: @Composable TitleBarScope.(DecoratedWindowState) -> Unit,
 ) {
     val titleBar = remember { JBR.getWindowDecorations().createCustomTitleBar() }
@@ -29,10 +34,17 @@ internal fun DecoratedWindowScope.TitleBarOnWindows(
         modifier = modifier.customTitleBarMouseEventHandler(titleBar),
         gradientStartColor = gradientStartColor,
         style = style,
+        window = window,
+        state = state,
         applyTitleBar = { height, _ ->
             titleBar.height = height.value
             titleBar.putProperty("controls.dark", style.colors.background.isDark())
-            JBR.getWindowDecorations().setCustomTitleBar(window, titleBar)
+            if (window is Frame) {
+                JBR.getWindowDecorations().setCustomTitleBar(window, titleBar)
+            }
+            if(window is Dialog) {
+                JBR.getWindowDecorations().setCustomTitleBar(window, titleBar)
+            }
             PaddingValues(start = titleBar.leftInset.dp, end = titleBar.rightInset.dp)
         },
         content = content,

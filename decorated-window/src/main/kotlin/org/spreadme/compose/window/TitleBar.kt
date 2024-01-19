@@ -43,17 +43,33 @@ fun DecoratedWindowScope.TitleBar(
     content: @Composable TitleBarScope.(DecoratedWindowState) -> Unit,
 ) {
     when (Platform.os) {
-        OS.Windows -> TitleBarOnWindows(modifier, gradientStartColor, style, content)
-        OS.MacOs -> TitleBarOnMacOs(modifier, gradientStartColor, style, content)
+        OS.Windows -> TitleBarOnWindows(modifier, gradientStartColor, style, window, state, content)
+        OS.MacOs -> TitleBarOnMacOs(modifier, gradientStartColor, style, window, state, content)
         OS.Unknown -> error("TitleBar is not supported on this platform(${System.getProperty("os.name")})")
     }
 }
 
 @Composable
-internal fun DecoratedWindowScope.TitleBarImpl(
+fun DecoratedDialogWindowScope.TitleBar(
     modifier: Modifier = Modifier,
     gradientStartColor: Color = Color.Unspecified,
     style: TitleBarStyle = defaultTitleBarStyle,
+    content: @Composable TitleBarScope.(DecoratedWindowState) -> Unit,
+) {
+    when (Platform.os) {
+        OS.Windows -> TitleBarOnWindows(modifier, gradientStartColor, style, window, state, content)
+        OS.MacOs -> TitleBarOnMacOs(modifier, gradientStartColor, style, window, state, content)
+        OS.Unknown -> error("TitleBar is not supported on this platform(${System.getProperty("os.name")})")
+    }
+}
+
+@Composable
+internal fun TitleBarImpl(
+    modifier: Modifier = Modifier,
+    gradientStartColor: Color = Color.Unspecified,
+    style: TitleBarStyle = defaultTitleBarStyle,
+    window: Window,
+    state: DecoratedWindowState,
     applyTitleBar: (Dp, DecoratedWindowState) -> PaddingValues,
     content: @Composable TitleBarScope.(DecoratedWindowState) -> Unit,
 ) {

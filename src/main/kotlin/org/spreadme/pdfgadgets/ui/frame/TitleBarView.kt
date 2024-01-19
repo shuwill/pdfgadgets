@@ -8,11 +8,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import org.spreadme.compose.window.DecoratedWindowScope
 import org.spreadme.compose.window.TitleBar
-import org.spreadme.compose.window.newFullscreenControls
 
 @Composable
-fun DecoratedWindowScope.TitleBarView(applicationViewModel: ApplicationViewModel) {
-    TitleBar(Modifier.newFullscreenControls(), gradientStartColor = applicationViewModel.projectColor) {
+fun DecoratedWindowScope.TitleBarView() {
+    TitleBar {
         Row(Modifier.align(Alignment.Start).padding(start = 12.dp)) {
 
         }

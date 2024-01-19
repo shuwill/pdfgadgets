@@ -13,6 +13,9 @@ import androidx.compose.ui.unit.dp
 import com.jetbrains.JBR
 import org.spreadme.compose.window.styling.TitleBarStyle
 import org.spreadme.compose.window.utils.macos.MacUtil
+import java.awt.Dialog
+import java.awt.Frame
+import java.awt.Window
 
 fun Modifier.newFullscreenControls(newControls: Boolean = true): Modifier =
     this then NewFullscreenControlsElement(
@@ -52,10 +55,12 @@ private class NewFullscreenControlsElement(
 private class NewFullscreenControlsNode(var newControls: Boolean) : Modifier.Node()
 
 @Composable
-internal fun DecoratedWindowScope.TitleBarOnMacOs(
+internal fun TitleBarOnMacOs(
     modifier: Modifier = Modifier,
     gradientStartColor: Color = Color.Unspecified,
     style: TitleBarStyle = defaultTitleBarStyle,
+    window: Window,
+    state: DecoratedWindowState,
     content: @Composable TitleBarScope.(DecoratedWindowState) -> Unit,
 ) {
     val newFullscreenControls = modifier.foldOut(false) { e, r ->
@@ -84,12 +89,19 @@ internal fun DecoratedWindowScope.TitleBarOnMacOs(
         modifier = modifier.customTitleBarMouseEventHandler(titleBar),
         gradientStartColor = gradientStartColor,
         style = style,
-        applyTitleBar = { height, state ->
+        window,
+        state = state,
+        applyTitleBar = { height, _ ->
             if (state.isFullscreen) {
                 MacUtil.updateFullScreenButtons(window)
             }
             titleBar.height = height.value
-            JBR.getWindowDecorations().setCustomTitleBar(window, titleBar)
+            if (window is Frame) {
+                JBR.getWindowDecorations().setCustomTitleBar(window, titleBar)
+            }
+            if (window is Dialog) {
+                JBR.getWindowDecorations().setCustomTitleBar(window, titleBar)
+            }
 
             if (state.isFullscreen && newFullscreenControls) {
                 PaddingValues(start = 80.dp)

@@ -5,7 +5,6 @@ import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.awt.ComposeWindow
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.window.WindowState
 import com.itextpdf.kernel.exceptions.BadPasswordException
@@ -49,12 +48,6 @@ class ApplicationViewModel(
     //UI State
     var windowState = WindowState()
     var isDark by AppConfig.isDark
-    val projectColor
-        get() = if (isDark) {
-            Color(0xFFF5D4C1)
-        } else {
-            Color(0xFF654B40)
-        }
 
     var tabbarPaddingStart = 0
     var tabbarPaddingEnd = 16

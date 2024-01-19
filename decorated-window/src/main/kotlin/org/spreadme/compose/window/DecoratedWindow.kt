@@ -4,6 +4,7 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.awt.ComposeDialog
 import androidx.compose.ui.awt.ComposeWindow
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.painter.Painter
@@ -53,7 +54,7 @@ fun DecoratedWindow(
         visible,
         title,
         icon,
-        undecorated ,
+        undecorated,
         transparent,
         resizable,
         enabled,
@@ -150,6 +151,70 @@ fun DecoratedWindow(
 interface DecoratedWindowScope : FrameWindowScope {
 
     override val window: ComposeWindow
+
+    val state: DecoratedWindowState
+}
+
+@Composable
+fun DecoratedDialog(
+    onCloseRequest: () -> Unit,
+    visible: Boolean = true,
+    title: String,
+    icon: Painter? = null,
+    undecorated: Boolean = false,
+    resizable: Boolean = true,
+    style: DecoratedWindowStyle = defaultDecoratedWindowStyle,
+    content: @Composable DecoratedDialogWindowScope.() -> Unit,
+) {
+
+    DialogWindow(
+        onCloseRequest = onCloseRequest,
+        visible = visible,
+        title = title,
+        icon = icon,
+        undecorated = undecorated,
+        resizable = resizable
+    ) {
+        val decoratedWindowState by remember {
+            mutableStateOf(DecoratedWindowState.of(fullscreen = false, minimized = false, maximized = false))
+        }
+
+        val undecoratedWindowBorder =
+            if (undecorated && !decoratedWindowState.isMaximized) {
+                Modifier.border(
+                    style.metrics.borderWidth,
+                    style.colors.borderFor(decoratedWindowState).value,
+                    RectangleShape,
+                ).padding(style.metrics.borderWidth)
+            } else {
+                Modifier
+            }
+
+        CompositionLocalProvider(
+            LocalTitleBarInfo provides TitleBarInfo(title, icon),
+        ) {
+            Layout(
+                content = {
+                    val scope = object : DecoratedDialogWindowScope {
+                        override val state: DecoratedWindowState
+                            get() = decoratedWindowState
+
+                        override val window: ComposeDialog
+                            get() = this@DialogWindow.window
+                    }
+                    scope.content()
+                },
+                modifier = undecoratedWindowBorder.trackWindowActivation(window),
+                measurePolicy = DecoratedWindowMeasurePolicy,
+            )
+        }
+    }
+}
+
+@Stable
+interface DecoratedDialogWindowScope : DialogWindowScope {
+
+    override val window: ComposeDialog
 
     val state: DecoratedWindowState
 }

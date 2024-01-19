@@ -1,5 +1,6 @@
 package org.spreadme.pdfgadgets.ui.tabbars
 
+import androidx.compose.animation.fadeOut
 import androidx.compose.desktop.ui.tooling.preview.Preview
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -11,9 +12,7 @@ import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Close
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.rememberUpdatedState
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind
@@ -88,7 +87,7 @@ fun TabItem(
         Modifier.fillMaxHeight().width(tabWidthProvider().dp)
             .background(MaterialTheme.colors.background)
             .drawBehind {
-                val strokeThickness = 2.0f
+                val strokeThickness = 4.0f
                 val startY = size.height - (strokeThickness / 2f)
                 val endX = size.width
                 val capDxFix = strokeThickness / 2f
@@ -119,18 +118,20 @@ fun TabItem(
             )
         }
 
-        Box(
-            Modifier.fillMaxSize().weight(0.2f),
-            contentAlignment = Alignment.CenterEnd
-        ) {
-            Icon(
-                Icons.Default.Close,
-                contentDescription = "Close",
-                tint = MaterialTheme.colors.onBackground,
-                modifier = Modifier.size(16.dp).clickable {
-                    onClose()
-                }
-            )
+        if (active) {
+            Box(
+                Modifier.fillMaxSize().weight(0.2f),
+                contentAlignment = Alignment.CenterEnd
+            ) {
+                Icon(
+                    Icons.Default.Close,
+                    contentDescription = "Close",
+                    tint = MaterialTheme.colors.onBackground,
+                    modifier = Modifier.size(16.dp).clickable {
+                        onClose()
+                    }
+                )
+            }
         }
     }
 }
