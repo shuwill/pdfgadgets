@@ -24,7 +24,6 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import org.spreadme.pdfgadgets.common.AppComponent
 import org.spreadme.pdfgadgets.ui.common.clickable
-import org.spreadme.pdfgadgets.utils.choose
 
 @Composable
 fun Tabbars(

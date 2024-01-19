@@ -2,7 +2,7 @@ plugins {
     java
 }
 
-group = "org.spreadme.pdfgadgets"
+group = "org.spreadme.mupdf"
 version = "1.0.0"
 
 repositories {

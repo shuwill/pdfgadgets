@@ -11,10 +11,6 @@ object R {
     }
 
     object Icons {
-        const val home ="icons/home.svg"
-        const val remove ="icons/remove.svg"
-        const val save ="icons/save.svg"
-        const val undo ="icons/undo.svg"
 
         const val pdf = "icons/pdf.svg"
         const val pdfdictionary = "icons/pdfDictionary.svg"
@@ -31,12 +27,7 @@ object R {
         const val info = "icons/info.svg"
         const val structure = "icons/structure.svg"
         const val outlines = "icons/outlines.svg"
-        const val font = "icons/font.svg"
         const val image = "icons/image.svg"
-        const val images = "icons/images.svg"
-
-        const val view_mode_default = "icons/view_mode_defaut.svg"
-        const val view_mode_flat = "icons/view_mode_flat.svg"
 
         const val zoom_out = "icons/zoom_out.svg"
         const val zoom_in = "icons/zoom_in.svg"
@@ -44,8 +35,6 @@ object R {
         const val signature = "icons/signature.svg"
         const val signature_verify = "icons/signature-verify.svg"
 
-        const val pdffile = "icons/pdffile.svg"
-        const val newfile = "icons/newfile.svg"
         const val open = "icons/open.svg"
         const val decode = "icons/decode.svg"
 

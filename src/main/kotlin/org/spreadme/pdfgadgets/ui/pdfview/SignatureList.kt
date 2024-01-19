@@ -29,8 +29,8 @@ import org.spreadme.pdfgadgets.model.SignatureResult
 import org.spreadme.pdfgadgets.resources.R
 import org.spreadme.pdfgadgets.ui.common.clickable
 import org.spreadme.pdfgadgets.ui.sidepanel.SidePanelUIState
-import org.spreadme.pdfgadgets.ui.theme.LocalExtraColors
-import org.spreadme.pdfgadgets.utils.choose
+import org.spreadme.pdfgadgets.ui.theme.PDFGadgetsTheme
+import org.spreadme.common.choose
 
 @Composable
 fun SignatureList(
@@ -103,12 +103,12 @@ private fun SignatureBrief(
 
         val tint = if (signatureResult.verifySignature) {
             if (!lastSignatureCoversWholeDocument) {
-                LocalExtraColors.current.warning
+                PDFGadgetsTheme.extraColors.warning
             } else {
-                LocalExtraColors.current.success
+                PDFGadgetsTheme.extraColors.success
             }
         } else {
-            LocalExtraColors.current.error
+            PDFGadgetsTheme.extraColors.error
         }
         Icon(
             painter = painterResource(R.Icons.signature_verify),

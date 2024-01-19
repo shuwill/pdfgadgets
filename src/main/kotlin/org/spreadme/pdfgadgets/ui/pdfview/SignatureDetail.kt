@@ -24,8 +24,8 @@ import org.spreadme.pdfgadgets.model.Signature
 import org.spreadme.pdfgadgets.resources.R
 import org.spreadme.pdfgadgets.ui.common.Dialog
 import org.spreadme.pdfgadgets.ui.common.Tipable
-import org.spreadme.pdfgadgets.ui.theme.LocalExtraColors
-import org.spreadme.pdfgadgets.utils.format
+import org.spreadme.pdfgadgets.ui.theme.PDFGadgetsTheme
+import org.spreadme.common.format
 import java.security.cert.X509Certificate
 
 @Composable
@@ -196,24 +196,24 @@ data class SignatureVerifyUIColor(
 
 @Composable
 fun verifySuccess(): SignatureVerifyUIColor = SignatureVerifyUIColor(
-    LocalExtraColors.current.successBackground,
-    LocalExtraColors.current.successBorder,
-    LocalExtraColors.current.success,
-    LocalExtraColors.current.onSuccess
+    PDFGadgetsTheme.extraColors.successBackground,
+    PDFGadgetsTheme.extraColors.successBorder,
+    PDFGadgetsTheme.extraColors.success,
+    PDFGadgetsTheme.extraColors.onSuccess
 )
 
 @Composable
 fun verifyWarning(): SignatureVerifyUIColor = SignatureVerifyUIColor(
-    LocalExtraColors.current.warningBackground,
-    LocalExtraColors.current.warningBorder,
-    LocalExtraColors.current.warning,
-    LocalExtraColors.current.onWarning
+    PDFGadgetsTheme.extraColors.warningBackground,
+    PDFGadgetsTheme.extraColors.warningBorder,
+    PDFGadgetsTheme.extraColors.warning,
+    PDFGadgetsTheme.extraColors.onWarning
 )
 
 @Composable
 fun verifyError(): SignatureVerifyUIColor = SignatureVerifyUIColor(
-    LocalExtraColors.current.errorBackground,
-    LocalExtraColors.current.errorBorder,
-    LocalExtraColors.current.error,
-    LocalExtraColors.current.onError
+    PDFGadgetsTheme.extraColors.errorBackground,
+    PDFGadgetsTheme.extraColors.errorBorder,
+    PDFGadgetsTheme.extraColors.error,
+    PDFGadgetsTheme.extraColors.onError
 )

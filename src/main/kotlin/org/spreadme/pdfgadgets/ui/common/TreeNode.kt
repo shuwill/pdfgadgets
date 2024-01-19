@@ -12,7 +12,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import org.spreadme.pdfgadgets.utils.choose
+import org.spreadme.common.choose
 
 @Composable
 fun TreeNodeIcon(

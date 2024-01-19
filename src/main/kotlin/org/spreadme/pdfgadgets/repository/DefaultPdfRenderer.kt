@@ -7,6 +7,7 @@ import kotlinx.coroutines.sync.withLock
 import mu.KotlinLogging
 import net.coobird.thumbnailator.Thumbnails
 import org.spreadme.pdfgadgets.model.*
+import org.spreadme.pdfgadgets.utils.rotate
 
 class DefaultPdfRenderer(fileMetadata: FileMetadata) : PdfRenderer {
 
@@ -54,7 +55,7 @@ class DefaultPdfRenderer(fileMetadata: FileMetadata) : PdfRenderer {
                             }
                         }
                         if (!blank) {
-                            val textBlock = TextBlock(chars, Position(page.index, page.pageSize, textBlockRectangle))
+                            val textBlock = TextBlock(chars, Position(page.index, page.pageSize, textBlockRectangle.rotate(rotation, page.pageSize)))
                             textBlocks.add(textBlock)
                         }
                     }
@@ -75,7 +76,7 @@ class DefaultPdfRenderer(fileMetadata: FileMetadata) : PdfRenderer {
                 rotation.let {
                     bufferedImage = Thumbnails.of(bufferedImage)
                         .scale(1.0)
-                        .rotate(-it.toDouble())
+                        .rotate(it.toDouble())
                         .asBufferedImage()
                 }
 

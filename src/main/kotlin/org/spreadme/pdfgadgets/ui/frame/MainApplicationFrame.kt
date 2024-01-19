@@ -4,7 +4,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.material.Divider
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import org.spreadme.pdfgadgets.ui.theme.LocalExtraColors
+import org.spreadme.pdfgadgets.ui.theme.PDFGadgetsTheme
 
 @Composable
 fun MainApplicationFrame(content: @Composable (BoxScope.() -> Unit)) {
@@ -16,7 +16,7 @@ fun MainApplicationFrame(content: @Composable (BoxScope.() -> Unit)) {
             Box(Modifier.fillMaxSize()) {
                 Row(Modifier.fillMaxSize()) {
                     Column(Modifier.fillMaxSize()) {
-                        Divider(color = LocalExtraColors.current.border)
+                        Divider(color = PDFGadgetsTheme.extraColors.border)
                         Box(Modifier.fillMaxSize()) {
                             content()
                         }

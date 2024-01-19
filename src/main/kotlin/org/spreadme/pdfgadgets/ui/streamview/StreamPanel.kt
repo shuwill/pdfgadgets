@@ -14,15 +14,15 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
-import org.jetbrains.jewel.ui.component.CircularProgressIndicatorBig
+import org.spreadme.pdfgadgets.ui.common.CircularProgressIndicator
 import org.spreadme.pdfgadgets.ui.common.Toast
 import org.spreadme.pdfgadgets.ui.common.ToastType
 import org.spreadme.pdfgadgets.ui.common.clickable
-import org.spreadme.pdfgadgets.ui.theme.LocalExtraColors
 import org.spreadme.pdfgadgets.ui.theme.LocalStreamKeywordColors
+import org.spreadme.pdfgadgets.ui.theme.PDFGadgetsTheme
 import org.spreadme.pdfgadgets.ui.theme.darkKeywordColor
 import org.spreadme.pdfgadgets.ui.theme.lightKeywordColor
-import org.spreadme.pdfgadgets.utils.choose
+import org.spreadme.common.choose
 
 @Composable
 fun StreamPanel(
@@ -30,11 +30,11 @@ fun StreamPanel(
     isDark: MutableState<Boolean>
 ) {
     Column(Modifier.fillMaxSize()) {
-        Divider(color = LocalExtraColors.current.border, thickness = 1.dp)
+        Divider(color = PDFGadgetsTheme.extraColors.border, thickness = 1.dp)
         ActionToolbar {
             streamPanelViewModel.enabled = false
         }
-        Divider(color = LocalExtraColors.current.border, thickness = 1.dp)
+        Divider(color = PDFGadgetsTheme.extraColors.border, thickness = 1.dp)
 
         LaunchedEffect(streamPanelViewModel.streamUIState) {
             streamPanelViewModel.parse()
@@ -77,7 +77,7 @@ fun StreamPanel(
                     }
                 }
             } else {
-                CircularProgressIndicatorBig(modifier = Modifier.align(Alignment.Center).zIndex(99f))
+                CircularProgressIndicator(modifier = Modifier.align(Alignment.Center).zIndex(99f))
 
             }
         }

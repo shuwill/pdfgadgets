@@ -14,8 +14,8 @@ import org.spreadme.pdfgadgets.config.AppConfigs
 import org.spreadme.pdfgadgets.config.DBHelper
 import org.spreadme.pdfgadgets.config.MupdfConfig
 import org.spreadme.pdfgadgets.model.FileMetadatas
-import org.spreadme.pdfgadgets.utils.copy
-import org.spreadme.pdfgadgets.utils.createFile
+import org.spreadme.common.copy
+import org.spreadme.common.createFile
 import java.net.URL
 import java.nio.file.Files
 import java.nio.file.Paths

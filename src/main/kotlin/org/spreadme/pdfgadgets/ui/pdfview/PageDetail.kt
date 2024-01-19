@@ -31,7 +31,7 @@ import org.spreadme.pdfgadgets.model.TextBlock
 import org.spreadme.pdfgadgets.ui.common.awaitEventFirstDown
 import org.spreadme.pdfgadgets.ui.common.clickable
 import org.spreadme.pdfgadgets.ui.common.gesture.dragMotionEvent
-import org.spreadme.pdfgadgets.ui.theme.LocalExtraColors
+import org.spreadme.pdfgadgets.ui.theme.PDFGadgetsTheme
 import java.awt.Cursor
 import java.awt.Toolkit
 import java.awt.datatransfer.StringSelection
@@ -75,7 +75,7 @@ fun mediabox(
     // mediabox size
     Rectangle(
         modifier = Modifier.background(MaterialTheme.colors.primary.copy(0.45f))
-            .border(1.dp, color = LocalExtraColors.current.border),
+            .border(1.dp, color = PDFGadgetsTheme.extraColors.border),
         page.mediabox,
         page.mediabox,
         scale = scale,

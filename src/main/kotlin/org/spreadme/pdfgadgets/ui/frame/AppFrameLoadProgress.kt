@@ -3,7 +3,6 @@ package org.spreadme.pdfgadgets.ui.frame
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
@@ -13,16 +12,13 @@ import androidx.compose.material.icons.outlined.Lock
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.input.key.Key
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
-import org.jetbrains.jewel.foundation.theme.JewelTheme
-import org.jetbrains.jewel.ui.component.CircularProgressIndicatorBig
 import org.spreadme.pdfgadgets.model.OpenProperties
 import org.spreadme.pdfgadgets.ui.common.*
-import org.spreadme.pdfgadgets.ui.theme.LocalExtraColors
+import org.spreadme.pdfgadgets.ui.theme.PDFGadgetsTheme
 
 @Composable
 fun AppFrameLoadProgress(loadProgressViewModel: LoadProgressViewModel, applicationViewModel: ApplicationViewModel) {
@@ -30,11 +26,13 @@ fun AppFrameLoadProgress(loadProgressViewModel: LoadProgressViewModel, applicati
         LoadProgressStatus.LOADING -> {
             LoadingModal()
         }
+
         LoadProgressStatus.FAILURE -> {
             FailureToast(loadProgressViewModel.message) {
                 loadProgressViewModel.status = LoadProgressStatus.FINISHED
             }
         }
+
         LoadProgressStatus.NEED_PASSWORD -> {
             EnterPasswordDialog("", loadProgressViewModel.message) { password ->
                 if (password.isNotBlank()) {
@@ -46,6 +44,7 @@ fun AppFrameLoadProgress(loadProgressViewModel: LoadProgressViewModel, applicati
                 }
             }
         }
+
         else -> {}
     }
 }
@@ -54,11 +53,11 @@ fun AppFrameLoadProgress(loadProgressViewModel: LoadProgressViewModel, applicati
 fun LoadingModal() {
     Box(
         Modifier.fillMaxSize()
-            .background(JewelTheme.globalColors.paneBackground.copy(alpha = 0.8f))
+            .background(PDFGadgetsTheme.globalColors.background.copy(alpha = 0.8f))
             .zIndex(999f),
         contentAlignment = Alignment.Center
     ) {
-        CircularProgressIndicatorBig()
+        CircularProgressIndicator()
     }
 }
 
@@ -100,7 +99,7 @@ fun EnterPasswordDialog(
                 Icon(
                     Icons.Outlined.Lock,
                     contentDescription = "",
-                    tint = LocalExtraColors.current.iconDisable,
+                    tint = PDFGadgetsTheme.extraColors.iconDisable,
                     modifier = Modifier.size(80.dp)
                 )
             }
@@ -124,9 +123,6 @@ fun EnterPasswordDialog(
                 TextInputField(
                     text,
                     modifier = Modifier.fillMaxWidth().height(32.dp)
-                        .clip(RoundedCornerShape(4.dp))
-                        .background(MaterialTheme.colors.surface)
-                        .padding(start = 8.dp)
                         .onBindKeyEvent(Key.Enter, onKeyDown = {
                             onConfirm(text)
                         })

@@ -10,7 +10,7 @@ import org.spreadme.pdfgadgets.model.OperatorName
 import org.spreadme.pdfgadgets.model.PdfImageInfo
 import org.spreadme.pdfgadgets.model.PdfStreamTokenSequence
 import org.spreadme.pdfgadgets.model.PdfStreamTokenType
-import org.spreadme.pdfgadgets.utils.applyMask
+import org.spreadme.common.applyMask
 import org.spreadme.pdfgadgets.utils.getArray
 import org.spreadme.pdfgadgets.utils.getBoolean
 import java.io.ByteArrayInputStream

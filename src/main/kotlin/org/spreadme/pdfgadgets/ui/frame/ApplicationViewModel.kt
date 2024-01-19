@@ -24,7 +24,6 @@ import org.spreadme.pdfgadgets.repository.FileMetadataRepository
 import org.spreadme.pdfgadgets.repository.PdfMetadataParser
 import org.spreadme.pdfgadgets.ui.home.HomeComponent
 import org.spreadme.pdfgadgets.ui.pdfview.PdfViewAppComponent
-import org.spreadme.pdfgadgets.ui.theme.IntUiThemes
 import org.spreadme.pdfgadgets.ui.tool.ASN1ParseViewComponent
 import java.nio.file.Path
 import kotlin.system.exitProcess
@@ -50,9 +49,8 @@ class ApplicationViewModel(
     //UI State
     var windowState = WindowState()
     var isDark by AppConfig.isDark
-    var theme by mutableStateOf(IntUiThemes.Light)
     val projectColor
-        get() = if (theme.isLightHeader()) {
+        get() = if (isDark) {
             Color(0xFFF5D4C1)
         } else {
             Color(0xFF654B40)

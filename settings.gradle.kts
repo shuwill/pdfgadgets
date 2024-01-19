@@ -14,4 +14,6 @@ pluginManagement {
 }
 
 rootProject.name = "pdfgadgets"
+include("common")
+include("decorated-window")
 include("mupdf")

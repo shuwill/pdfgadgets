@@ -3,9 +3,7 @@ package org.spreadme.pdfgadgets.ui.toolbars
 import androidx.compose.animation.*
 import androidx.compose.desktop.ui.tooling.preview.Preview
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
@@ -18,11 +16,9 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.input.key.Key
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
-import org.jetbrains.jewel.foundation.theme.JewelTheme
 import org.spreadme.pdfgadgets.model.Position
 import org.spreadme.pdfgadgets.resources.R
 import org.spreadme.pdfgadgets.ui.common.DropdownTextInputField
@@ -31,7 +27,7 @@ import org.spreadme.pdfgadgets.ui.common.clickable
 import org.spreadme.pdfgadgets.ui.common.onBindKeyEvent
 import org.spreadme.pdfgadgets.ui.pdfview.PdfViewType
 import org.spreadme.pdfgadgets.ui.sidepanel.SidePanelMode
-import org.spreadme.pdfgadgets.ui.theme.LocalExtraColors
+import org.spreadme.pdfgadgets.ui.theme.PDFGadgetsTheme
 import org.spreadme.pdfgadgets.ui.toolbars.ToolbarsViewModel.Companion.SCALES
 
 @Composable
@@ -81,14 +77,14 @@ fun SidePanelSwitchBar(
         horizontalArrangement = Arrangement.Start,
         verticalAlignment = Alignment.CenterVertically
     ) {
-        SidePanelMode.values().forEach { mode ->
+        SidePanelMode.entries.forEach { mode ->
             Icon(
                 painter = painterResource(mode.icon),
                 contentDescription = mode.desc,
                 tint = if (enabled) {
                     MaterialTheme.colors.onBackground
                 } else {
-                    LocalExtraColors.current.iconDisable
+                    PDFGadgetsTheme.extraColors.iconDisable
                 },
                 modifier = Modifier.padding(start = 16.dp)
                     .size(16.dp)
@@ -153,7 +149,7 @@ fun ScaleIcon(
         tint = if (enabled) {
             MaterialTheme.colors.onBackground
         } else {
-            LocalExtraColors.current.iconDisable
+            PDFGadgetsTheme.extraColors.iconDisable
         },
         modifier = Modifier.size(size.dp).clickable(enabled) {
             onScaleChange(scaleType)
@@ -172,20 +168,18 @@ fun ScaleDropdownInput(
         SCALES,
         modifier = Modifier
             .padding(8.dp, 8.dp)
-            .fillMaxHeight().width(180.dp)
-            .border(width = 1.dp, color = JewelTheme.globalColors.borders.normal)
-            .background(MaterialTheme.colors.surface),
+            .fillMaxHeight().width(180.dp),
         MaterialTheme.typography.caption.copy(
             color = if (enabled) {
                 MaterialTheme.colors.onSurface
             } else {
-                LocalExtraColors.current.contentDisable
+                PDFGadgetsTheme.extraColors.contentDisable
             }
         ),
         tint = if (enabled) {
             MaterialTheme.colors.onBackground
         } else {
-            LocalExtraColors.current.iconDisable
+            PDFGadgetsTheme.extraColors.iconDisable
         },
         enabled = enabled
     ) {
@@ -204,14 +198,14 @@ fun PdfViewTypeSwitchBar(
         horizontalArrangement = Arrangement.Start,
         verticalAlignment = Alignment.CenterVertically
     ) {
-        PdfViewType.values().forEach { type ->
+        PdfViewType.entries.forEach { type ->
             Icon(
                 painterResource(type.icon),
                 contentDescription = "",
                 tint = if (enabled) {
                     MaterialTheme.colors.onBackground
                 } else {
-                    LocalExtraColors.current.iconDisable
+                    PDFGadgetsTheme.extraColors.iconDisable
                 },
                 modifier = Modifier.padding(start = 8.dp).size(16.dp).clickable {
                     onViewTypeChange(type)
@@ -243,8 +237,6 @@ fun TextSearchBar(
             onValueChange = onValueChange,
             modifier = Modifier.padding(16.dp, 8.dp)
                 .fillMaxHeight().widthIn(240.dp, 272.dp)
-                .border(width = 1.dp, color = JewelTheme.globalColors.borders.normal)
-                .background(MaterialTheme.colors.surface)
                 .onBindKeyEvent(Key.Enter, onKeyDown = {
                     onSeach()
                 }),
@@ -252,13 +244,13 @@ fun TextSearchBar(
                 color = if (enabled) {
                     MaterialTheme.colors.onSurface
                 } else {
-                    LocalExtraColors.current.contentDisable
+                    PDFGadgetsTheme.extraColors.contentDisable
                 }
             ),
             tint = if (enabled) {
                 MaterialTheme.colors.onBackground
             } else {
-                LocalExtraColors.current.iconDisable
+                PDFGadgetsTheme.extraColors.iconDisable
             },
             enabled = enabled
         ) {

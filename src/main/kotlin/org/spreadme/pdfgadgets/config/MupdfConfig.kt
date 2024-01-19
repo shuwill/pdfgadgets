@@ -2,20 +2,19 @@ package org.spreadme.pdfgadgets.config
 
 import com.artifex.mupdf.fitz.Context
 import mu.KotlinLogging
-import org.spreadme.pdfgadgets.utils.OS
-import org.spreadme.pdfgadgets.utils.Platform
+import org.spreadme.common.OS
+import org.spreadme.common.Platform
 import java.nio.file.Files
 import java.nio.file.Paths
 
 object MupdfConfig : Context.MupdfLibLoader{
 
     private val logger = KotlinLogging.logger {}
-    private val platform: Platform = Platform()
     private const val MUPDF_LIBRARY_PATH_PROPERTY = "mupdf.library.path"
 
     var cache_url = "https://spreadme.oss-cn-shanghai.aliyuncs.com/mupdf"
     val cache_root = "${AppConfig.appPath}/.mupdf/"
-    val libName = "mupdf-${platform.os.id}-${platform.arch.id}.${platform.os.ext}"
+    val libName = "mupdf-${Platform.os.id}-${Platform.arch.id}.${Platform.os.ext}"
 
     override fun load(): String {
         val libPath = System.getProperty(MUPDF_LIBRARY_PATH_PROPERTY)
@@ -32,6 +31,6 @@ object MupdfConfig : Context.MupdfLibLoader{
             return library.toString()
         }
 
-        return "${System.getProperty("java.home")}/${if (platform.os == OS.Windows) "bin" else "natives"}/$libName"
+        return "${System.getProperty("java.home")}/${if (Platform.os == OS.Windows) "bin" else "natives"}/$libName"
     }
 }

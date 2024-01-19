@@ -15,7 +15,7 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
-import org.spreadme.pdfgadgets.ui.theme.LocalExtraColors
+import org.spreadme.pdfgadgets.ui.theme.PDFGadgetsTheme
 import java.awt.Cursor
 
 @Composable
@@ -29,7 +29,7 @@ fun SidePanel(
 
     Column(
         modifier = Modifier.fillMaxHeight().width(sideViewState.expandedSize)
-            .background(LocalExtraColors.current.sidePanelBackground)
+            .background(PDFGadgetsTheme.extraColors.sidePanelBackground)
     ) {
         Box(modifier = Modifier.fillMaxSize()) {
             content(sidePanelUIState)
@@ -90,5 +90,5 @@ fun SidePanelVerticalSplitter(
             }
         }
     )
-    Box(modifier = Modifier.width(1.dp).fillMaxHeight().background(LocalExtraColors.current.border))
+    Box(modifier = Modifier.width(1.dp).fillMaxHeight().background(PDFGadgetsTheme.extraColors.border))
 }

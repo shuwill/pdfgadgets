@@ -1,5 +1,7 @@
 package org.spreadme.pdfgadgets.ui.common
 
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material.*
@@ -39,7 +41,9 @@ fun TextInputField(
 ) {
     BasicTextField(
         value = value,
-        modifier = modifier,
+        modifier = modifier.background(MaterialTheme.colors.surface, MaterialTheme.shapes.small)
+            .border(1.dp, MaterialTheme.colors.onSurface.copy(0.1f), MaterialTheme.shapes.small)
+            .padding(start = 4.dp),
         onValueChange = onValueChange,
         textStyle = textStyle,
         singleLine = singleLine,

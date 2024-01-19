@@ -13,14 +13,12 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
-import org.jetbrains.jewel.foundation.theme.JewelTheme
 import org.spreadme.pdfgadgets.config.AppConfigs
 import org.spreadme.pdfgadgets.resources.R
 import org.spreadme.pdfgadgets.ui.common.FileDialog
 import org.spreadme.pdfgadgets.ui.frame.ApplicationViewModel
 import org.spreadme.pdfgadgets.ui.frame.LoadProgressViewModel
-import org.spreadme.pdfgadgets.ui.theme.IntUiThemes
-import org.spreadme.pdfgadgets.utils.choose
+import org.spreadme.common.choose
 
 @Composable
 fun ActionBar(
@@ -32,7 +30,7 @@ fun ActionBar(
             .background(MaterialTheme.colors.background),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        ActionIcon(Modifier.padding(top = 16.dp), R.Icons.pdf) {
+        ActionIcon(Modifier.padding(top = 16.dp), R.Icons.open) {
             FileDialog(
                 parent = applicationViewModel.composeWindow,
                 title = "打开文件",
@@ -57,11 +55,6 @@ fun ActionBar(
         ) {
             ActionIcon(Modifier.padding(bottom = 16.dp), applicationViewModel.isDark.choose(R.Icons.dark, R.Icons.lignt)) {
                 applicationViewModel.isDark = !applicationViewModel.isDark
-                if(applicationViewModel.isDark) {
-                    applicationViewModel.theme = IntUiThemes.Dark
-                } else {
-                    applicationViewModel.theme = IntUiThemes.Light
-                }
                 applicationViewModel.config(AppConfigs.DARK_CONFIG, applicationViewModel.isDark.toString())
             }
         }
@@ -76,17 +69,19 @@ fun ActionIcon(
 ) {
     val focusManager = LocalFocusManager.current
     Box(
-        modifier.size(20.dp).clip(RoundedCornerShape(4.dp))
+        modifier.size(32.dp).clip(RoundedCornerShape(4.dp))
+            .background(MaterialTheme.colors.primary)
             .selectable(true) {
                 onAction()
                 focusManager.clearFocus()
-            },
+            }
+            .padding(4.dp),
         contentAlignment = Alignment.Center
     ) {
         Icon(
             painter = painterResource(resource),
             contentDescription = "",
-            tint = JewelTheme.globalColors.infoContent
+            tint = MaterialTheme.colors.onPrimary
         )
     }
 }

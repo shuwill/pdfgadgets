@@ -20,7 +20,7 @@ import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import org.spreadme.pdfgadgets.ui.theme.LocalExtraColors
+import org.spreadme.pdfgadgets.ui.theme.PDFGadgetsTheme
 
 
 @Composable
@@ -32,21 +32,21 @@ fun Toast(
 ) {
     val toastUI = when (type) {
         ToastType.SUCCESS -> ToastUI(
-            LocalExtraColors.current.successBackground,
-            LocalExtraColors.current.successBorder,
-            LocalExtraColors.current.onSuccess,
+            PDFGadgetsTheme.extraColors.successBackground,
+            PDFGadgetsTheme.extraColors.successBorder,
+            PDFGadgetsTheme.extraColors.onSuccess,
             Icons.Default.Check
         )
         ToastType.WARNING -> ToastUI(
-            LocalExtraColors.current.warningBackground,
-            LocalExtraColors.current.warningBorder,
-            LocalExtraColors.current.onWarning,
+            PDFGadgetsTheme.extraColors.warningBackground,
+            PDFGadgetsTheme.extraColors.warningBorder,
+            PDFGadgetsTheme.extraColors.onWarning,
             Icons.Default.Warning
         )
         ToastType.ERROR -> ToastUI(
-            LocalExtraColors.current.errorBackground,
-            LocalExtraColors.current.errorBorder,
-            LocalExtraColors.current.onError,
+            PDFGadgetsTheme.extraColors.errorBackground,
+            PDFGadgetsTheme.extraColors.errorBorder,
+            PDFGadgetsTheme.extraColors.onError,
             Icons.Default.Error
         )
         ToastType.INFO -> ToastUI(

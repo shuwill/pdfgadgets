@@ -15,7 +15,7 @@ import org.spreadme.pdfgadgets.model.PdfStreamTokenSequence
 import org.spreadme.pdfgadgets.repository.ASN1Parser
 import org.spreadme.pdfgadgets.repository.PdfStreamParser
 import org.spreadme.pdfgadgets.ui.sidepanel.SidePanelUIState
-import org.spreadme.pdfgadgets.utils.uuid
+import org.spreadme.common.uuid
 
 class StreamPanelViewModel : ViewModel() {
 

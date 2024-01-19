@@ -18,9 +18,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.unit.dp
 import org.spreadme.pdfgadgets.model.FileMetadata
-import org.spreadme.pdfgadgets.ui.theme.LocalExtraColors
-import org.spreadme.pdfgadgets.utils.SizeUnit
-import org.spreadme.pdfgadgets.utils.format
+import org.spreadme.pdfgadgets.ui.theme.PDFGadgetsTheme
+import org.spreadme.common.SizeUnit
+import org.spreadme.common.format
 
 @Composable
 fun RecentFiles(
@@ -58,7 +58,7 @@ fun TableHeader(modifier: Modifier = Modifier) {
             TableHeaderText("打开时间")
         }
     }
-    Divider(color = LocalExtraColors.current.border)
+    Divider(color = PDFGadgetsTheme.extraColors.border)
 }
 
 @Composable
@@ -98,14 +98,14 @@ fun TableLine(
             Icon(
                 Icons.Default.DeleteForever,
                 contentDescription = "",
-                tint = LocalExtraColors.current.error,
+                tint = PDFGadgetsTheme.extraColors.iconDisable,
                 modifier = Modifier.size(16.dp).onClick {
                     onDelete(fileMetadata)
                 }
             )
         }
     }
-    Divider(color = LocalExtraColors.current.border)
+    Divider(color = PDFGadgetsTheme.extraColors.border)
 }
 
 @Composable
