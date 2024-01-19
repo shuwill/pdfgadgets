@@ -4,6 +4,8 @@
 > 
 > if you want to build the project,must base JetBrainsRuntime,and get the last version
 
+![PdfGadgets GIF](artwork/readme/app.gif)
+
 - #### view pdf document 
 - #### view pdf outlines
 - #### view pdf structure
