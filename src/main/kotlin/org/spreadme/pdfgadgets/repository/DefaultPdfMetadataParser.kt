@@ -38,8 +38,6 @@ class DefaultPdfMetadataParser : PdfMetadataParser, KoinComponent {
 
         // signatures
         val signatures = signatureParser.parse(document)
-        val lastSignatureCoversWholeDocument = signatures.isNotEmpty() &&
-                signatures.last().signatureCoversWholeDocument
         val signatureMap = signatures.associateBy { it.fieldName }
 
         // pages info
@@ -58,7 +56,6 @@ class DefaultPdfMetadataParser : PdfMetadataParser, KoinComponent {
                 val fieldName = merged.getAsString(PdfName.T)?.value ?: ""
                 val signature = signatureMap[fieldName]
                 if (signature != null) {
-                    signature.lastSignatureCoversWholeDocument = lastSignatureCoversWholeDocument
                     val rectangle = a.rectangle?.toRectangle()
                     if (rectangle != null) {
                         signature.position = Position(it, pageSize, rectangle)

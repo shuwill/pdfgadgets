@@ -55,7 +55,7 @@ fun SignatureDetail(
 @Composable
 fun VerifyDetail(signature: Signature) {
     val signatureVerifyUIState = if (signature.signatureResult.verifySignature) {
-        if (signature.lastSignatureCoversWholeDocument) {
+        if (signature.signatureCoversWholeDocument) {
             SignatureVerifyUIState("签名有效", verifySuccess())
         } else {
             SignatureVerifyUIState("签名未覆盖全文", verifyWarning())

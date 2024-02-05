@@ -59,7 +59,9 @@ class DefaultSignatureParser : SignatureParser {
             val pkcS7 = parsePdfPKCS7(signature, content, document)
 
             // checko signatureCoversWholeDocument
-            val contentsChecker = ContentsChecker(document.reader.safeFile.createSourceView())
+            val contentCheckRange = longArrayOf(0, signedLength.toLong())
+            val bytesSource = RandomAccessSourceFactory().createRanged(document.reader.safeFile.createSourceView(), contentCheckRange)
+            val contentsChecker = ContentsChecker(bytesSource)
             val signatureCoversWholeDocument = contentsChecker.checkWhetherSignatureCoversWholeDocument(field)
 
             return Signature(fieldName, signedLength.toLong(), content, SignatureResult(pkcS7), signatureCoversWholeDocument)

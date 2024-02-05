@@ -74,7 +74,7 @@ fun SignatureListDetail(
         modifier = Modifier.fillMaxSize(),
     ) {
         val expanded by remember { signature.expand }
-        SignatureBrief(signature.expand, signature.signatureResult, signature.lastSignatureCoversWholeDocument)
+        SignatureBrief(signature.expand, signature.signatureResult, signature.signatureCoversWholeDocument)
         SignatureExpandDetail(expanded, signature, onParseSignatureContent, onScroll)
     }
 }
